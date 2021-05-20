@@ -1,14 +1,22 @@
 import {red} from 'chalk';
 import {Command} from 'commander';
 import {Lib as NgxerModule} from '../lib/index';
+import {GenerateCommand} from './commands/generate.command';
 
 export class Cli {
   private ngxerModule: NgxerModule;
+  generateCommand: GenerateCommand;
 
   commander = ['ngxer', 'Tool for prerendering Angular apps'];
 
+  generateCommandDef: CommandDef = [
+    ['generate', 'g'],
+    'Generate static content.',
+  ];
+
   constructor() {
     this.ngxerModule = new NgxerModule();
+    this.generateCommand = new GenerateCommand();
   }
 
   getApp() {
@@ -21,6 +29,16 @@ export class Cli {
       .name(`${command}`)
       .usage('[options] [command]')
       .description(description);
+
+    // generate
+    (() => {
+      const [[command, ...aliases], description] = this.generateCommandDef;
+      commander
+        .command(command)
+        .aliases(aliases)
+        .description(description)
+        .action(() => this.generateCommand.run());
+    })();
 
     // help
     commander
@@ -36,7 +54,6 @@ export class Cli {
 
     return commander;
   }
-
 }
 
 type CommandDef = [string | string[], string, ...Array<[string, string]>];
