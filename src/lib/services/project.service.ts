@@ -20,29 +20,23 @@ export interface DatabaseRender {
 }
 
 export interface ParsedHTML {
-  template: string;
+  content: string;
   styles: string[];
   styleBetweens: [string, string];
   scripts: string[];
   scriptBetweens: [string, string];
   title: string;
   titleBetweens: [string, string];
-  titlePlaceholder: string;
   description: string;
   descriptionBetweens: [string, string];
-  descriptionPlaceholder: string;
   image: string;
   imageBetweens: [string, string];
-  imagePlaceholder: string;
   url: string;
   urlBetweens: [string, string];
-  urlPlaceholder: string;
   lang: string;
   langBetweens: [string, string];
-  langPlaceholder: string;
   locale: string;
   localeBetweens: [string, string];
-  localePlaceholder: string;
 }
 
 export class ProjectService {
@@ -86,26 +80,23 @@ export class ProjectService {
   }
 
   async parseHTML(path: string) {
-    path = path.indexOf('index.html') ? path : `${path}/index.html`;
+    path = path.indexOf('index.html') !== -1 ? path : `${path}/index.html`;
     const rawHtmlContent = await this.fileService.readText(path);
     // strip all unneccesary code
     const htmlContent = await minify({
       compressor: htmlMinifier,
       content: rawHtmlContent,
+      options: {
+        removeAttributeQuotes: false,
+      },
     });
     // defined extract betweens and placeholder
     const titleBetweens = ['<title>', '</title>'];
-    const titlePlaceholder = '{{TITLE}}';
     const descriptionBetweens = ['<meta name="description" content="', '"'];
-    const descriptionPlaceholder = '{{DESCRIPTION}}';
     const imageBetweens = ['<meta property="og:image" content="', '"'];
-    const imagePlaceholder = '{{IMAGE}}';
     const urlBetweens = ['<link rel="canonical" href="', '"'];
-    const urlPlaceholder = '{{URL}}';
     const langBetweens = ['<html lang="', '"'];
-    const langPlaceholder = '{{LANG}}';
     const localeBetweens = ['<meta property="og:locale" content="', '"'];
-    const localePlaceholder = '{{LOCALE}}';
     const scriptBetweens = ['<script src="', '"'];
     const styleBetweens = ['<link rel="stylesheet" href="', '"'];
     // extract metas
@@ -146,60 +137,25 @@ export class ProjectService {
       scriptBetweens[1],
       onlyVendorFilesFilter
     );
-    // make the template
-    const template = htmlContent
-      .replace(
-        new RegExp(`${titleBetweens[0]}${title}${titleBetweens[1]}`, 'g'),
-        titlePlaceholder
-      )
-      .replace(
-        new RegExp(
-          `${descriptionBetweens[0]}${description}${descriptionBetweens[1]}`,
-          'g'
-        ),
-        descriptionPlaceholder
-      )
-      .replace(
-        new RegExp(`${imageBetweens[0]}${image}${imageBetweens[1]}`, 'g'),
-        imagePlaceholder
-      )
-      .replace(
-        new RegExp(`${urlBetweens[0]}${url}${urlBetweens[1]}`, 'g'),
-        urlPlaceholder
-      )
-      .replace(
-        new RegExp(`${langBetweens[0]}${lang}${langBetweens[1]}`, 'g'),
-        langPlaceholder
-      )
-      .replace(
-        new RegExp(`${localeBetweens[0]}${locale}${localeBetweens[1]}`, 'g'),
-        localePlaceholder
-      );
     // result
     return {
-      template,
+      content: htmlContent,
       styles,
       styleBetweens,
       scripts,
       scriptBetweens,
       title,
       titleBetweens,
-      titlePlaceholder,
       description,
       descriptionBetweens,
-      descriptionPlaceholder,
       image,
       imageBetweens,
-      imagePlaceholder,
       url,
       urlBetweens,
-      urlPlaceholder,
       lang,
       langBetweens,
-      langPlaceholder,
       locale,
       localeBetweens,
-      localePlaceholder,
     } as ParsedHTML;
   }
 }

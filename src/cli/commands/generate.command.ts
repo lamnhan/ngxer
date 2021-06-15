@@ -13,7 +13,7 @@ export class GenerateCommand {
 
   async run(paths: string[] = []) {
     // load data
-    const {out = 'www', sitemap = true} =
+    const {out = 'www', sitemap = false} =
       await this.projectService.loadDotNgxerRCDotJson();
     const parsedIndexHTML = await this.projectService.parseIndexHTML(out);
     console.log(parsedIndexHTML);
