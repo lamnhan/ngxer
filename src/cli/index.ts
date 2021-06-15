@@ -45,7 +45,8 @@ export class Cli {
     );
     this.generateCommand = new GenerateCommand(
       this.ngxerModule.fileService,
-      this.ngxerModule.projectService
+      this.ngxerModule.projectService,
+      this.ngxerModule.renderService
     );
     this.removeCommand = new RemoveCommand(
       this.ngxerModule.fileService,

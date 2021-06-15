@@ -6,8 +6,8 @@ import {HelperService} from './helper.service';
 import {FileService} from './file.service';
 
 export interface DotNgxerRCDotJson {
-  out?: string;
-  url?: string;
+  out: string;
+  url: string;
   sitemap?: boolean;
   pathRender?: string[];
   databaseRender?: DatabaseRender[];
@@ -76,12 +76,16 @@ export class ProjectService {
   }
 
   async parseIndexHTML(out: string) {
-    return this.parseHTML(resolve(out));
+    return this.parseHTMLFile(resolve(out));
   }
 
-  async parseHTML(path: string) {
+  async parseHTMLFile(path: string) {
     path = path.indexOf('index.html') !== -1 ? path : `${path}/index.html`;
     const rawHtmlContent = await this.fileService.readText(path);
+    return this.parseHTMLContent(rawHtmlContent);
+  }
+
+  async parseHTMLContent(rawHtmlContent: string) {
     // strip all unneccesary code
     const htmlContent = await minify({
       compressor: htmlMinifier,

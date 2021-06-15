@@ -10,3 +10,4 @@ export * from './lib/services/helper.service';
 export * from './lib/services/file.service';
 export * from './lib/services/project.service';
 export * from './lib/services/firebase.service';
+export * from './lib/services/render.service';
