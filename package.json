@@ -20,6 +20,7 @@
     "build:lib": "npm run compile && npm i -g",
     "build:app": "ayedocs generate",
     "build": "npm run build:app && npm run build:lib",
+    "deploy:lib": "npm publish",
     "deploy:app": "git add . && git commit -m 'deploy:app' && git push",
     "test": "npm run compile && nyc --cache false mocha test/**/*.js",
     "coverage": "nyc --cache false report --reporter=text-lcov | coveralls",
