@@ -1,17 +1,11 @@
-import {launch, Browser} from 'puppeteer-core';
+import {launch, Browser, Page} from 'puppeteer-core';
 const superstatic = require('superstatic');
-
-import {FileService} from './file.service';
-import {ProjectService} from './project.service';
 
 export class RenderService {
   private server!: any;
   private browser!: Browser;
 
-  constructor(
-    private fileService: FileService,
-    private projectService: ProjectService
-  ) {}
+  constructor() {}
 
   async bootup(www: string) {
     if (!this.server || !this.browser) {
@@ -47,8 +41,7 @@ export class RenderService {
   async render(
     out: string,
     paths: string[],
-    contentModifier: (path: string, content: string) => string,
-    handler: (path: string, content: string) => Promise<void>,
+    handler: (path: string, page: Page) => Promise<void>,
     afterBootup?: () => void,
     afterShutdown?: () => void
   ) {
@@ -61,13 +54,13 @@ export class RenderService {
     await Promise.all(
       paths.map(path =>
         (async () => {
+          path = path.startsWith('/') ? path : '/' + path;
           const page = await this.browser.newPage();
-          await page.goto('http://localhost:7777/' + path, {
+          await page.goto('http://localhost:7777' + path, {
             waitUntil: 'networkidle0',
             timeout: 1000000,
           });
-          const pageContent = await page.content();
-          await handler(path, contentModifier(path, pageContent));
+          await handler(path, page);
           await page.close();
         })()
       )

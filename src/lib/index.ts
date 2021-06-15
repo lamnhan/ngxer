@@ -22,9 +22,6 @@ export class Lib {
       this.fileService
     );
     this.firebaseService = new FirebaseService(this.fileService);
-    this.renderService = new RenderService(
-      this.fileService,
-      this.projectService
-    );
+    this.renderService = new RenderService();
   }
 }

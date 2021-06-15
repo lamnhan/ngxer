@@ -20,7 +20,9 @@ export interface DatabaseRender {
 }
 
 export interface ParsedHTML {
+  full: string;
   content: string;
+  contentBetweens: [string, string];
   styles: string[];
   styleBetweens: [string, string];
   scripts: string[];
@@ -60,6 +62,7 @@ export class ProjectService {
     return this.fileService.createJson(resolve(projectPath, this.rcFile), {
       out: 'firebase/public',
       url: '',
+      sitemap: true,
       pathRender: [],
       databaseRender: [],
     });
@@ -103,6 +106,7 @@ export class ProjectService {
     const localeBetweens = ['<meta property="og:locale" content="', '"'];
     const scriptBetweens = ['<script src="', '"'];
     const styleBetweens = ['<link rel="stylesheet" href="', '"'];
+    const contentBetweens = ['</router-outlet>', '</main>'];
     // extract metas
     const title = this.helperService
       .stringsBetweens(htmlContent, titleBetweens[0], titleBetweens[1])
@@ -141,9 +145,14 @@ export class ProjectService {
       scriptBetweens[1],
       onlyVendorFilesFilter
     );
+    const content = this.helperService
+      .stringsBetweens(htmlContent, contentBetweens[0], contentBetweens[1])
+      .shift() as string;
     // result
     return {
-      content: htmlContent,
+      full: htmlContent,
+      content,
+      contentBetweens,
       styles,
       styleBetweens,
       scripts,
@@ -161,5 +170,51 @@ export class ProjectService {
       locale,
       localeBetweens,
     } as ParsedHTML;
+  }
+
+  composeHTMLContent(templateData: ParsedHTML, data: ParsedHTML) {
+    const {
+      full: htmlContent,
+      title: templateTitle,
+      description: templateDescription,
+      image: templateImage,
+      url: templateUrl,
+      lang: templateLang,
+      locale: templateLocale,
+      scripts,
+      styles,
+    } = templateData;
+    const {content, title, description, image, url, lang, locale} = data;
+    // meta replacements
+    let finalContent = htmlContent
+      .replace(new RegExp(templateTitle, 'g'), title)
+      .replace(new RegExp(templateDescription, 'g'), description)
+      .replace(new RegExp(templateImage, 'g'), image)
+      .replace(new RegExp(templateUrl, 'g'), url)
+      .replace(templateLocale, locale)
+      .replace(`lang="${templateLang}"`, `lang="${lang}"`);
+    // scripts replacement (to absolute)
+    scripts.forEach(
+      script =>
+        (finalContent = finalContent.replace(
+          new RegExp(`src="${script}"`, 'g'),
+          `src="/${script}"`
+        ))
+    );
+    // styles replacement (to absolute)
+    styles.forEach(
+      style =>
+        (finalContent = finalContent.replace(
+          new RegExp(`href="${style}"`, 'g'),
+          `href="/${style}"`
+        ))
+    );
+    // content replacement
+    finalContent = finalContent.replace(
+      '<app-root></app-root>',
+      `<app-root>${content}</app-root>`
+    );
+    // result
+    return finalContent;
   }
 }

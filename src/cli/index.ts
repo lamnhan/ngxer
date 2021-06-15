@@ -14,7 +14,7 @@ export class Cli {
   commander = ['ngxer', 'Tool for prerendering Angular apps'];
 
   /**
-   * @param path? - custom path to the project
+   * @param path? - Custom path to the project
    */
   initCommandDef: CommandDef = [
     ['init [path]', 'i'],
@@ -44,6 +44,7 @@ export class Cli {
       this.ngxerModule.projectService
     );
     this.generateCommand = new GenerateCommand(
+      this.ngxerModule.helperService,
       this.ngxerModule.fileService,
       this.ngxerModule.projectService,
       this.ngxerModule.renderService

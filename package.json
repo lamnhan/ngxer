@@ -17,8 +17,10 @@
   ],
   "scripts": {
     "compile": "tsc",
-    "build": "npm run compile && npm i -g",
-    "docs": "ayedocs generate",
+    "build:lib": "npm run compile && npm i -g",
+    "build:app": "ayedocs generate",
+    "build": "npm run build:app && npm run build:lib",
+    "deploy:app": "git add . && git commit -m 'deploy:app' && git push",
     "test": "npm run compile && nyc --cache false mocha test/**/*.js",
     "coverage": "nyc --cache false report --reporter=text-lcov | coveralls",
     "lint": "gts lint",
