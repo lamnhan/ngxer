@@ -16,6 +16,7 @@ export class GenerateCommand {
     const {out = 'www', sitemap = true} =
       await this.projectService.loadDotNgxerRCDotJson();
     const parsedIndexHTML = await this.projectService.parseIndexHTML(out);
+    console.log(parsedIndexHTML);
     // check bundles status
     const outdated = true;
     // path render from command
