@@ -37,6 +37,8 @@
     "url": "https://github.com/lamnhan/ngxer/issues"
   },
   "dependencies": {
+    "@node-minify/core": "^6.2.0",
+    "@node-minify/html-minifier": "^6.2.0",
     "chalk": "^4.1.0",
     "commander": "^6.1.0",
     "del": "^6.0.0",

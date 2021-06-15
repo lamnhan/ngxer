@@ -1,9 +1,12 @@
 import {resolve} from 'path';
+const minify = require('@node-minify/core');
+const htmlMinifier = require('@node-minify/html-minifier');
 
 import {FileService} from './file.service';
 
 export interface DotNgxerRCDotJson {
   out?: string;
+  url?: string;
   sitemap?: boolean;
   pathRender?: string[];
   databaseRender?: DatabaseRender[];
@@ -36,7 +39,9 @@ export class ProjectService {
   createDotNgxerRCDotJson(projectPath = '.') {
     return this.fileService.createJson(resolve(projectPath, this.rcFile), {
       out: 'firebase/public',
+      url: '',
       pathRender: [],
+      databaseRender: [],
     });
   }
 
@@ -53,8 +58,11 @@ export class ProjectService {
   async parseIndexHTML(out: string) {
     const indexHTMLPath = resolve(out, 'index.html');
     let indexContent = await this.fileService.readText(indexHTMLPath);
-    // strip all new lines
-    indexContent = indexContent.replace(/(\r\n|\n|\r)/gm, '');
+    // strip all unneccesary code
+    indexContent = await minify({
+      compressor: htmlMinifier,
+      content: indexContent,
+    });
     // extract bundles
     // result
     return {} as ParsedIndexHTML;
