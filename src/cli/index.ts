@@ -61,19 +61,22 @@ export class Cli {
       this.ngxerModule.projectService
     );
     this.generateCommand = new GenerateCommand(
-      this.ngxerModule.helperService,
       this.ngxerModule.fileService,
       this.ngxerModule.projectService,
+      this.ngxerModule.cacheService,
+      this.ngxerModule.htmlService,
       this.ngxerModule.renderService
     );
     this.cacheCommand = new CacheCommand(
       this.ngxerModule.fileService,
-      this.ngxerModule.projectService
+      this.ngxerModule.projectService,
+      this.ngxerModule.cacheService
     );
     this.updateCommand = new UpdateCommand();
     this.removeCommand = new RemoveCommand(
       this.ngxerModule.fileService,
-      this.ngxerModule.projectService
+      this.ngxerModule.projectService,
+      this.ngxerModule.cacheService
     );
   }
 

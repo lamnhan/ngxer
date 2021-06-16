@@ -2,16 +2,18 @@ import {resolve} from 'path';
 import {blue, yellow, grey, red, magenta} from 'chalk';
 
 import {OK, INFO} from '../../lib/services/message.service';
-import {HelperService} from '../../lib/services/helper.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
+import {CacheService} from '../../lib/services/cache.service';
+import {HtmlService} from '../../lib/services/html.service';
 import {RenderService} from '../../lib/services/render.service';
 
 export class GenerateCommand {
   constructor(
-    private helperService: HelperService,
     private fileService: FileService,
     private projectService: ProjectService,
+    private cacheService: CacheService,
+    private htmlService: HtmlService,
     private renderService: RenderService
   ) {}
 
@@ -25,7 +27,7 @@ export class GenerateCommand {
       databaseRender = [],
       contentBetweens,
     } = await this.projectService.loadDotNgxerRCDotJson();
-    const parsedIndexHTML = await this.projectService.parseIndexHTML(out);
+    const parsedIndexHTML = await this.htmlService.parseIndexHTML(out);
 
     /**
      * path render (from manual paths or rc pathRender)
@@ -43,7 +45,7 @@ export class GenerateCommand {
         if (await this.fileService.exists(resolve(out, path, 'index.html'))) {
           pathRenderExisting.push(path);
         } else {
-          if (await this.projectService.cacheExists('path', path)) {
+          if (await this.cacheService.cacheExists('path', path)) {
             pathRenderCache.push(path);
           } else {
             pathRenderLive.push(path);
@@ -66,10 +68,7 @@ export class GenerateCommand {
         await Promise.all(
           pathRenderCache.map(path =>
             (async () => {
-              const metaData = await this.projectService.readCache(
-                'path',
-                path
-              );
+              const metaData = await this.cacheService.readCache('path', path);
               // save file
               if (metaData) {
                 const filePath = resolve(
@@ -79,10 +78,7 @@ export class GenerateCommand {
                 );
                 await this.fileService.createFile(
                   filePath,
-                  this.projectService.composeHTMLContent(
-                    parsedIndexHTML,
-                    metaData
-                  )
+                  this.htmlService.composeHTMLContent(parsedIndexHTML, metaData)
                 );
                 console.log('  + ' + yellow(path));
               } else {
@@ -100,13 +96,13 @@ export class GenerateCommand {
           async (path, page) => {
             // extract data
             const pageContent = await page.content();
-            const metaData = await this.projectService.parseHTMLContent(
+            const metaData = await this.htmlService.parseHTMLContent(
               pageContent,
               contentBetweens
             );
             metaData.url = url + path + '/';
             // cache
-            await this.projectService.saveCache(
+            await this.cacheService.saveCache(
               'path',
               path.substr(1),
               metaData as unknown as Record<string, unknown>
@@ -115,7 +111,7 @@ export class GenerateCommand {
             const filePath = resolve(out, path.substr(1), 'index.html');
             await this.fileService.createFile(
               filePath,
-              this.projectService.composeHTMLContent(parsedIndexHTML, metaData)
+              this.htmlService.composeHTMLContent(parsedIndexHTML, metaData)
             );
             console.log('  + ' + magenta(path));
           }

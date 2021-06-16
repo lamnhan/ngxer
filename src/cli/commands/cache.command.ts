@@ -3,11 +3,13 @@ import {resolve} from 'path';
 import {OK} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
+import {CacheService} from '../../lib/services/cache.service';
 
 export class CacheCommand {
   constructor(
     private fileService: FileService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private cacheService: CacheService
   ) {}
 
   async run(inputs: string[]) {
@@ -21,7 +23,7 @@ export class CacheCommand {
             resolve(dataPath)
           );
           // save cache
-          await this.projectService.saveCache('path', cachePath, data);
+          await this.cacheService.saveCache('path', cachePath, data);
           results.push(
             `${this.projectService.rcDir}/path_cached/` + cachePath + '.json'
           );

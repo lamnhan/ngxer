@@ -4,11 +4,13 @@ import {blue} from 'chalk';
 import {OK, WARN, ERROR} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
+import {CacheService} from '../../lib/services/cache.service';
 
 export class RemoveCommand {
   constructor(
     private fileService: FileService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private cacheService: CacheService
   ) {}
 
   async run(inputs: string[]) {
@@ -33,7 +35,7 @@ export class RemoveCommand {
               .shift();
             if (renderItem) {
               // remove cache
-              await this.projectService.removeCache('database', input);
+              await this.cacheService.removeCache('database', input);
               // remove file
               const dirPath = resolve(out, renderItem.path.replace(':id', doc));
               await dirRemoval(dirPath, input, out);
@@ -48,7 +50,7 @@ export class RemoveCommand {
           // path
           else {
             // remove cached
-            await this.projectService.removeCache('path', input);
+            await this.cacheService.removeCache('path', input);
             // remove file
             const dirPath = resolve(out, input);
             await dirRemoval(dirPath, input, out);
