@@ -31,12 +31,11 @@ export class Cli {
   ];
 
   /**
-   * @param inputs... - List of inputs to be cached
+   * @param inputs... - List of inputs to be cached ("foo<foo.json" "bar<bar.json")
    */
   cacheCommandDef: CommandDef = [
     ['cache <inputs...>', 'c'],
     'Cache a input before generating.',
-    ['-r, --remove', 'Remove the data.json after caching.'],
   ];
 
   /**
@@ -111,14 +110,12 @@ export class Cli {
 
     // cache
     (() => {
-      const [[command, ...aliases], description, removeOpt] =
-        this.cacheCommandDef;
+      const [[command, ...aliases], description] = this.cacheCommandDef;
       commander
         .command(command)
         .aliases(aliases)
         .description(description)
-        .option(...removeOpt)
-        .action((inputs, options) => this.cacheCommand.run(inputs, options));
+        .action(inputs => this.cacheCommand.run(inputs));
     })();
 
     // update
