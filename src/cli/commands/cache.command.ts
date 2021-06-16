@@ -15,6 +15,7 @@ export class CacheCommand {
   ) {}
 
   async run(inputs: string[], options: CacheCommandOptions) {
+    const results = [] as string[];
     await Promise.all(
       inputs.map(input =>
         (async () => {
@@ -25,6 +26,9 @@ export class CacheCommand {
           );
           // save cache
           await this.projectService.saveCache('path', cachePath, data);
+          results.push(
+            `${this.projectService.rcDir}/path_cached/` + cachePath + '.json'
+          );
           // remove data.json
           if (options.remove) {
             await this.fileService.removeFile(dataPath);
@@ -32,6 +36,7 @@ export class CacheCommand {
         })()
       )
     );
-    console.log(OK + 'Caches saved.');
+    console.log(OK + 'Caches saved:');
+    console.log(results.map(item => '  + ' + item).join('\n'));
   }
 }

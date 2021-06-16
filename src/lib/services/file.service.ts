@@ -3,8 +3,8 @@ import {
   pathExists,
   readFile,
   readJson,
-  writeJson,
   outputFile,
+  outputJson,
   remove,
   ensureDir,
   copy as fsCopy,
@@ -33,7 +33,7 @@ export class FileService {
   }
 
   createJson<T>(filePath: string, jsonData: T) {
-    return writeJson(filePath, jsonData, {spaces: 2});
+    return outputJson(filePath, jsonData, {spaces: 2});
   }
 
   removeFile(path: string) {

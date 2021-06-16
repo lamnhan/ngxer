@@ -54,7 +54,7 @@ export interface ParsedHTML extends MetaData {
 }
 
 export class ProjectService {
-  private rcDir = '.ngxer';
+  public readonly rcDir = 'ngxer';
   public readonly rcFile = '.ngxerrc.json';
   constructor(
     private helperService: HelperService,
@@ -132,10 +132,10 @@ export class ProjectService {
         typeof data.content === 'string' ? data.content : 'Invalid content',
     };
     // save cache
-    return this.fileService.createJson(
-      this.getCachePath(type, input),
-      metaData
-    );
+    const cachePath = this.getCachePath(type, input);
+    await this.fileService.createJson(cachePath, metaData);
+    // result
+    return {path: cachePath, data: metaData};
   }
 
   async removeCache(type: RenderingTypes, input: string) {

@@ -68,6 +68,7 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-class"><a href="classes/cachecommand.html" class="tsd-kind-icon">Cache<wbr>Command</a></li>
 								<li class="tsd-kind-class"><a href="classes/cli.html" class="tsd-kind-icon">Cli</a></li>
 								<li class="tsd-kind-class"><a href="classes/fileservice.html" class="tsd-kind-icon">File<wbr>Service</a></li>
 								<li class="tsd-kind-class"><a href="classes/firebaseservice.html" class="tsd-kind-icon">Firebase<wbr>Service</a></li>
@@ -79,13 +80,16 @@
 								<li class="tsd-kind-class"><a href="classes/projectservice.html" class="tsd-kind-icon">Project<wbr>Service</a></li>
 								<li class="tsd-kind-class"><a href="classes/removecommand.html" class="tsd-kind-icon">Remove<wbr>Command</a></li>
 								<li class="tsd-kind-class"><a href="classes/renderservice.html" class="tsd-kind-icon">Render<wbr>Service</a></li>
+								<li class="tsd-kind-class"><a href="classes/updatecommand.html" class="tsd-kind-icon">Update<wbr>Command</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface"><a href="interfaces/cachecommandoptions.html" class="tsd-kind-icon">Cache<wbr>Command<wbr>Options</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/databaserender.html" class="tsd-kind-icon">Database<wbr>Render</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/parsedhtml.html" class="tsd-kind-icon">ParsedHTML</a></li>
 							</ul>
 						</section>
@@ -93,6 +97,7 @@
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias"><a href="globals.html#commanddef" class="tsd-kind-icon">Command<wbr>Def</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#renderingtypes" class="tsd-kind-icon">Rendering<wbr>Types</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -120,7 +125,17 @@
 					<div class="tsd-signature tsd-kind-icon">Command<wbr>Def<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/cli/index.ts#L115">cli/index.ts:115</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/cli/index.ts#L160">cli/index.ts:160</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="renderingtypes" class="tsd-anchor"></a>
+					<h3>Rendering<wbr>Types</h3>
+					<div class="tsd-signature tsd-kind-icon">Rendering<wbr>Types<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"path"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"database"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L22">lib/services/project.service.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -133,7 +148,7 @@
 					<div class="tsd-signature tsd-kind-icon">ANY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = grey(&#x27;[ANY] &#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/message.service.ts#L3">lib/services/message.service.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/message.service.ts#L3">lib/services/message.service.ts:3</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -143,7 +158,7 @@
 					<div class="tsd-signature tsd-kind-icon">ERROR<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = red(&#x27;[ERROR] &#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/message.service.ts#L4">lib/services/message.service.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/message.service.ts#L4">lib/services/message.service.ts:4</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -153,7 +168,7 @@
 					<div class="tsd-signature tsd-kind-icon">INFO<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = blue(&#x27;[INFO] &#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/message.service.ts#L6">lib/services/message.service.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/message.service.ts#L6">lib/services/message.service.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -163,7 +178,7 @@
 					<div class="tsd-signature tsd-kind-icon">OK<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = green(&#x27;[OK] &#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/message.service.ts#L7">lib/services/message.service.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/message.service.ts#L7">lib/services/message.service.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -173,7 +188,7 @@
 					<div class="tsd-signature tsd-kind-icon">WARN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = yellow(&#x27;[WARN] &#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/message.service.ts#L5">lib/services/message.service.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/message.service.ts#L5">lib/services/message.service.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -183,7 +198,7 @@
 					<div class="tsd-signature tsd-kind-icon">cli<wbr>App<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol"> = new Cli().getApp()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/bin.ts#L4">bin.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/bin.ts#L4">bin.ts:4</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -193,7 +208,7 @@
 					<div class="tsd-signature tsd-kind-icon">html<wbr>Minifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;@node-minify/html-minifier&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L3">lib/services/project.service.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L3">lib/services/project.service.ts:3</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -203,7 +218,7 @@
 					<div class="tsd-signature tsd-kind-icon">minify<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;@node-minify/core&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L2">lib/services/project.service.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L2">lib/services/project.service.ts:2</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -213,7 +228,7 @@
 					<div class="tsd-signature tsd-kind-icon">superstatic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;superstatic&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/render.service.ts#L2">lib/services/render.service.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/render.service.ts#L2">lib/services/render.service.ts:2</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -229,6 +244,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="classes/cachecommand.html" class="tsd-kind-icon">Cache<wbr>Command</a>
+					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/cli.html" class="tsd-kind-icon">Cli</a>
 					</li>
@@ -262,6 +280,12 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/renderservice.html" class="tsd-kind-icon">Render<wbr>Service</a>
 					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/updatecommand.html" class="tsd-kind-icon">Update<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/cachecommandoptions.html" class="tsd-kind-icon">Cache<wbr>Command<wbr>Options</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/databaserender.html" class="tsd-kind-icon">Database<wbr>Render</a>
 					</li>
@@ -269,10 +293,16 @@
 						<a href="interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/parsedhtml.html" class="tsd-kind-icon">ParsedHTML</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#commanddef" class="tsd-kind-icon">Command<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#renderingtypes" class="tsd-kind-icon">Rendering<wbr>Types</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#any" class="tsd-kind-icon">ANY</a>

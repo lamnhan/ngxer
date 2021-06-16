@@ -91,13 +91,18 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#cacheexists" class="tsd-kind-icon">cache<wbr>Exists</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#composehtmlcontent" class="tsd-kind-icon">composeHTMLContent</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#createdotngxerrcdotjson" class="tsd-kind-icon">create<wbr>Dot<wbr>NgxerRCDot<wbr>Json</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#getcachepath" class="tsd-kind-icon">get<wbr>Cache<wbr>Path</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#isvalid" class="tsd-kind-icon">is<wbr>Valid</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#loaddotngxerrcdotjson" class="tsd-kind-icon">load<wbr>Dot<wbr>NgxerRCDot<wbr>Json</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#parsehtmlcontent" class="tsd-kind-icon">parseHTMLContent</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#parsehtmlfile" class="tsd-kind-icon">parseHTMLFile</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#parseindexhtml" class="tsd-kind-icon">parse<wbr>IndexHTML</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#readcache" class="tsd-kind-icon">read<wbr>Cache</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#removecache" class="tsd-kind-icon">remove<wbr>Cache</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#savecache" class="tsd-kind-icon">save<wbr>Cache</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="projectservice.html#updatedotngxerrcdotjson" class="tsd-kind-icon">update<wbr>Dot<wbr>NgxerRCDot<wbr>Json</a></li>
 							</ul>
 						</section>
@@ -116,7 +121,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L45">lib/services/project.service.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L58">lib/services/project.service.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -141,7 +146,7 @@
 					<div class="tsd-signature tsd-kind-icon">rc<wbr>File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">".ngxerrc.json"</span><span class="tsd-signature-symbol"> = &quot;.ngxerrc.json&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L45">lib/services/project.service.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L58">lib/services/project.service.ts:58</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -149,16 +154,42 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="composehtmlcontent" class="tsd-anchor"></a>
-					<h3>composeHTMLContent</h3>
+					<a name="cacheexists" class="tsd-anchor"></a>
+					<h3>cache<wbr>Exists</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">composeHTMLContent<span class="tsd-signature-symbol">(</span>templateData<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, data<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">cache<wbr>Exists<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L175">lib/services/project.service.ts:175</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L102">lib/services/project.service.ts:102</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type: <a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a></h5>
+								</li>
+								<li>
+									<h5>input: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="composehtmlcontent" class="tsd-anchor"></a>
+					<h3>composeHTMLContent</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">composeHTMLContent<span class="tsd-signature-symbol">(</span>templateData<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, data<span class="tsd-signature-symbol">: </span><a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L244">lib/services/project.service.ts:244</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -167,7 +198,7 @@
 									<h5>templateData: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
 								</li>
 								<li>
-									<h5>data: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
+									<h5>data: <a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -184,7 +215,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L61">lib/services/project.service.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L74">lib/services/project.service.ts:74</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -198,6 +229,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getcachepath" class="tsd-anchor"></a>
+					<h3>get<wbr>Cache<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Cache<wbr>Path<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L94">lib/services/project.service.ts:94</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type: <a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a></h5>
+								</li>
+								<li>
+									<h5>input: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="isvalid" class="tsd-anchor"></a>
 					<h3>is<wbr>Valid</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -207,7 +264,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L51">lib/services/project.service.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L64">lib/services/project.service.ts:64</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -230,7 +287,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L55">lib/services/project.service.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L68">lib/services/project.service.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -247,19 +304,22 @@
 					<a name="parsehtmlcontent" class="tsd-anchor"></a>
 					<h3>parseHTMLContent</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">parseHTMLContent<span class="tsd-signature-symbol">(</span>rawHtmlContent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">parseHTMLContent<span class="tsd-signature-symbol">(</span>rawHtmlContent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, customContentBetweens<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L91">lib/services/project.service.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L155">lib/services/project.service.ts:155</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rawHtmlContent: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> customContentBetweens: <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -276,7 +336,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L85">lib/services/project.service.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L149">lib/services/project.service.ts:149</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -299,7 +359,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L81">lib/services/project.service.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L145">lib/services/project.service.ts:145</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -313,6 +373,87 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="readcache" class="tsd-anchor"></a>
+					<h3>read<wbr>Cache</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">read<wbr>Cache<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L106">lib/services/project.service.ts:106</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type: <a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a></h5>
+								</li>
+								<li>
+									<h5>input: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="removecache" class="tsd-anchor"></a>
+					<h3>remove<wbr>Cache</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Cache<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L141">lib/services/project.service.ts:141</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type: <a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a></h5>
+								</li>
+								<li>
+									<h5>input: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="savecache" class="tsd-anchor"></a>
+					<h3>save<wbr>Cache</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">save<wbr>Cache<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a>, input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L114">lib/services/project.service.ts:114</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type: <a href="../globals.html#renderingtypes" class="tsd-signature-type">RenderingTypes</a></h5>
+								</li>
+								<li>
+									<h5>input: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>data: <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="updatedotngxerrcdotjson" class="tsd-anchor"></a>
 					<h3>update<wbr>Dot<wbr>NgxerRCDot<wbr>Json</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -322,7 +463,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/4f961e7/src/lib/services/project.service.ts#L71">lib/services/project.service.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/project.service.ts#L84">lib/services/project.service.ts:84</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -349,6 +490,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="cachecommand.html" class="tsd-kind-icon">Cache<wbr>Command</a>
+					</li>
 					<li class=" tsd-kind-class">
 						<a href="cli.html" class="tsd-kind-icon">Cli</a>
 					</li>
@@ -385,10 +529,16 @@
 								<a href="projectservice.html#rcfile" class="tsd-kind-icon">rc<wbr>File</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="projectservice.html#cacheexists" class="tsd-kind-icon">cache<wbr>Exists</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="projectservice.html#composehtmlcontent" class="tsd-kind-icon">composeHTMLContent</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="projectservice.html#createdotngxerrcdotjson" class="tsd-kind-icon">create<wbr>Dot<wbr>NgxerRCDot<wbr>Json</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="projectservice.html#getcachepath" class="tsd-kind-icon">get<wbr>Cache<wbr>Path</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="projectservice.html#isvalid" class="tsd-kind-icon">is<wbr>Valid</a>
@@ -406,6 +556,15 @@
 								<a href="projectservice.html#parseindexhtml" class="tsd-kind-icon">parse<wbr>IndexHTML</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="projectservice.html#readcache" class="tsd-kind-icon">read<wbr>Cache</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="projectservice.html#removecache" class="tsd-kind-icon">remove<wbr>Cache</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="projectservice.html#savecache" class="tsd-kind-icon">save<wbr>Cache</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="projectservice.html#updatedotngxerrcdotjson" class="tsd-kind-icon">update<wbr>Dot<wbr>NgxerRCDot<wbr>Json</a>
 							</li>
 						</ul>
@@ -418,6 +577,12 @@
 					<li class=" tsd-kind-class">
 						<a href="renderservice.html" class="tsd-kind-icon">Render<wbr>Service</a>
 					</li>
+					<li class=" tsd-kind-class">
+						<a href="updatecommand.html" class="tsd-kind-icon">Update<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/cachecommandoptions.html" class="tsd-kind-icon">Cache<wbr>Command<wbr>Options</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/databaserender.html" class="tsd-kind-icon">Database<wbr>Render</a>
 					</li>
@@ -425,10 +590,16 @@
 						<a href="../interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="../interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="../interfaces/parsedhtml.html" class="tsd-kind-icon">ParsedHTML</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#commanddef" class="tsd-kind-icon">Command<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#renderingtypes" class="tsd-kind-icon">Rendering<wbr>Types</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../globals.html#any" class="tsd-kind-icon">ANY</a>

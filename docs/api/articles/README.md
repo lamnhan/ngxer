@@ -11,9 +11,11 @@
 - [Getting started](#getting-started)
 - [Command overview](#cli-command-overview)
 - [Command reference](#cli-command-reference)
+  - [`cache`](#command-cache)
   - [`generate`](#command-generate)
   - [`init`](#command-init)
   - [`remove`](#command-remove)
+  - [`update`](#command-update)
   - [`help`](#command-help)
   - [`*`](#command-*)
 - [Detail API reference](https://ngxer.lamnhan.com)
@@ -58,14 +60,36 @@ ngxer generate
 
 Tool for prerendering Angular apps
 
-- [`ngxer generate|g [paths...]`](#command-generate)
-- [`ngxer init|i [path]`](#command-init)
-- [`ngxer remove|r <path>`](#command-remove)
+- [`ngxer cache|c <inputs...> --remove`](#command-cache)
+- [`ngxer generate|g`](#command-generate)
+- [`ngxer init|i [projectPath]`](#command-init)
+- [`ngxer remove|r <inputs...>`](#command-remove)
+- [`ngxer update|u <inputs...>`](#command-update)
 - [`ngxer help`](#command-help)
 - [`ngxer *`](#command-*)
 
 <h2><a name="cli-command-reference"><p>Command reference</p>
 </a></h2>
+
+<h3><a name="command-cache"><p><code>cache</code></p>
+</a></h3>
+
+Cache a input before generating.
+
+**Usage:**
+
+```sh
+ngxer cache <inputs...> --remove
+ngxer c <inputs...> --remove
+```
+
+**Parameters:**
+
+- `<inputs...>`: List of inputs to be cached
+
+**Options:**
+
+- `-r, --remove`: Remove the data.json after caching.
 
 <h3><a name="command-generate"><p><code>generate</code></p>
 </a></h3>
@@ -75,13 +99,9 @@ Generate static content.
 **Usage:**
 
 ```sh
-ngxer generate [paths...]
-ngxer g [paths...]
+ngxer generate
+ngxer g
 ```
-
-**Parameters:**
-
-- `[paths...]`: List of path rendering
 
 <h3><a name="command-init"><p><code>init</code></p>
 </a></h3>
@@ -91,13 +111,13 @@ Add ngxer to a project.
 **Usage:**
 
 ```sh
-ngxer init [path]
-ngxer i [path]
+ngxer init [projectPath]
+ngxer i [projectPath]
 ```
 
 **Parameters:**
 
-- `[path]`: Custom path to the project
+- `[projectPath]`: Custom path to the project
 
 <h3><a name="command-remove"><p><code>remove</code></p>
 </a></h3>
@@ -107,13 +127,29 @@ Remove a generated content
 **Usage:**
 
 ```sh
-ngxer remove <path>
-ngxer r <path>
+ngxer remove <inputs...>
+ngxer r <inputs...>
 ```
 
 **Parameters:**
 
-- `<path>`: Path to be removed
+- `<inputs...>`: List of inputs to be removed
+
+<h3><a name="command-update"><p><code>update</code></p>
+</a></h3>
+
+Update a static.
+
+**Usage:**
+
+```sh
+ngxer update <inputs...>
+ngxer u <inputs...>
+```
+
+**Parameters:**
+
+- `<inputs...>`: List of inputs to be updated
 
 <h3><a name="command-help"><p><code>help</code></p>
 </a></h3>

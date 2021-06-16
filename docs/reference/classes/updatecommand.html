@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>FirebaseService | @lamnhan/ngxer</title>
+	<title>UpdateCommand | @lamnhan/ngxer</title>
 	<meta name="description" content="Documentation for @lamnhan/ngxer">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="firebaseservice.html">FirebaseService</a>
+					<a href="updatecommand.html">UpdateCommand</a>
 				</li>
 			</ul>
-			<h1>Class FirebaseService</h1>
+			<h1>Class UpdateCommand</h1>
 		</div>
 	</div>
 </header>
@@ -68,7 +68,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">FirebaseService</span>
+						<span class="target">UpdateCommand</span>
 					</li>
 				</ul>
 			</section>
@@ -79,13 +79,13 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="firebaseservice.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="updatecommand.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="firebaseservice.html#firestore" class="tsd-kind-icon">firestore</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="updatecommand.html#run" class="tsd-kind-icon">run</a></li>
 							</ul>
 						</section>
 					</div>
@@ -97,22 +97,16 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Firebase<wbr>Service<span class="tsd-signature-symbol">(</span>fileService<span class="tsd-signature-symbol">: </span><a href="fileservice.html" class="tsd-signature-type">FileService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="firebaseservice.html" class="tsd-signature-type">FirebaseService</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Update<wbr>Command<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="updatecommand.html" class="tsd-signature-type">UpdateCommand</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/firebase.service.ts#L8">lib/services/firebase.service.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/cli/commands/update.command.ts#L1">cli/commands/update.command.ts:1</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>fileService: <a href="fileservice.html" class="tsd-signature-type">FileService</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="firebaseservice.html" class="tsd-signature-type">FirebaseService</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="updatecommand.html" class="tsd-signature-type">UpdateCommand</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -120,19 +114,25 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="firestore" class="tsd-anchor"></a>
-					<h3>firestore</h3>
+					<a name="run" class="tsd-anchor"></a>
+					<h3>run</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">firestore<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Firestore</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">run<span class="tsd-signature-symbol">(</span>inputs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/lib/services/firebase.service.ts#L27">lib/services/firebase.service.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5643757/src/cli/commands/update.command.ts#L4">cli/commands/update.command.ts:4</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Firestore</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>inputs: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -157,21 +157,9 @@
 					<li class=" tsd-kind-class">
 						<a href="fileservice.html" class="tsd-kind-icon">File<wbr>Service</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class=" tsd-kind-class">
 						<a href="firebaseservice.html" class="tsd-kind-icon">Firebase<wbr>Service</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="firebaseservice.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="firebaseservice.html#firestore" class="tsd-kind-icon">firestore</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="generatecommand.html" class="tsd-kind-icon">Generate<wbr>Command</a>
 					</li>
@@ -196,9 +184,21 @@
 					<li class=" tsd-kind-class">
 						<a href="renderservice.html" class="tsd-kind-icon">Render<wbr>Service</a>
 					</li>
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="updatecommand.html" class="tsd-kind-icon">Update<wbr>Command</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="updatecommand.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="updatecommand.html#run" class="tsd-kind-icon">run</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/cachecommandoptions.html" class="tsd-kind-icon">Cache<wbr>Command<wbr>Options</a>
 					</li>
