@@ -35,17 +35,17 @@ export class HtmlService {
     private projectService: ProjectService
   ) {}
 
-  async parseIndexHTML(out: string) {
-    return this.parseHTMLFile(resolve(out));
+  async parseIndex(out: string) {
+    return this.parseFile(resolve(out));
   }
 
-  async parseHTMLFile(path: string) {
+  async parseFile(path: string) {
     path = path.indexOf('index.html') !== -1 ? path : `${path}/index.html`;
     const rawHtmlContent = await this.fileService.readText(path);
-    return this.parseHTMLContent(rawHtmlContent);
+    return this.parseContent(rawHtmlContent);
   }
 
-  async parseHTMLContent(
+  async parseContent(
     rawHtmlContent: string,
     customContentBetweens?: [string, string]
   ) {
@@ -134,7 +134,7 @@ export class HtmlService {
     } as ParsedHTML;
   }
 
-  composeHTMLContent(templateData: ParsedHTML, data: MetaData) {
+  composeContent(templateData: ParsedHTML, data: MetaData) {
     const {
       full: htmlContent,
       title: templateTitle,

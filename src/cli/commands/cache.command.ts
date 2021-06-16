@@ -23,7 +23,7 @@ export class CacheCommand {
             resolve(dataPath)
           );
           // save cache
-          await this.cacheService.saveCache('path', cachePath, data);
+          await this.cacheService.save('path', cachePath, data);
           results.push(
             `${this.projectService.rcDir}/path_cached/` + cachePath + '.json'
           );

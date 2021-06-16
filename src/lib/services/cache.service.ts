@@ -9,7 +9,7 @@ export class CacheService {
     private projectService: ProjectService
   ) {}
 
-  getCachePath(type: RenderingTypes, input: string) {
+  getPath(type: RenderingTypes, input: string) {
     return resolve(
       this.projectService.rcDir,
       `${type}_cached`,
@@ -17,19 +17,19 @@ export class CacheService {
     );
   }
 
-  cacheExists(type: RenderingTypes, input: string) {
-    return this.fileService.exists(this.getCachePath(type, input));
+  exists(type: RenderingTypes, input: string) {
+    return this.fileService.exists(this.getPath(type, input));
   }
 
-  async readCache(type: RenderingTypes, input: string) {
-    const cachedPath = this.getCachePath(type, input);
+  async read(type: RenderingTypes, input: string) {
+    const cachedPath = this.getPath(type, input);
     if (!(await this.fileService.exists(cachedPath))) {
       return null;
     }
     return this.fileService.readJson<MetaData>(cachedPath);
   }
 
-  async saveCache(
+  async save(
     type: RenderingTypes,
     input: string,
     data: Record<string, unknown>
@@ -68,13 +68,13 @@ export class CacheService {
           : this.projectService.defaultMetaData.content,
     };
     // save cache
-    const cachePath = this.getCachePath(type, input);
+    const cachePath = this.getPath(type, input);
     await this.fileService.createJson(cachePath, metaData);
     // result
     return {path: cachePath, data: metaData};
   }
 
-  async removeCache(type: RenderingTypes, input: string) {
-    return this.fileService.removeFile(this.getCachePath(type, input));
+  async remove(type: RenderingTypes, input: string) {
+    return this.fileService.removeFile(this.getPath(type, input));
   }
 }

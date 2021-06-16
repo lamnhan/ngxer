@@ -27,7 +27,7 @@ export class GenerateCommand {
       databaseRender = [],
       contentBetweens,
     } = await this.projectService.loadDotNgxerRCDotJson();
-    const parsedIndexHTML = await this.htmlService.parseIndexHTML(out);
+    const parsedIndexHTML = await this.htmlService.parseIndex(out);
 
     /**
      * path render (from manual paths or rc pathRender)
@@ -45,7 +45,7 @@ export class GenerateCommand {
         if (await this.fileService.exists(resolve(out, path, 'index.html'))) {
           pathRenderExisting.push(path);
         } else {
-          if (await this.cacheService.cacheExists('path', path)) {
+          if (await this.cacheService.exists('path', path)) {
             pathRenderCache.push(path);
           } else {
             pathRenderLive.push(path);
@@ -68,7 +68,7 @@ export class GenerateCommand {
         await Promise.all(
           pathRenderCache.map(path =>
             (async () => {
-              const metaData = await this.cacheService.readCache('path', path);
+              const metaData = await this.cacheService.read('path', path);
               // save file
               if (metaData) {
                 const filePath = resolve(
@@ -78,7 +78,7 @@ export class GenerateCommand {
                 );
                 await this.fileService.createFile(
                   filePath,
-                  this.htmlService.composeHTMLContent(parsedIndexHTML, metaData)
+                  this.htmlService.composeContent(parsedIndexHTML, metaData)
                 );
                 console.log('  + ' + yellow(path));
               } else {
@@ -96,13 +96,13 @@ export class GenerateCommand {
           async (path, page) => {
             // extract data
             const pageContent = await page.content();
-            const metaData = await this.htmlService.parseHTMLContent(
+            const metaData = await this.htmlService.parseContent(
               pageContent,
               contentBetweens
             );
             metaData.url = url + path + '/';
             // cache
-            await this.cacheService.saveCache(
+            await this.cacheService.save(
               'path',
               path.substr(1),
               metaData as unknown as Record<string, unknown>
@@ -111,7 +111,7 @@ export class GenerateCommand {
             const filePath = resolve(out, path.substr(1), 'index.html');
             await this.fileService.createFile(
               filePath,
-              this.htmlService.composeHTMLContent(parsedIndexHTML, metaData)
+              this.htmlService.composeContent(parsedIndexHTML, metaData)
             );
             console.log('  + ' + magenta(path));
           }
