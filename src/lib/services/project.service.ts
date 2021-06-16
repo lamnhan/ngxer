@@ -91,12 +91,20 @@ export class ProjectService {
     });
   }
 
-  async readCache(type: RenderingTypes, input: string) {
-    const cachedPath = resolve(
+  getCachePath(type: RenderingTypes, input: string) {
+    return resolve(
       this.rcDir,
       `${type}_cached`,
       `${input.replace(':', '/')}.json`
     );
+  }
+
+  cacheExists(type: RenderingTypes, input: string) {
+    return this.fileService.exists(this.getCachePath(type, input));
+  }
+
+  async readCache(type: RenderingTypes, input: string) {
+    const cachedPath = this.getCachePath(type, input);
     if (!(await this.fileService.exists(cachedPath))) {
       return null;
     }
@@ -125,18 +133,13 @@ export class ProjectService {
     };
     // save cache
     return this.fileService.createJson(
-      resolve(this.rcDir, `${type}_cached`, `${input.replace(':', '/')}.json`),
+      this.getCachePath(type, input),
       metaData
     );
   }
 
   async removeCache(type: RenderingTypes, input: string) {
-    const cachedPath = resolve(
-      this.rcDir,
-      `${type}_cached`,
-      `${input.replace(':', '/')}.json`
-    );
-    return this.fileService.removeFile(cachedPath);
+    return this.fileService.removeFile(this.getCachePath(type, input));
   }
 
   async parseIndexHTML(out: string) {
@@ -238,7 +241,7 @@ export class ProjectService {
     } as ParsedHTML;
   }
 
-  composeHTMLContent(templateData: ParsedHTML, data: ParsedHTML) {
+  composeHTMLContent(templateData: ParsedHTML, data: MetaData) {
     const {
       full: htmlContent,
       title: templateTitle,

@@ -38,18 +38,13 @@ export class RenderService {
     this.browser = undefined as any;
   }
 
-  async render(
+  async liveRender(
     out: string,
     paths: string[],
-    handler: (path: string, page: Page) => Promise<void>,
-    afterBootup?: () => void,
-    afterShutdown?: () => void
+    handler: (path: string, page: Page) => Promise<void>
   ) {
     // bootup
     await this.bootup(out);
-    if (afterBootup) {
-      afterBootup();
-    }
     // render
     await Promise.all(
       paths.map(path =>
@@ -67,8 +62,5 @@ export class RenderService {
     );
     // shutdown
     await this.shutdown();
-    if (afterShutdown) {
-      afterShutdown();
-    }
   }
 }

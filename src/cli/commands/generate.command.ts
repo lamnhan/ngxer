@@ -1,7 +1,7 @@
 import {resolve} from 'path';
 import {blue} from 'chalk';
 
-import {OK, INFO} from '../../lib/services/message.service';
+import {OK, INFO, ERROR} from '../../lib/services/message.service';
 import {HelperService} from '../../lib/services/helper.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
@@ -32,7 +32,8 @@ export class GenerateCommand {
      */
 
     if (pathRender.length) {
-      const pathRenderFiltered = [] as string[];
+      const pathRenderCache = [] as string[];
+      const pathRenderLive = [] as string[];
       // filter
       for (let i = 0; i < pathRender.length; i++) {
         if (
@@ -40,35 +41,74 @@ export class GenerateCommand {
             resolve(out, pathRender[i], 'index.html')
           ))
         ) {
-          pathRenderFiltered.push(pathRender[i]);
+          if (await this.projectService.cacheExists('path', pathRender[i])) {
+            pathRenderCache.push(pathRender[i]);
+          } else {
+            pathRenderLive.push(pathRender[i]);
+          }
         }
       }
-      // render
-      await this.renderService.render(
-        out,
-        pathRenderFiltered,
-        async (path, page) => {
-          const filePath = resolve(out, path.substr(1), 'index.html');
-          // extract data
-          const pageContent = await page.content();
-          const parsedPage = await this.projectService.parseHTMLContent(
-            pageContent,
-            contentBetweens
-          );
-          // save file
-          await this.fileService.createFile(
-            filePath,
-            this.projectService.composeHTMLContent(parsedIndexHTML, {
-              ...parsedPage,
-              url: url + path + '/',
-            })
-          );
-          console.log('  + ' + path);
-        },
-        () =>
-          console.log(INFO + 'Begin path rendering (could take some time):'),
-        () => console.log(INFO + 'Disposed server and browser.')
-      );
+      // cache render
+      console.log(INFO + 'Begin path rendering (could take some time):');
+      if (pathRenderCache.length) {
+        await Promise.all(
+          pathRenderCache.map(path =>
+            (async () => {
+              const metaData = await this.projectService.readCache(
+                'path',
+                path
+              );
+              // save file
+              if (metaData) {
+                const filePath = resolve(out, path.substr(1), 'index.html');
+                await this.fileService.createFile(
+                  filePath,
+                  this.projectService.composeHTMLContent(parsedIndexHTML, {
+                    ...metaData,
+                    url: url + path + '/',
+                  })
+                );
+                console.log('  + ' + blue(path));
+              } else {
+                console.log('  + ' + ERROR + blue(path) + ' (empty cache)');
+              }
+            })()
+          )
+        );
+      }
+      // live render
+      if (pathRenderLive.length) {
+        await this.renderService.liveRender(
+          out,
+          pathRenderLive,
+          async (path, page) => {
+            // extract data
+            const pageContent = await page.content();
+            const metaData = await this.projectService.parseHTMLContent(
+              pageContent,
+              contentBetweens
+            );
+            // cache
+            await this.projectService.saveCache(
+              'path',
+              path,
+              metaData as unknown as Record<string, unknown>
+            );
+            // save file
+            const filePath = resolve(out, path.substr(1), 'index.html');
+            await this.fileService.createFile(
+              filePath,
+              this.projectService.composeHTMLContent(parsedIndexHTML, {
+                ...metaData,
+                url: url + path + '/',
+              })
+            );
+            console.log('  + ' + blue(path));
+          }
+        );
+      }
+      // done
+      console.log(INFO + 'Path rendering completed.');
     }
 
     /**
