@@ -73,9 +73,11 @@
 						<li><a href="#getting-started">Getting started</a></li>
 						<li><a href="#cli-command-overview">Command overview</a></li>
 						<li><a href="#cli-command-reference">Command reference</a><ul>
+								<li><a href="#command-cache"><code>cache</code></a></li>
 								<li><a href="#command-generate"><code>generate</code></a></li>
 								<li><a href="#command-init"><code>init</code></a></li>
 								<li><a href="#command-remove"><code>remove</code></a></li>
+								<li><a href="#command-update"><code>update</code></a></li>
 								<li><a href="#command-help"><code>help</code></a></li>
 								<li><a href="#command-*"><code>*</code></a></li>
 							</ul>
@@ -101,43 +103,65 @@
 					</a></h2>
 					<p>Tool for prerendering Angular apps</p>
 					<ul>
-						<li><a href="#command-generate"><code>ngxer generate|g [paths...]</code></a></li>
-						<li><a href="#command-init"><code>ngxer init|i [path]</code></a></li>
-						<li><a href="#command-remove"><code>ngxer remove|r &lt;path&gt;</code></a></li>
+						<li><a href="#command-cache"><code>ngxer cache|c &lt;inputs...&gt; --remove</code></a></li>
+						<li><a href="#command-generate"><code>ngxer generate|g</code></a></li>
+						<li><a href="#command-init"><code>ngxer init|i [projectPath]</code></a></li>
+						<li><a href="#command-remove"><code>ngxer remove|r &lt;inputs...&gt;</code></a></li>
+						<li><a href="#command-update"><code>ngxer update|u &lt;inputs...&gt;</code></a></li>
 						<li><a href="#command-help"><code>ngxer help</code></a></li>
 						<li><a href="#command-*"><code>ngxer *</code></a></li>
 					</ul>
 					<h2><a name="cli-command-reference"><p>Command reference</p>
 					</a></h2>
+					<h3><a name="command-cache"><p><code>cache</code></p>
+					</a></h3>
+					<p>Cache a input before generating.</p>
+					<p><strong>Usage:</strong></p>
+					<pre><code class="language-sh">ngxer cache &lt;inputs...&gt; --remove
+ngxer c &lt;inputs...&gt; --remove</code></pre>
+					<p><strong>Parameters:</strong></p>
+					<ul>
+						<li><code>&lt;inputs...&gt;</code>: List of inputs to be cached</li>
+					</ul>
+					<p><strong>Options:</strong></p>
+					<ul>
+						<li><code>-r, --remove</code>: Remove the data.json after caching.</li>
+					</ul>
 					<h3><a name="command-generate"><p><code>generate</code></p>
 					</a></h3>
 					<p>Generate static content.</p>
 					<p><strong>Usage:</strong></p>
-					<pre><code class="language-sh">ngxer generate [paths...]
-ngxer g [paths...]</code></pre>
-					<p><strong>Parameters:</strong></p>
-					<ul>
-						<li><code>[paths...]</code>: List of path rendering</li>
-					</ul>
+					<pre><code class="language-sh">ngxer generate
+ngxer g</code></pre>
 					<h3><a name="command-init"><p><code>init</code></p>
 					</a></h3>
 					<p>Add ngxer to a project.</p>
 					<p><strong>Usage:</strong></p>
-					<pre><code class="language-sh">ngxer init [path]
-ngxer i [path]</code></pre>
+					<pre><code class="language-sh">ngxer init [projectPath]
+ngxer i [projectPath]</code></pre>
 					<p><strong>Parameters:</strong></p>
 					<ul>
-						<li><code>[path]</code>: Custom path to the project</li>
+						<li><code>[projectPath]</code>: Custom path to the project</li>
 					</ul>
 					<h3><a name="command-remove"><p><code>remove</code></p>
 					</a></h3>
 					<p>Remove a generated content</p>
 					<p><strong>Usage:</strong></p>
-					<pre><code class="language-sh">ngxer remove &lt;path&gt;
-ngxer r &lt;path&gt;</code></pre>
+					<pre><code class="language-sh">ngxer remove &lt;inputs...&gt;
+ngxer r &lt;inputs...&gt;</code></pre>
 					<p><strong>Parameters:</strong></p>
 					<ul>
-						<li><code>&lt;path&gt;</code>: Path to be removed</li>
+						<li><code>&lt;inputs...&gt;</code>: List of inputs to be removed</li>
+					</ul>
+					<h3><a name="command-update"><p><code>update</code></p>
+					</a></h3>
+					<p>Update a static.</p>
+					<p><strong>Usage:</strong></p>
+					<pre><code class="language-sh">ngxer update &lt;inputs...&gt;
+ngxer u &lt;inputs...&gt;</code></pre>
+					<p><strong>Parameters:</strong></p>
+					<ul>
+						<li><code>&lt;inputs...&gt;</code>: List of inputs to be updated</li>
 					</ul>
 					<h3><a name="command-help"><p><code>help</code></p>
 					</a></h3>
@@ -169,7 +193,7 @@ ngxer r &lt;path&gt;</code></pre>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class">
-						<a href="classes/cachecommand.html" class="tsd-kind-icon">Cache<wbr>Command</a>
+						<a href="classes/cacheservice.html" class="tsd-kind-icon">Cache<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/cli.html" class="tsd-kind-icon">Cli</a>
@@ -185,6 +209,9 @@ ngxer r &lt;path&gt;</code></pre>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/helperservice.html" class="tsd-kind-icon">Helper<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/htmlservice.html" class="tsd-kind-icon">Html<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/initcommand.html" class="tsd-kind-icon">Init<wbr>Command</a>
@@ -206,9 +233,6 @@ ngxer r &lt;path&gt;</code></pre>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/updatecommand.html" class="tsd-kind-icon">Update<wbr>Command</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/cachecommandoptions.html" class="tsd-kind-icon">Cache<wbr>Command<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/databaserender.html" class="tsd-kind-icon">Database<wbr>Render</a>

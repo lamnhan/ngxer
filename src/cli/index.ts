@@ -3,7 +3,6 @@ import {Command} from 'commander';
 import {Lib as NgxerModule} from '../lib/index';
 import {InitCommand} from './commands/init.command';
 import {GenerateCommand} from './commands/generate.command';
-import {CacheCommand} from './commands/cache.command';
 import {UpdateCommand} from './commands/update.command';
 import {RemoveCommand} from './commands/remove.command';
 
@@ -11,7 +10,6 @@ export class Cli {
   private ngxerModule: NgxerModule;
   initCommand: InitCommand;
   generateCommand: GenerateCommand;
-  cacheCommand: CacheCommand;
   updateCommand: UpdateCommand;
   removeCommand: RemoveCommand;
 
@@ -28,14 +26,6 @@ export class Cli {
   generateCommandDef: CommandDef = [
     ['generate', 'g'],
     'Generate static content.',
-  ];
-
-  /**
-   * @param inputs... - List of inputs to be cached ("foo<foo.json" "bar<bar.json")
-   */
-  cacheCommandDef: CommandDef = [
-    ['cache <inputs...>', 'c'],
-    'Cache a input before generating.',
   ];
 
   /**
@@ -66,11 +56,6 @@ export class Cli {
       this.ngxerModule.cacheService,
       this.ngxerModule.htmlService,
       this.ngxerModule.renderService
-    );
-    this.cacheCommand = new CacheCommand(
-      this.ngxerModule.fileService,
-      this.ngxerModule.projectService,
-      this.ngxerModule.cacheService
     );
     this.updateCommand = new UpdateCommand();
     this.removeCommand = new RemoveCommand(
@@ -109,16 +94,6 @@ export class Cli {
         .aliases(aliases)
         .description(description)
         .action(() => this.generateCommand.run());
-    })();
-
-    // cache
-    (() => {
-      const [[command, ...aliases], description] = this.cacheCommandDef;
-      commander
-        .command(command)
-        .aliases(aliases)
-        .description(description)
-        .action(inputs => this.cacheCommand.run(inputs));
     })();
 
     // update

@@ -11,7 +11,6 @@
 - [Getting started](#getting-started)
 - [Command overview](#cli-command-overview)
 - [Command reference](#cli-command-reference)
-  - [`cache`](#command-cache)
   - [`generate`](#command-generate)
   - [`init`](#command-init)
   - [`remove`](#command-remove)
@@ -60,7 +59,6 @@ ngxer generate
 
 Tool for prerendering Angular apps
 
-- [`ngxer cache|c <inputs...> --remove`](#command-cache)
 - [`ngxer generate|g`](#command-generate)
 - [`ngxer init|i [projectPath]`](#command-init)
 - [`ngxer remove|r <inputs...>`](#command-remove)
@@ -70,26 +68,6 @@ Tool for prerendering Angular apps
 
 <h2><a name="cli-command-reference"><p>Command reference</p>
 </a></h2>
-
-<h3><a name="command-cache"><p><code>cache</code></p>
-</a></h3>
-
-Cache a input before generating.
-
-**Usage:**
-
-```sh
-ngxer cache <inputs...> --remove
-ngxer c <inputs...> --remove
-```
-
-**Parameters:**
-
-- `<inputs...>`: List of inputs to be cached
-
-**Options:**
-
-- `-r, --remove`: Remove the data.json after caching.
 
 <h3><a name="command-generate"><p><code>generate</code></p>
 </a></h3>
