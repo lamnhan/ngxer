@@ -11,14 +11,32 @@ export class RemoveCommand {
     private projectService: ProjectService
   ) {}
 
-  async run(path: string) {
-    const {out = 'www'} = await this.projectService.loadDotNgxerRCDotJson();
-    const dirPath = resolve(out, path);
-    if (await this.fileService.exists(dirPath)) {
-      this.fileService.removeDir(dirPath);
-      console.log(OK + 'Static removed: ' + blue(`${out}/${path}`));
-    } else {
-      console.log(WARN + 'No static found at: ' + blue(`${out}/${path}`));
-    }
+  async run(inputs: string[]) {
+    const {out} = await this.projectService.loadDotNgxerRCDotJson();
+    return Promise.all(
+      inputs.map(input =>
+        (async () => {
+          // database
+          if (input.indexOf(':') !== -1) {
+            // TODO: ...
+          }
+          // path
+          else {
+            // remove cached
+            // TODO: ...
+            // remove file
+            const dirPath = resolve(out, input);
+            if (await this.fileService.exists(dirPath)) {
+              this.fileService.removeDir(dirPath);
+              console.log(OK + 'Static removed: ' + blue(`${out}/${input}`));
+            } else {
+              console.log(
+                WARN + 'No static found at: ' + blue(`${out}/${input}`)
+              );
+            }
+          }
+        })()
+      )
+    );
   }
 }

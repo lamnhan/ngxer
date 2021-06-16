@@ -11,6 +11,7 @@ export interface DotNgxerRCDotJson {
   sitemap?: boolean;
   pathRender?: string[];
   databaseRender?: DatabaseRender[];
+  contentBetweens?: [string, string];
 }
 
 export interface DatabaseRender {
@@ -60,8 +61,8 @@ export class ProjectService {
 
   createDotNgxerRCDotJson(projectPath = '.') {
     return this.fileService.createJson(resolve(projectPath, this.rcFile), {
-      out: 'firebase/public',
-      url: '',
+      out: 'docs',
+      url: 'https://ngxer.lamnhan.com',
       sitemap: true,
       pathRender: [],
       databaseRender: [],
@@ -88,7 +89,10 @@ export class ProjectService {
     return this.parseHTMLContent(rawHtmlContent);
   }
 
-  async parseHTMLContent(rawHtmlContent: string) {
+  async parseHTMLContent(
+    rawHtmlContent: string,
+    customContentBetweens?: [string, string]
+  ) {
     // strip all unneccesary code
     const htmlContent = await minify({
       compressor: htmlMinifier,
@@ -106,7 +110,9 @@ export class ProjectService {
     const localeBetweens = ['<meta property="og:locale" content="', '"'];
     const scriptBetweens = ['<script src="', '"'];
     const styleBetweens = ['<link rel="stylesheet" href="', '"'];
-    const contentBetweens = ['</router-outlet>', '</main>'];
+    const contentBetweens = customContentBetweens
+      ? customContentBetweens
+      : ['</router-outlet>', '</main>'];
     // extract metas
     const title = this.helperService
       .stringsBetweens(htmlContent, titleBetweens[0], titleBetweens[1])

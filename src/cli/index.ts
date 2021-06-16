@@ -14,26 +14,23 @@ export class Cli {
   commander = ['ngxer', 'Tool for prerendering Angular apps'];
 
   /**
-   * @param path? - Custom path to the project
+   * @param projectPath? - Custom path to the project
    */
   initCommandDef: CommandDef = [
-    ['init [path]', 'i'],
+    ['init [projectPath]', 'i'],
     'Add ngxer to a project.',
   ];
 
-  /**
-   * @param paths...? - List of path rendering
-   */
   generateCommandDef: CommandDef = [
-    ['generate [paths...]', 'g'],
+    ['generate', 'g'],
     'Generate static content.',
   ];
 
   /**
-   * @param path - Path to be removed
+   * @param inputs... - List of inputs to be removed
    */
   removeCommandDef: CommandDef = [
-    ['remove <path>', 'r'],
+    ['remove <inputs...>', 'r'],
     'Remove a generated content',
   ];
 
@@ -73,7 +70,7 @@ export class Cli {
         .command(command)
         .aliases(aliases)
         .description(description)
-        .action(path => this.initCommand.run(path));
+        .action(projectPath => this.initCommand.run(projectPath));
     })();
 
     // generate
@@ -83,7 +80,7 @@ export class Cli {
         .command(command)
         .aliases(aliases)
         .description(description)
-        .action(paths => this.generateCommand.run(paths));
+        .action(() => this.generateCommand.run());
     })();
 
     // remove
@@ -93,7 +90,7 @@ export class Cli {
         .command(command)
         .aliases(aliases)
         .description(description)
-        .action(path => this.removeCommand.run(path));
+        .action(inputs => this.removeCommand.run(inputs));
     })();
 
     // help

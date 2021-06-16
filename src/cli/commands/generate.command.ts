@@ -15,7 +15,7 @@ export class GenerateCommand {
     private renderService: RenderService
   ) {}
 
-  async run(manualPaths: string[] = []) {
+  async run() {
     // load data
     const {
       out,
@@ -23,6 +23,7 @@ export class GenerateCommand {
       sitemap = false,
       pathRender = [],
       databaseRender = [],
+      contentBetweens,
     } = await this.projectService.loadDotNgxerRCDotJson();
     const parsedIndexHTML = await this.projectService.parseIndexHTML(out);
 
@@ -30,32 +31,29 @@ export class GenerateCommand {
      * path render (from manual paths or rc pathRender)
      */
 
-    const pathRenderFinal = [] as string[];
-    // process input
-    if (manualPaths.length) {
-      pathRenderFinal.push(...manualPaths);
-    } else if (pathRender.length) {
+    if (pathRender.length) {
+      const pathRenderFiltered = [] as string[];
+      // filter
       for (let i = 0; i < pathRender.length; i++) {
         if (
           !(await this.fileService.exists(
             resolve(out, pathRender[i], 'index.html')
           ))
         ) {
-          pathRenderFinal.push(pathRender[i]);
+          pathRenderFiltered.push(pathRender[i]);
         }
       }
-    }
-    // render
-    if (pathRenderFinal.length) {
+      // render
       await this.renderService.render(
         out,
-        pathRenderFinal,
+        pathRenderFiltered,
         async (path, page) => {
           const filePath = resolve(out, path.substr(1), 'index.html');
           // extract data
           const pageContent = await page.content();
           const parsedPage = await this.projectService.parseHTMLContent(
-            pageContent
+            pageContent,
+            contentBetweens
           );
           // save file
           await this.fileService.createFile(
@@ -88,7 +86,7 @@ export class GenerateCommand {
     if (sitemap) {
       const sitemapItems = [] as string[];
       // path renders
-      sitemapItems.push(...manualPaths, ...pathRender);
+      sitemapItems.push(...pathRender);
       // create sitemap
       const sitemapContent = await this.buildSitemap(url, sitemapItems);
       await this.fileService.createFile(
