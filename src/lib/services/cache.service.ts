@@ -101,7 +101,10 @@ export class CacheService {
 
   private convertMeta(metaData: MetaData) {
     const {title, description, image, url, locale, content} = metaData;
-    const id = url.split('/').pop() as string;
+    const urlSplits = url.split('/');
+    const id = urlSplits[urlSplits.length - 1]
+      ? urlSplits[urlSplits.length - 1]
+      : urlSplits[urlSplits.length - 2];
     return {
       id,
       title,
@@ -131,13 +134,19 @@ export class CacheService {
       return null;
     }
     // data
-    const title = data.title;
-    const description = data.description;
-    const image = data.image;
-    const url = rcJson.url + '/' + data.id;
-    const locale = data.locale;
-    const lang = (locale as string).split('-').shift() as string;
-    const content = data.content;
+    const title = data.title || this.projectService.defaultMetaData.title;
+    const description =
+      data.description || this.projectService.defaultMetaData.description;
+    const image = data.image || this.projectService.defaultMetaData.image;
+    const url = data.id
+      ? rcJson.url + '/' + data.id
+      : this.projectService.defaultMetaData.url;
+    const locale = data.locale || this.projectService.defaultMetaData.locale;
+    const lang =
+      typeof locale === 'string'
+        ? (locale.split('-').shift() as string)
+        : this.projectService.defaultMetaData.lang;
+    const content = data.content || this.projectService.defaultMetaData.content;
     // result
     return {title, description, image, url, locale, lang, content} as MetaData;
   }
