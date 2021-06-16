@@ -20,29 +20,42 @@ export interface DatabaseRender {
   locale?: string;
 }
 
-export interface ParsedHTML {
-  full: string;
+export type RenderingTypes = 'path' | 'database';
+
+export interface MetaData {
+  title: string;
+  description: string;
+  image: string;
+  url: string;
+  lang: string;
+  locale: string;
   content: string;
+}
+
+export interface ParsedHTML extends MetaData {
+  full: string;
+  // content: string;
   contentBetweens: [string, string];
   styles: string[];
   styleBetweens: [string, string];
   scripts: string[];
   scriptBetweens: [string, string];
-  title: string;
+  // title: string;
   titleBetweens: [string, string];
   description: string;
   descriptionBetweens: [string, string];
-  image: string;
+  // image: string;
   imageBetweens: [string, string];
-  url: string;
+  // url: string;
   urlBetweens: [string, string];
-  lang: string;
+  // lang: string;
   langBetweens: [string, string];
-  locale: string;
+  // locale: string;
   localeBetweens: [string, string];
 }
 
 export class ProjectService {
+  private rcDir = '.ngxer';
   public readonly rcFile = '.ngxerrc.json';
   constructor(
     private helperService: HelperService,
@@ -77,6 +90,45 @@ export class ProjectService {
       ...dotNgxerRCDotJson,
       ...data,
     });
+  }
+
+  async readCache(type: RenderingTypes, input: string) {
+    const cachedPath = resolve(
+      this.rcDir,
+      `${type}_cached`,
+      `${input.replace(':', '/')}.json`
+    );
+    if (!(await this.fileService.exists(cachedPath))) {
+      return null;
+    }
+    return this.fileService.readJson<MetaData>(cachedPath);
+  }
+
+  async saveCache(
+    type: RenderingTypes,
+    input: string,
+    data: Record<string, unknown>
+  ) {
+    // process data
+    const metaData: MetaData = {
+      title: typeof data.title === 'string' ? data.title : 'Invalid title',
+      description:
+        typeof data.description === 'string'
+          ? data.description
+          : 'Invalid description',
+      image:
+        typeof data.image === 'string' ? data.image : 'https://invalid.image',
+      url: typeof data.url === 'string' ? data.url : 'https://invalid.url',
+      lang: typeof data.lang === 'string' ? data.lang : 'en',
+      locale: typeof data.locale === 'string' ? data.locale : 'en-US',
+      content:
+        typeof data.content === 'string' ? data.content : 'Invalid content',
+    };
+    // save cache
+    return this.fileService.createJson(
+      resolve(this.rcDir, `${type}_cached`, `${input.replace(':', '/')}.json`),
+      metaData
+    );
   }
 
   async parseIndexHTML(out: string) {

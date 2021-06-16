@@ -36,6 +36,7 @@ export class Cli {
   cacheCommandDef: CommandDef = [
     ['cache <inputs...>', 'c'],
     'Cache a input before generating.',
+    ['-r, --remove', 'Remove the data.json after caching.'],
   ];
 
   /**
@@ -66,7 +67,10 @@ export class Cli {
       this.ngxerModule.projectService,
       this.ngxerModule.renderService
     );
-    this.cacheCommand = new CacheCommand();
+    this.cacheCommand = new CacheCommand(
+      this.ngxerModule.fileService,
+      this.ngxerModule.projectService
+    );
     this.updateCommand = new UpdateCommand();
     this.removeCommand = new RemoveCommand(
       this.ngxerModule.fileService,
@@ -107,12 +111,14 @@ export class Cli {
 
     // cache
     (() => {
-      const [[command, ...aliases], description] = this.cacheCommandDef;
+      const [[command, ...aliases], description, removeOpt] =
+        this.cacheCommandDef;
       commander
         .command(command)
         .aliases(aliases)
         .description(description)
-        .action(inputs => this.cacheCommand.run(inputs));
+        .option(...removeOpt)
+        .action((inputs, options) => this.cacheCommand.run(inputs, options));
     })();
 
     // update

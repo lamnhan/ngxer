@@ -36,6 +36,10 @@ export class FileService {
     return writeJson(filePath, jsonData, {spaces: 2});
   }
 
+  removeFile(path: string) {
+    return remove(path);
+  }
+
   removeFiles(paths: string[]) {
     return Promise.all(paths.map(filePath => remove(filePath)));
   }
