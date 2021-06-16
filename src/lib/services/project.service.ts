@@ -17,8 +17,6 @@ export interface DatabaseRender {
   path: string; // xxx/:id
 }
 
-export type RenderingTypes = 'path' | 'database';
-
 export interface MetaData {
   title: string;
   description: string;

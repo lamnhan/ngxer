@@ -19,6 +19,7 @@ export class GenerateCommand {
 
   async run() {
     // load data
+    const dotNgxerDotJson = await this.projectService.loadDotNgxerRCDotJson();
     const {
       out,
       url,
@@ -26,7 +27,7 @@ export class GenerateCommand {
       pathRender = [],
       databaseRender = [],
       contentBetweens,
-    } = await this.projectService.loadDotNgxerRCDotJson();
+    } = dotNgxerDotJson;
     const parsedIndexHTML = await this.htmlService.parseIndex(out);
 
     /**
@@ -45,7 +46,7 @@ export class GenerateCommand {
         if (await this.fileService.exists(resolve(out, path, 'index.html'))) {
           pathRenderExisting.push(path);
         } else {
-          if (await this.cacheService.exists('path', path)) {
+          if (await this.cacheService.exists(path)) {
             pathRenderCache.push(path);
           } else {
             pathRenderLive.push(path);
@@ -68,9 +69,12 @@ export class GenerateCommand {
         await Promise.all(
           pathRenderCache.map(path =>
             (async () => {
-              const metaData = await this.cacheService.read('path', path);
+              const cached = await this.cacheService.read(
+                dotNgxerDotJson,
+                path
+              );
               // save file
-              if (metaData) {
+              if (cached) {
                 const filePath = resolve(
                   out,
                   !path.startsWith('/') ? path : path.substr(1),
@@ -78,7 +82,7 @@ export class GenerateCommand {
                 );
                 await this.fileService.createFile(
                   filePath,
-                  this.htmlService.composeContent(parsedIndexHTML, metaData)
+                  this.htmlService.composeContent(parsedIndexHTML, cached.meta)
                 );
                 console.log('  + ' + yellow(path));
               } else {
@@ -103,7 +107,6 @@ export class GenerateCommand {
             metaData.url = url + path + '/';
             // cache
             await this.cacheService.save(
-              'path',
               path.substr(1),
               metaData as unknown as Record<string, unknown>
             );

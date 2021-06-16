@@ -35,7 +35,7 @@ export class RemoveCommand {
               .shift();
             if (renderItem) {
               // remove cache
-              await this.cacheService.remove('database', input);
+              await this.cacheService.remove(input);
               // remove file
               const dirPath = resolve(out, renderItem.path.replace(':id', doc));
               await dirRemoval(dirPath, input, out);
@@ -50,7 +50,7 @@ export class RemoveCommand {
           // path
           else {
             // remove cached
-            await this.cacheService.remove('path', input);
+            await this.cacheService.remove(input);
             // remove file
             const dirPath = resolve(out, input);
             await dirRemoval(dirPath, input, out);
