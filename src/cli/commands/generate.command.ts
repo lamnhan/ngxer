@@ -82,7 +82,11 @@ export class GenerateCommand {
                 );
                 await this.fileService.createFile(
                   filePath,
-                  this.htmlService.composeContent(parsedIndexHTML, cached.meta)
+                  this.htmlService.composeContent(
+                    parsedIndexHTML,
+                    cached.meta,
+                    cached.data
+                  )
                 );
                 console.log('  + ' + yellow(path));
               } else {
@@ -106,7 +110,7 @@ export class GenerateCommand {
             );
             metaData.url = url + path + '/';
             // cache
-            await this.cacheService.save(
+            const cached = await this.cacheService.save(
               path.substr(1),
               metaData as unknown as Record<string, unknown>
             );
@@ -114,7 +118,11 @@ export class GenerateCommand {
             const filePath = resolve(out, path.substr(1), 'index.html');
             await this.fileService.createFile(
               filePath,
-              this.htmlService.composeContent(parsedIndexHTML, metaData)
+              this.htmlService.composeContent(
+                parsedIndexHTML,
+                cached.meta,
+                cached.data
+              )
             );
             console.log('  + ' + magenta(path));
           }

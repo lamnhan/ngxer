@@ -92,7 +92,11 @@ export class CacheService {
       input.indexOf(':') !== -1 ? data : this.convertMeta(metaData);
     await this.fileService.createJson(cachePath, cacheData);
     // result
-    return {path: cachePath, meta: metaData, data: cacheData};
+    return {
+      path: cachePath,
+      meta: metaData,
+      data: cacheData as Record<string, unknown>,
+    };
   }
 
   async remove(input: string) {

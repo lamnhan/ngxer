@@ -134,7 +134,11 @@ export class HtmlService {
     } as ParsedHTML;
   }
 
-  composeContent(templateData: ParsedHTML, data: MetaData) {
+  composeContent(
+    templateData: ParsedHTML,
+    metaData: MetaData,
+    sessionData?: Record<string, unknown>
+  ) {
     const {
       full: htmlContent,
       title: templateTitle,
@@ -146,12 +150,12 @@ export class HtmlService {
       scripts,
       styles,
     } = templateData;
-    const {content, title, description, image, lang, locale} = data;
-    const url = !data.url
+    const {content, title, description, image, lang, locale} = metaData;
+    const url = !metaData.url
       ? ''
-      : data.url.substr(-1) === '/'
-      ? data.url
-      : data.url + '/';
+      : metaData.url.substr(-1) === '/'
+      ? metaData.url
+      : metaData.url + '/';
     const {
       content: defaultContent,
       title: defaultTitle,
@@ -193,6 +197,13 @@ export class HtmlService {
       '<app-root></app-root>',
       `<app-root>${content || defaultContent}</app-root>`
     );
+    // session data
+    if (sessionData) {
+      const scriptCode = `<script>if(window.sessionStorage){sessionStorage.setItem('PRERENDER_DATA','${JSON.stringify(
+        sessionData
+      )}');}</script>`;
+      finalContent = finalContent.replace('</title>', `</title>${scriptCode}`);
+    }
     // result
     return finalContent;
   }
