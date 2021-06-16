@@ -3,12 +3,16 @@ import {Command} from 'commander';
 import {Lib as NgxerModule} from '../lib/index';
 import {InitCommand} from './commands/init.command';
 import {GenerateCommand} from './commands/generate.command';
+import {CacheCommand} from './commands/cache.command';
+import {UpdateCommand} from './commands/update.command';
 import {RemoveCommand} from './commands/remove.command';
 
 export class Cli {
   private ngxerModule: NgxerModule;
   initCommand: InitCommand;
   generateCommand: GenerateCommand;
+  cacheCommand: CacheCommand;
+  updateCommand: UpdateCommand;
   removeCommand: RemoveCommand;
 
   commander = ['ngxer', 'Tool for prerendering Angular apps'];
@@ -24,6 +28,22 @@ export class Cli {
   generateCommandDef: CommandDef = [
     ['generate', 'g'],
     'Generate static content.',
+  ];
+
+  /**
+   * @param inputs... - List of inputs to be cached
+   */
+  cacheCommandDef: CommandDef = [
+    ['cache <inputs...>', 'c'],
+    'Cache a input before generating.',
+  ];
+
+  /**
+   * @param inputs... - List of inputs to be updated
+   */
+  updateCommandDef: CommandDef = [
+    ['update <inputs...>', 'u'],
+    'Update a static.',
   ];
 
   /**
@@ -46,6 +66,8 @@ export class Cli {
       this.ngxerModule.projectService,
       this.ngxerModule.renderService
     );
+    this.cacheCommand = new CacheCommand();
+    this.updateCommand = new UpdateCommand();
     this.removeCommand = new RemoveCommand(
       this.ngxerModule.fileService,
       this.ngxerModule.projectService
@@ -81,6 +103,26 @@ export class Cli {
         .aliases(aliases)
         .description(description)
         .action(() => this.generateCommand.run());
+    })();
+
+    // cache
+    (() => {
+      const [[command, ...aliases], description] = this.cacheCommandDef;
+      commander
+        .command(command)
+        .aliases(aliases)
+        .description(description)
+        .action(inputs => this.cacheCommand.run(inputs));
+    })();
+
+    // update
+    (() => {
+      const [[command, ...aliases], description] = this.updateCommandDef;
+      commander
+        .command(command)
+        .aliases(aliases)
+        .description(description)
+        .action(inputs => this.updateCommand.run(inputs));
     })();
 
     // remove

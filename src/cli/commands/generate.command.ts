@@ -1,7 +1,7 @@
 import {resolve} from 'path';
 import {blue} from 'chalk';
 
-import {OK, WARN, INFO} from '../../lib/services/message.service';
+import {OK, INFO} from '../../lib/services/message.service';
 import {HelperService} from '../../lib/services/helper.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';

@@ -13,7 +13,7 @@ export class RemoveCommand {
 
   async run(inputs: string[]) {
     const {out} = await this.projectService.loadDotNgxerRCDotJson();
-    return Promise.all(
+    await Promise.all(
       inputs.map(input =>
         (async () => {
           // database
