@@ -56,6 +56,15 @@ export interface ParsedHTML extends MetaData {
 export class ProjectService {
   public readonly rcDir = 'ngxer';
   public readonly rcFile = '.ngxerrc.json';
+  private defaultMetaData: MetaData = {
+    title: 'Invalid title',
+    description: 'Invalid description',
+    image: 'https://invalid.image/none.jpg',
+    url: 'https://invalid.url/',
+    lang: 'en',
+    locale: 'en-US',
+    content: '<p>Invalid content ...</p>',
+  };
   constructor(
     private helperService: HelperService,
     private fileService: FileService
@@ -118,18 +127,34 @@ export class ProjectService {
   ) {
     // process data
     const metaData: MetaData = {
-      title: typeof data.title === 'string' ? data.title : 'Invalid title',
+      title:
+        typeof data.title === 'string'
+          ? data.title
+          : this.defaultMetaData.title,
       description:
         typeof data.description === 'string'
           ? data.description
-          : 'Invalid description',
+          : this.defaultMetaData.description,
       image:
-        typeof data.image === 'string' ? data.image : 'https://invalid.image',
-      url: typeof data.url === 'string' ? data.url : 'https://invalid.url',
-      lang: typeof data.lang === 'string' ? data.lang : 'en',
-      locale: typeof data.locale === 'string' ? data.locale : 'en-US',
+        typeof data.image === 'string'
+          ? data.image
+          : this.defaultMetaData.image,
+      url:
+        typeof data.url !== 'string'
+          ? this.defaultMetaData.url
+          : data.url.substr(-1) === '/'
+          ? data.url
+          : data.url + '/',
+      lang:
+        typeof data.lang === 'string' ? data.lang : this.defaultMetaData.lang,
+      locale:
+        typeof data.locale === 'string'
+          ? data.locale
+          : this.defaultMetaData.locale,
       content:
-        typeof data.content === 'string' ? data.content : 'Invalid content',
+        typeof data.content === 'string'
+          ? data.content
+          : this.defaultMetaData.content,
     };
     // save cache
     const cachePath = this.getCachePath(type, input);
@@ -253,15 +278,32 @@ export class ProjectService {
       scripts,
       styles,
     } = templateData;
-    const {content, title, description, image, url, lang, locale} = data;
+    const {content, title, description, image, lang, locale} = data;
+    const url = !data.url
+      ? ''
+      : data.url.substr(-1) === '/'
+      ? data.url
+      : data.url + '/';
+    const {
+      content: defaultContent,
+      title: defaultTitle,
+      description: defaultDescription,
+      image: defaultImage,
+      url: defaultUrl,
+      lang: defaultLang,
+      locale: defaultLocale,
+    } = this.defaultMetaData;
     // meta replacements
     let finalContent = htmlContent
-      .replace(new RegExp(templateTitle, 'g'), title)
-      .replace(new RegExp(templateDescription, 'g'), description)
-      .replace(new RegExp(templateImage, 'g'), image)
-      .replace(new RegExp(templateUrl, 'g'), url)
-      .replace(templateLocale, locale)
-      .replace(`lang="${templateLang}"`, `lang="${lang}"`);
+      .replace(new RegExp(templateTitle, 'g'), title || defaultTitle)
+      .replace(
+        new RegExp(templateDescription, 'g'),
+        description || defaultDescription
+      )
+      .replace(new RegExp(templateImage, 'g'), image || defaultImage)
+      .replace(new RegExp(`="${templateUrl}"`, 'g'), `="${url || defaultUrl}"`)
+      .replace(`="${templateLocale}"`, `="${locale || defaultLocale}"`)
+      .replace(`lang="${templateLang}"`, `lang="${lang || defaultLang}"`);
     // scripts replacement (to absolute)
     scripts.forEach(
       script =>
@@ -281,7 +323,7 @@ export class ProjectService {
     // content replacement
     finalContent = finalContent.replace(
       '<app-root></app-root>',
-      `<app-root>${content}</app-root>`
+      `<app-root>${content || defaultContent}</app-root>`
     );
     // result
     return finalContent;

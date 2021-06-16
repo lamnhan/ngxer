@@ -1,7 +1,7 @@
 import {resolve} from 'path';
-import {blue} from 'chalk';
+import {blue, yellow, grey, red, magenta} from 'chalk';
 
-import {OK, INFO, ERROR} from '../../lib/services/message.service';
+import {OK, INFO} from '../../lib/services/message.service';
 import {HelperService} from '../../lib/services/helper.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
@@ -32,24 +32,36 @@ export class GenerateCommand {
      */
 
     if (pathRender.length) {
+      const pathRenderExisting = [] as string[];
       const pathRenderCache = [] as string[];
       const pathRenderLive = [] as string[];
       // filter
       for (let i = 0; i < pathRender.length; i++) {
-        if (
-          !(await this.fileService.exists(
-            resolve(out, pathRender[i], 'index.html')
-          ))
-        ) {
-          if (await this.projectService.cacheExists('path', pathRender[i])) {
-            pathRenderCache.push(pathRender[i]);
+        const path = !pathRender[i].startsWith('/')
+          ? pathRender[i]
+          : pathRender[i].substr(1);
+        if (await this.fileService.exists(resolve(out, path, 'index.html'))) {
+          pathRenderExisting.push(path);
+        } else {
+          if (await this.projectService.cacheExists('path', path)) {
+            pathRenderCache.push(path);
           } else {
-            pathRenderLive.push(pathRender[i]);
+            pathRenderLive.push(path);
           }
         }
       }
       // cache render
-      console.log(INFO + 'Begin path rendering (could take some time):');
+      const legends =
+        `(${yellow('cached')}/` +
+        `${magenta('live')}/` +
+        `${grey('exists')}/` +
+        `${red('error')})`;
+      console.log(
+        INFO + 'Begin path rendering ' + legends + ' (could take some time):'
+      );
+      if (pathRenderExisting.length) {
+        pathRenderExisting.forEach(path => console.log('  + ' + grey(path)));
+      }
       if (pathRenderCache.length) {
         await Promise.all(
           pathRenderCache.map(path =>
@@ -60,17 +72,21 @@ export class GenerateCommand {
               );
               // save file
               if (metaData) {
-                const filePath = resolve(out, path.substr(1), 'index.html');
+                const filePath = resolve(
+                  out,
+                  !path.startsWith('/') ? path : path.substr(1),
+                  'index.html'
+                );
                 await this.fileService.createFile(
                   filePath,
-                  this.projectService.composeHTMLContent(parsedIndexHTML, {
-                    ...metaData,
-                    url: url + path + '/',
-                  })
+                  this.projectService.composeHTMLContent(
+                    parsedIndexHTML,
+                    metaData
+                  )
                 );
-                console.log('  + ' + blue(path));
+                console.log('  + ' + yellow(path));
               } else {
-                console.log('  + ' + ERROR + blue(path) + ' (empty cache)');
+                console.log('  + ' + red(path));
               }
             })()
           )
@@ -88,27 +104,25 @@ export class GenerateCommand {
               pageContent,
               contentBetweens
             );
+            metaData.url = url + path + '/';
             // cache
             await this.projectService.saveCache(
               'path',
-              path,
+              path.substr(1),
               metaData as unknown as Record<string, unknown>
             );
             // save file
             const filePath = resolve(out, path.substr(1), 'index.html');
             await this.fileService.createFile(
               filePath,
-              this.projectService.composeHTMLContent(parsedIndexHTML, {
-                ...metaData,
-                url: url + path + '/',
-              })
+              this.projectService.composeHTMLContent(parsedIndexHTML, metaData)
             );
-            console.log('  + ' + blue(path));
+            console.log('  + ' + magenta(path));
           }
         );
       }
       // done
-      console.log(INFO + 'Path rendering completed.');
+      console.log(OK + 'Path rendering completed.');
     }
 
     /**
