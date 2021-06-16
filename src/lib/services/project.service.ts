@@ -16,8 +16,7 @@ export interface DotNgxerRCDotJson {
 
 export interface DatabaseRender {
   collection: string;
-  output: string;
-  locale?: string;
+  path: string; // xxx/:id
 }
 
 export type RenderingTypes = 'path' | 'database';
@@ -129,6 +128,15 @@ export class ProjectService {
       resolve(this.rcDir, `${type}_cached`, `${input.replace(':', '/')}.json`),
       metaData
     );
+  }
+
+  async removeCache(type: RenderingTypes, input: string) {
+    const cachedPath = resolve(
+      this.rcDir,
+      `${type}_cached`,
+      `${input.replace(':', '/')}.json`
+    );
+    return this.fileService.removeFile(cachedPath);
   }
 
   async parseIndexHTML(out: string) {

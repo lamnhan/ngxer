@@ -1,7 +1,7 @@
 import {resolve} from 'path';
 import {blue} from 'chalk';
 
-import {OK, WARN} from '../../lib/services/message.service';
+import {OK, WARN, ERROR} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
 
@@ -12,28 +12,46 @@ export class RemoveCommand {
   ) {}
 
   async run(inputs: string[]) {
-    const {out} = await this.projectService.loadDotNgxerRCDotJson();
+    const {out, databaseRender = []} =
+      await this.projectService.loadDotNgxerRCDotJson();
+    const dirRemoval = async (dirPath: string, input: string, out: string) => {
+      if (await this.fileService.exists(dirPath)) {
+        await this.fileService.removeDir(dirPath);
+        console.log(OK + 'Removed: ' + blue(`${out}/${input}`));
+      } else {
+        console.log(WARN + 'Not found: ' + blue(`${out}/${input}`));
+      }
+    };
     await Promise.all(
       inputs.map(input =>
         (async () => {
           // database
           if (input.indexOf(':') !== -1) {
-            // TODO: ...
+            const [collection, doc] = input.split(':');
+            const renderItem = databaseRender
+              .filter(item => item.collection === collection)
+              .shift();
+            if (renderItem) {
+              // remove cache
+              await this.projectService.removeCache('database', input);
+              // remove file
+              const dirPath = resolve(out, renderItem.path.replace(':id', doc));
+              await dirRemoval(dirPath, input, out);
+            } else {
+              console.log(
+                ERROR +
+                  'No database render for the collection: ' +
+                  blue(collection)
+              );
+            }
           }
           // path
           else {
             // remove cached
-            // TODO: ...
+            await this.projectService.removeCache('path', input);
             // remove file
             const dirPath = resolve(out, input);
-            if (await this.fileService.exists(dirPath)) {
-              this.fileService.removeDir(dirPath);
-              console.log(OK + 'Static removed: ' + blue(`${out}/${input}`));
-            } else {
-              console.log(
-                WARN + 'No static found at: ' + blue(`${out}/${input}`)
-              );
-            }
+            await dirRemoval(dirPath, input, out);
           }
         })()
       )
