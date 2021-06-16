@@ -55,7 +55,8 @@ export class Cli {
       this.ngxerModule.projectService,
       this.ngxerModule.cacheService,
       this.ngxerModule.htmlService,
-      this.ngxerModule.renderService
+      this.ngxerModule.renderService,
+      this.ngxerModule.firebaseService
     );
     this.updateCommand = new UpdateCommand();
     this.removeCommand = new RemoveCommand(

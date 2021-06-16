@@ -7,6 +7,7 @@ import {ProjectService} from '../../lib/services/project.service';
 import {CacheService} from '../../lib/services/cache.service';
 import {HtmlService} from '../../lib/services/html.service';
 import {RenderService} from '../../lib/services/render.service';
+import {FirebaseService} from '../../lib/services/firebase.service';
 
 export class GenerateCommand {
   constructor(
@@ -14,7 +15,8 @@ export class GenerateCommand {
     private projectService: ProjectService,
     private cacheService: CacheService,
     private htmlService: HtmlService,
-    private renderService: RenderService
+    private renderService: RenderService,
+    private firebaseService: FirebaseService
   ) {}
 
   async run() {
@@ -137,7 +139,41 @@ export class GenerateCommand {
      */
 
     if (databaseRender.length) {
-      console.log('TODO: database render ...');
+      console.log(INFO + 'Begin database rendering.');
+      await Promise.all(
+        databaseRender.map(item =>
+          (async () => {
+            const {collection, type, locale, path} = item;
+            const firestore = await this.firebaseService.firestore();
+            const collectionQuery = firestore
+              .collection(collection)
+              .where('type', '==', type)
+              .where('status', '==', 'publish')
+              .where('locale', '==', locale)
+              .orderBy('createdAt', 'asc');
+            if (
+              !(await this.fileService.exists(
+                resolve(
+                  this.projectService.rcDir,
+                  'database_cached',
+                  collection
+                )
+              ))
+            ) {
+              // load data for the fist time
+              const docs = (
+                await collectionQuery.limitToLast(1000).get()
+              ).docs.map(doc => doc.data());
+              console.log({docs});
+            } else {
+              // load latest 30 items
+              const docs = (
+                await collectionQuery.limitToLast(30).get()
+              ).docs.map(doc => doc.data());
+            }
+          })()
+        )
+      );
     }
 
     /**

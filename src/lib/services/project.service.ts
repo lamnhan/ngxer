@@ -15,6 +15,7 @@ export interface DotNgxerRCDotJson {
 export interface DatabaseRender {
   collection: string;
   type: string;
+  locale: string;
   path: string; // xxx/:id
 }
 
