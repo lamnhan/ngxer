@@ -101,7 +101,7 @@ export class RenderService {
             const ext = url.split('.').pop() as string;
             const content = await this.fetchService.text(url);
             data.contentSrc = null;
-            data.content = this.htmlService.minifyContent(
+            data.content = await this.htmlService.minifyContent(
               ext === 'html' ? content : marked(content)
             );
           }
