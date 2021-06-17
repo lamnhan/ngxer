@@ -1,7 +1,7 @@
 import {resolve} from 'path';
-import {blue, yellow, grey, red, magenta} from 'chalk';
+import {yellow, grey, red, magenta} from 'chalk';
 
-import {OK, INFO} from '../../lib/services/message.service';
+import {OK, INFO, WARN} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
 import {CacheService} from '../../lib/services/cache.service';
@@ -44,8 +44,9 @@ export class GenerateCommand {
      * path render (from manual paths or rc pathRender)
      */
 
+    const pathRenderSitemap = [] as string[];
     if (pathRender.length) {
-      console.log('\n' + 'Begin path rendering (could take some time):');
+      console.log('\n' + 'Begin path rendering:');
       // filter
       const pathRenderExisting: string[] = [];
       const pathRenderCache: string[] = [];
@@ -64,9 +65,10 @@ export class GenerateCommand {
       }
       // render existing
       if (pathRenderExisting.length) {
-        pathRenderExisting.forEach(path =>
-          console.log('  + ' + grey('/' + path))
-        );
+        pathRenderExisting.forEach(path => {
+          pathRenderSitemap.push(path);
+          console.log('  + ' + grey('/' + path));
+        });
       }
       // render cached
       if (pathRenderCache.length) {
@@ -89,6 +91,7 @@ export class GenerateCommand {
                     cached.data
                   )
                 );
+                pathRenderSitemap.push(path);
                 console.log('  + ' + yellow('/' + path));
               } else {
                 console.log('  + ' + red('/' + path));
@@ -99,6 +102,7 @@ export class GenerateCommand {
       }
       // render live
       if (pathRenderLive.length) {
+        console.log(WARN + 'Live path rendering could take some time.');
         await this.renderService.liveRender(
           out,
           pathRenderLive,
@@ -127,6 +131,7 @@ export class GenerateCommand {
                   cached.data
                 )
               );
+              pathRenderSitemap.push(path);
               console.log('  + ' + magenta('/' + path));
             } else {
               console.log('  + ' + red('/' + path));
@@ -142,9 +147,9 @@ export class GenerateCommand {
      * database render
      */
 
-    const databaseRenderResults = [] as string[]; // for sitemap
+    const databaseRenderSitemap = [] as string[];
     if (databaseRender.length) {
-      console.log('\n' + 'Begin database rendering.');
+      console.log('\n' + 'Begin database rendering:');
       // proccess collection
       await Promise.all(
         databaseRender.map(databaseRenderItem =>
@@ -208,9 +213,10 @@ export class GenerateCommand {
             }
             // renderexisting
             if (databaseRenderExisting.length) {
-              databaseRenderExisting.forEach(path =>
-                console.log('  + ' + grey('/' + path))
-              );
+              databaseRenderExisting.forEach(path => {
+                databaseRenderSitemap.push(path);
+                console.log('  + ' + grey('/' + path));
+              });
             }
             // render cached
             if (databaseRenderCache.length) {
@@ -235,6 +241,7 @@ export class GenerateCommand {
                           cached.data
                         )
                       );
+                      databaseRenderSitemap.push(path);
                       console.log('  + ' + yellow('/' + path));
                     } else {
                       console.log('  + ' + red('/' + path));
@@ -266,9 +273,8 @@ export class GenerateCommand {
                         cached.data
                       )
                     );
+                    databaseRenderSitemap.push(path);
                     console.log('  + ' + magenta('/' + path));
-                    // for sitmap
-                    databaseRenderResults.push(path);
                   } else {
                     console.log('  + ' + red('/' + path));
                   }
@@ -289,7 +295,7 @@ export class GenerateCommand {
     if (sitemap) {
       const sitemapItems = [] as string[];
       // path renders
-      sitemapItems.push(...pathRender, ...databaseRenderResults);
+      sitemapItems.push(...pathRenderSitemap, ...databaseRenderSitemap);
       // create sitemap
       const sitemapContent = await this.buildSitemap(url, sitemapItems);
       await this.fileService.createFile(
