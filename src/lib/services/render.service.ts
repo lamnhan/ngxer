@@ -1,13 +1,15 @@
 import {launch, Browser, Page} from 'puppeteer-core';
 const superstatic = require('superstatic');
+import * as marked from 'marked';
 
+import {FetchService} from './fetch.service';
 import {DatabaseRender} from './project.service';
 
 export class RenderService {
   private server!: any;
   private browser!: Browser;
 
-  constructor() {}
+  constructor(private fetchService: FetchService) {}
 
   async bootup(dir: string) {
     if (!this.server || !this.browser) {
@@ -88,7 +90,17 @@ export class RenderService {
           const id = doc.id as string;
           const path = pathTemplate.replace(':id', id);
           const cacheInput = `${collection}:${id}`;
-          await handler(path, cacheInput, doc);
+          // data
+          const data = doc;
+          if (!data.content && data.contentSrc) {
+            const url = data.contentSrc as string;
+            const ext = url.split('.').pop() as string;
+            const content = await this.fetchService.text(url);
+            data.content = ext === 'html' ? content : marked(content);
+            data.contentSrc = null;
+          }
+          // forwarding
+          await handler(path, cacheInput, data);
         })()
       )
     );

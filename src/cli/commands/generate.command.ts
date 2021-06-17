@@ -64,7 +64,9 @@ export class GenerateCommand {
       // cache render
       console.log(INFO + 'Begin path rendering (could take some time):');
       if (pathRenderExisting.length) {
-        pathRenderExisting.forEach(path => console.log('  + ' + grey(path)));
+        pathRenderExisting.forEach(path =>
+          console.log('  + ' + grey('/' + path))
+        );
       }
       if (pathRenderCache.length) {
         await Promise.all(
@@ -109,6 +111,7 @@ export class GenerateCommand {
             metaData.url = url + '/' + path + '/';
             // cache
             const cached = await this.cacheService.save(
+              dotNgxerDotJson,
               path,
               metaData as unknown as Record<string, unknown>
             );
@@ -183,7 +186,11 @@ export class GenerateCommand {
               databaseRenderDocs,
               async (path, cacheInput, data) => {
                 // save cache
-                const cached = await this.cacheService.save(cacheInput, data);
+                const cached = await this.cacheService.save(
+                  dotNgxerDotJson,
+                  cacheInput,
+                  data
+                );
                 // save files
                 const filePath = resolve(out, path, 'index.html');
                 await this.fileService.createFile(

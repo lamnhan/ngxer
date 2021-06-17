@@ -1,6 +1,7 @@
 import {MessageService} from './services/message.service';
 import {HelperService} from './services/helper.service';
 import {FileService} from './services/file.service';
+import {FetchService} from './services/fetch.service';
 import {ProjectService} from './services/project.service';
 import {CacheService} from './services/cache.service';
 import {HtmlService} from './services/html.service';
@@ -11,6 +12,7 @@ export class Lib {
   messageService: MessageService;
   helperService: HelperService;
   fileService: FileService;
+  fetchService: FetchService;
   projectService: ProjectService;
   cacheService: CacheService;
   htmlService: HtmlService;
@@ -21,6 +23,7 @@ export class Lib {
     this.messageService = new MessageService();
     this.helperService = new HelperService();
     this.fileService = new FileService();
+    this.fetchService = new FetchService();
     this.projectService = new ProjectService(
       this.helperService,
       this.fileService
@@ -32,6 +35,6 @@ export class Lib {
       this.projectService
     );
     this.firebaseService = new FirebaseService(this.fileService);
-    this.renderService = new RenderService();
+    this.renderService = new RenderService(this.fetchService);
   }
 }

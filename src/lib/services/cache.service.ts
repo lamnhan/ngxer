@@ -52,7 +52,11 @@ export class CacheService {
     return {data, meta};
   }
 
-  async save(input: string, data: Record<string, unknown>) {
+  async save(
+    rcJson: DotNgxerRCDotJson,
+    input: string,
+    data: Record<string, unknown>
+  ) {
     // process data
     const metaData: MetaData = {
       title:
@@ -67,12 +71,13 @@ export class CacheService {
         typeof data.image === 'string'
           ? data.image
           : this.projectService.defaultMetaData.image,
-      url:
-        typeof data.url !== 'string'
-          ? this.projectService.defaultMetaData.url
-          : data.url.substr(-1) === '/'
-          ? data.url
-          : data.url + '/',
+      url: data.id
+        ? rcJson.url + '/' + data.id
+        : typeof data.url !== 'string'
+        ? this.projectService.defaultMetaData.url
+        : data.url.substr(-1) === '/'
+        ? data.url
+        : data.url + '/',
       lang:
         typeof data.lang === 'string'
           ? data.lang
@@ -140,7 +145,9 @@ export class CacheService {
     // data
     const title = data.title || this.projectService.defaultMetaData.title;
     const description =
-      data.description || this.projectService.defaultMetaData.description;
+      data.description ||
+      data.excerpt ||
+      this.projectService.defaultMetaData.description;
     const image = data.image || this.projectService.defaultMetaData.image;
     const url = data.id
       ? rcJson.url + '/' + data.id
