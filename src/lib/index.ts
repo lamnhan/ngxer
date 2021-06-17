@@ -28,6 +28,6 @@ export class Lib {
     this.cacheService = new CacheService(this.fileService, this.projectService);
     this.htmlService = new HtmlService(this.helperService, this.fileService);
     this.firebaseService = new FirebaseService(this.fileService);
-    this.renderService = new RenderService(this.fetchService);
+    this.renderService = new RenderService(this.fetchService, this.htmlService);
   }
 }

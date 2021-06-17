@@ -3,13 +3,17 @@ const superstatic = require('superstatic');
 import * as marked from 'marked';
 
 import {FetchService} from './fetch.service';
+import {HtmlService} from './html.service';
 import {DatabaseRender} from './project.service';
 
 export class RenderService {
   private server!: any;
   private browser!: Browser;
 
-  constructor(private fetchService: FetchService) {}
+  constructor(
+    private fetchService: FetchService,
+    private htmlService: HtmlService
+  ) {}
 
   async bootup(dir: string) {
     if (!this.server || !this.browser) {
@@ -96,8 +100,10 @@ export class RenderService {
             const url = data.contentSrc as string;
             const ext = url.split('.').pop() as string;
             const content = await this.fetchService.text(url);
-            data.content = ext === 'html' ? content : marked(content);
             data.contentSrc = null;
+            data.content = this.htmlService.minifyContent(
+              ext === 'html' ? content : marked(content)
+            );
           }
           // forwarding
           await handler(path, cacheInput, data);

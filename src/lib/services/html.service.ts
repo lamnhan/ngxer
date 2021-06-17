@@ -40,6 +40,16 @@ export class HtmlService {
     private fileService: FileService
   ) {}
 
+  async minifyContent(rawHtmlContent: string) {
+    return minify({
+      compressor: htmlMinifier,
+      content: rawHtmlContent,
+      options: {
+        removeAttributeQuotes: false,
+      },
+    });
+  }
+
   async parseIndex(out: string, customContentBetweens?: [string, string]) {
     return this.parseFile(resolve(out), customContentBetweens);
   }
@@ -55,13 +65,7 @@ export class HtmlService {
     customContentBetweens?: [string, string]
   ) {
     // strip all unneccesary code
-    const htmlContent = await minify({
-      compressor: htmlMinifier,
-      content: rawHtmlContent,
-      options: {
-        removeAttributeQuotes: false,
-      },
-    });
+    const htmlContent = await this.minifyContent(rawHtmlContent);
     // defined extract betweens and placeholder
     const urlBetweens = ['<link rel="canonical" href="', '"'];
     const titleBetweens = ['<title>', '</title>'];
