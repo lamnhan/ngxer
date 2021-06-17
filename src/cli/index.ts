@@ -50,7 +50,6 @@ export class Cli {
     ['report', 'r'],
     'Show generated statistics.',
     ['-d, --detail', 'Show detail.'],
-    ['-c, --clear', 'Remove the report (when re-build app).'],
   ];
 
   constructor() {
@@ -130,14 +129,13 @@ export class Cli {
 
     // report
     (() => {
-      const [[command, ...aliases], description, detailOpt, clearOpt] =
+      const [[command, ...aliases], description, detailOpt] =
         this.reportCommandDef;
       commander
         .command(command)
         .aliases(aliases)
         .description(description)
         .option(...detailOpt)
-        .option(...clearOpt)
         .action(options => this.reportCommand.run(options));
     })();
 

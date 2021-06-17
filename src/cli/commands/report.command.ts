@@ -6,17 +6,13 @@ import {ReportService} from '../../lib/services/report.service';
 
 interface Options {
   detail?: boolean;
-  clear?: boolean;
 }
 
 export class ReportCommand {
   constructor(private reportService: ReportService) {}
 
   async run(options: Options) {
-    if (options.clear) {
-      await this.reportService.remove();
-      console.log(OK + 'Cleared render report.');
-    } else if (await this.reportService.exists()) {
+    if (await this.reportService.exists()) {
       const {timestamp, pathRendering, databaseRendering} =
         await this.reportService.read();
       const table = ttyTable(
@@ -30,25 +26,23 @@ export class ReportCommand {
       const totalDatabaseRender = databaseRendering.length;
       if (!options.detail) {
         table.push(
-          ['Path render', green(totalPathRender)],
-          ['Database render', green(totalDatabaseRender)],
-          ['Total', green(totalPathRender + totalDatabaseRender)]
+          ['Path count', green(totalPathRender)],
+          ['Database count', green(totalDatabaseRender)],
+          ['Total count', green(totalPathRender + totalDatabaseRender)]
         );
       } else {
         table.push(
           [
             'Path render',
             `Count: ${green(totalPathRender)}` +
-              '\n' +
-              pathRendering.join('\n'),
+              grey('\n+ /' + pathRendering.join('\n+ /')),
           ],
           [
             'Database render',
             `Count: ${green(totalDatabaseRender)}` +
-              '\n' +
-              databaseRendering.join('\n'),
+              grey('\n+ /' + databaseRendering.join('\n+ /')),
           ],
-          ['Total', green(totalPathRender + totalDatabaseRender)]
+          ['Total count', green(totalPathRender + totalDatabaseRender)]
         );
       }
       console.log(OK + 'Here your render report:');
