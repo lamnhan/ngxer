@@ -30,7 +30,10 @@ export class GenerateCommand {
       databaseRender = [],
       contentBetweens,
     } = dotNgxerDotJson;
-    const parsedIndexHTML = await this.htmlService.parseIndex(out);
+    const parsedIndexHTML = await this.htmlService.parseIndex(
+      out,
+      contentBetweens
+    );
 
     // legends
     console.log(

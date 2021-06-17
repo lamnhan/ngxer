@@ -6,35 +6,29 @@ import {HelperService} from './helper.service';
 import {FileService} from './file.service';
 
 export interface MetaData {
+  url: string;
   title: string;
   description: string;
   image: string;
-  url: string;
-  lang: string;
   locale: string;
+  lang: string;
   content: string;
 }
 
 export interface ParsedHTML extends MetaData {
-  full: string;
-  // content: string;
-  contentBetweens: [string, string];
+  urlBetweens: [string, string];
+  titleBetweens: [string, string];
+  description: string;
+  descriptionBetweens: [string, string];
+  imageBetweens: [string, string];
+  localeBetweens: [string, string];
+  langBetweens: [string, string];
   styles: string[];
   styleBetweens: [string, string];
   scripts: string[];
   scriptBetweens: [string, string];
-  // title: string;
-  titleBetweens: [string, string];
-  description: string;
-  descriptionBetweens: [string, string];
-  // image: string;
-  imageBetweens: [string, string];
-  // url: string;
-  urlBetweens: [string, string];
-  // lang: string;
-  langBetweens: [string, string];
-  // locale: string;
-  localeBetweens: [string, string];
+  contentBetweens: [string, string];
+  full: string;
 }
 
 export class HtmlService {
@@ -43,14 +37,14 @@ export class HtmlService {
     private fileService: FileService
   ) {}
 
-  async parseIndex(out: string) {
-    return this.parseFile(resolve(out));
+  async parseIndex(out: string, customContentBetweens?: [string, string]) {
+    return this.parseFile(resolve(out), customContentBetweens);
   }
 
-  async parseFile(path: string) {
+  async parseFile(path: string, customContentBetweens?: [string, string]) {
     path = path.indexOf('index.html') !== -1 ? path : `${path}/index.html`;
     const rawHtmlContent = await this.fileService.readText(path);
-    return this.parseContent(rawHtmlContent);
+    return this.parseContent(rawHtmlContent, customContentBetweens);
   }
 
   async parseContent(
@@ -66,18 +60,21 @@ export class HtmlService {
       },
     });
     // defined extract betweens and placeholder
+    const urlBetweens = ['<link rel="canonical" href="', '"'];
     const titleBetweens = ['<title>', '</title>'];
     const descriptionBetweens = ['<meta name="description" content="', '"'];
-    const imageBetweens = ['<meta property="og:image" content="', '"'];
-    const urlBetweens = ['<link rel="canonical" href="', '"'];
+    const imageBetweens = ['<meta itemprop="image" content="', '"'];
+    const localeBetweens = ['<meta itemprop="inLanguage" content="', '"'];
     const langBetweens = ['<html lang="', '"'];
-    const localeBetweens = ['<meta property="og:locale" content="', '"'];
     const scriptBetweens = ['<script src="', '"'];
     const styleBetweens = ['<link rel="stylesheet" href="', '"'];
     const contentBetweens = customContentBetweens
       ? customContentBetweens
       : ['</router-outlet>', '</main>'];
     // extract metas
+    const url = this.helperService
+      .stringsBetweens(htmlContent, urlBetweens[0], urlBetweens[1])
+      .shift() as string;
     const title = this.helperService
       .stringsBetweens(htmlContent, titleBetweens[0], titleBetweens[1])
       .shift() as string;
@@ -91,14 +88,11 @@ export class HtmlService {
     const image = this.helperService
       .stringsBetweens(htmlContent, imageBetweens[0], imageBetweens[1])
       .shift() as string;
-    const url = this.helperService
-      .stringsBetweens(htmlContent, urlBetweens[0], urlBetweens[1])
+    const locale = this.helperService
+      .stringsBetweens(htmlContent, localeBetweens[0], localeBetweens[1])
       .shift() as string;
     const lang = this.helperService
       .stringsBetweens(htmlContent, langBetweens[0], langBetweens[1])
-      .shift() as string;
-    const locale = this.helperService
-      .stringsBetweens(htmlContent, localeBetweens[0], localeBetweens[1])
       .shift() as string;
     // extract bundles
     const onlyVendorFilesFilter = (url: string) =>
@@ -120,25 +114,25 @@ export class HtmlService {
       .shift() as string;
     // result
     return {
-      full: htmlContent,
-      content,
-      contentBetweens,
-      styles,
-      styleBetweens,
-      scripts,
-      scriptBetweens,
+      url,
+      urlBetweens,
       title,
       titleBetweens,
       description,
       descriptionBetweens,
       image,
       imageBetweens,
-      url,
-      urlBetweens,
-      lang,
-      langBetweens,
       locale,
       localeBetweens,
+      lang,
+      langBetweens,
+      styles,
+      styleBetweens,
+      scripts,
+      scriptBetweens,
+      content,
+      contentBetweens,
+      full: htmlContent,
     } as ParsedHTML;
   }
 
@@ -148,18 +142,18 @@ export class HtmlService {
     sessionData?: Record<string, unknown>
   ) {
     const {
-      full: htmlContent,
+      url: templateUrl,
       title: templateTitle,
       description: templateDescription,
       image: templateImage,
-      url: templateUrl,
-      lang: templateLang,
       locale: templateLocale,
+      lang: templateLang,
       scripts,
       styles,
       content: templateContent,
+      full: htmlContent,
     } = templateData;
-    const {content, title, description, image, lang, locale} = metaData;
+    const {title, description, image, locale, lang, content} = metaData;
     const url = !metaData.url
       ? ''
       : metaData.url.substr(-1) === '/'
@@ -174,7 +168,10 @@ export class HtmlService {
       )
       .replace(new RegExp(templateImage, 'g'), image || templateImage)
       .replace(new RegExp(`="${templateUrl}"`, 'g'), `="${url || templateUrl}"`)
-      .replace(`="${templateLocale}"`, `="${locale || templateLocale}"`)
+      .replace(
+        new RegExp(`="${templateLocale}"`, 'g'),
+        `="${locale || templateLocale}"`
+      )
       .replace(`lang="${templateLang}"`, `lang="${lang || templateLang}"`);
     // scripts replacement (to absolute)
     scripts.forEach(
