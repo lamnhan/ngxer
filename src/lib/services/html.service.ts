@@ -4,7 +4,16 @@ const htmlMinifier = require('@node-minify/html-minifier');
 
 import {HelperService} from './helper.service';
 import {FileService} from './file.service';
-import {MetaData, ProjectService} from './project.service';
+
+export interface MetaData {
+  title: string;
+  description: string;
+  image: string;
+  url: string;
+  lang: string;
+  locale: string;
+  content: string;
+}
 
 export interface ParsedHTML extends MetaData {
   full: string;
@@ -31,8 +40,7 @@ export interface ParsedHTML extends MetaData {
 export class HtmlService {
   constructor(
     private helperService: HelperService,
-    private fileService: FileService,
-    private projectService: ProjectService
+    private fileService: FileService
   ) {}
 
   async parseIndex(out: string) {
@@ -149,6 +157,7 @@ export class HtmlService {
       locale: templateLocale,
       scripts,
       styles,
+      content: templateContent,
     } = templateData;
     const {content, title, description, image, lang, locale} = metaData;
     const url = !metaData.url
@@ -156,26 +165,17 @@ export class HtmlService {
       : metaData.url.substr(-1) === '/'
       ? metaData.url
       : metaData.url + '/';
-    const {
-      content: defaultContent,
-      title: defaultTitle,
-      description: defaultDescription,
-      image: defaultImage,
-      url: defaultUrl,
-      lang: defaultLang,
-      locale: defaultLocale,
-    } = this.projectService.defaultMetaData;
     // meta replacements
     let finalContent = htmlContent
-      .replace(new RegExp(templateTitle, 'g'), title || defaultTitle)
+      .replace(new RegExp(templateTitle, 'g'), title || templateTitle)
       .replace(
         new RegExp(templateDescription, 'g'),
-        description || defaultDescription
+        description || templateDescription
       )
-      .replace(new RegExp(templateImage, 'g'), image || defaultImage)
-      .replace(new RegExp(`="${templateUrl}"`, 'g'), `="${url || defaultUrl}"`)
-      .replace(`="${templateLocale}"`, `="${locale || defaultLocale}"`)
-      .replace(`lang="${templateLang}"`, `lang="${lang || defaultLang}"`);
+      .replace(new RegExp(templateImage, 'g'), image || templateImage)
+      .replace(new RegExp(`="${templateUrl}"`, 'g'), `="${url || templateUrl}"`)
+      .replace(`="${templateLocale}"`, `="${locale || templateLocale}"`)
+      .replace(`lang="${templateLang}"`, `lang="${lang || templateLang}"`);
     // scripts replacement (to absolute)
     scripts.forEach(
       script =>
@@ -195,7 +195,7 @@ export class HtmlService {
     // content replacement
     finalContent = finalContent.replace(
       '<app-root></app-root>',
-      `<app-root>${content || defaultContent}</app-root>`
+      `<app-root>${content || templateContent || templateTitle}</app-root>`
     );
     // session data
     if (sessionData) {

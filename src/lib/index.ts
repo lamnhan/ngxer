@@ -24,16 +24,9 @@ export class Lib {
     this.helperService = new HelperService();
     this.fileService = new FileService();
     this.fetchService = new FetchService();
-    this.projectService = new ProjectService(
-      this.helperService,
-      this.fileService
-    );
+    this.projectService = new ProjectService(this.fileService);
     this.cacheService = new CacheService(this.fileService, this.projectService);
-    this.htmlService = new HtmlService(
-      this.helperService,
-      this.fileService,
-      this.projectService
-    );
+    this.htmlService = new HtmlService(this.helperService, this.fileService);
     this.firebaseService = new FirebaseService(this.fileService);
     this.renderService = new RenderService(this.fetchService);
   }

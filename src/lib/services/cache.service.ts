@@ -3,11 +3,11 @@ import {Page} from '@lamnhan/schemata';
 
 import {FileService} from './file.service';
 import {
-  MetaData,
   DotNgxerRCDotJson,
   DatabaseRender,
   ProjectService,
 } from './project.service';
+import {MetaData} from './html.service';
 
 export class CacheService {
   public readonly allowedCollections = [
@@ -132,23 +132,17 @@ export class CacheService {
       return null;
     }
     // data
-    const title = data.title || this.projectService.defaultMetaData.title;
-    const description =
-      data.description ||
-      data.excerpt ||
-      this.projectService.defaultMetaData.description;
-    const image = data.image || this.projectService.defaultMetaData.image;
+    const title = data.title as string;
+    const description = (data.description || data.excerpt) as string;
+    const image = data.image || `${rcJson.url}/assets/images/featured.jpg`;
     const url = databaseRender
       ? rcJson.url + '/' + databaseRender.path.replace(':id', docId)
       : data.url
       ? data.url
-      : this.projectService.defaultMetaData.url;
-    const locale = data.locale || this.projectService.defaultMetaData.locale;
-    const lang =
-      typeof locale === 'string'
-        ? (locale.split('-').shift() as string)
-        : this.projectService.defaultMetaData.lang;
-    const content = data.content || this.projectService.defaultMetaData.content;
+      : rcJson.url;
+    const locale = data.locale as string;
+    const lang = locale.split('-').shift() as string;
+    const content = data.content as string;
     // result
     return {title, description, image, url, locale, lang, content} as MetaData;
   }
