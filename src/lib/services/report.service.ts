@@ -15,11 +15,15 @@ export class ReportService {
     return resolve(this.projectService.rcDir, this.file);
   }
 
-  async read() {
+  exists() {
+    return this.fileService.exists(this.getPath());
+  }
+
+  read() {
     return this.fileService.readJson<string[]>(this.getPath());
   }
 
-  async save(data: string[]) {
+  save(data: string[]) {
     return this.fileService.createJson(this.getPath(), data);
   }
 
@@ -28,7 +32,7 @@ export class ReportService {
     return this.save([...currentValue, ...data]);
   }
 
-  async remove() {
+  remove() {
     return this.fileService.removeFile(this.getPath());
   }
 }

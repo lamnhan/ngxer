@@ -14,6 +14,7 @@
   - [`generate`](#command-generate)
   - [`init`](#command-init)
   - [`remove`](#command-remove)
+  - [`report`](#command-report)
   - [`update`](#command-update)
   - [`help`](#command-help)
   - [`*`](#command-*)
@@ -62,6 +63,7 @@ Tool for prerendering Angular apps
 - [`ngxer generate|g`](#command-generate)
 - [`ngxer init|i [projectPath]`](#command-init)
 - [`ngxer remove|r <inputs...>`](#command-remove)
+- [`ngxer report|s --clear`](#command-report)
 - [`ngxer update|u <inputs...>`](#command-update)
 - [`ngxer help`](#command-help)
 - [`ngxer *`](#command-*)
@@ -112,6 +114,22 @@ ngxer r <inputs...>
 **Parameters:**
 
 - `<inputs...>`: List of inputs to be removed
+
+<h3><a name="command-report"><p><code>report</code></p>
+</a></h3>
+
+Show generated statistics.
+
+**Usage:**
+
+```sh
+ngxer report --clear
+ngxer s --clear
+```
+
+**Options:**
+
+- `-c, --clear`: Remove the report (when re-build app)
 
 <h3><a name="command-update"><p><code>update</code></p>
 </a></h3>

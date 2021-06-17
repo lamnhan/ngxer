@@ -5,6 +5,7 @@ import {InitCommand} from './commands/init.command';
 import {GenerateCommand} from './commands/generate.command';
 import {UpdateCommand} from './commands/update.command';
 import {RemoveCommand} from './commands/remove.command';
+import {ReportCommand} from './commands/report.command';
 
 export class Cli {
   private ngxerModule: NgxerModule;
@@ -12,6 +13,7 @@ export class Cli {
   generateCommand: GenerateCommand;
   updateCommand: UpdateCommand;
   removeCommand: RemoveCommand;
+  reportCommand: ReportCommand;
 
   commander = ['ngxer', 'Tool for prerendering Angular apps'];
 
@@ -44,6 +46,12 @@ export class Cli {
     'Remove a generated content',
   ];
 
+  reportCommandDef: CommandDef = [
+    ['report', 's'],
+    'Show generated statistics.',
+    ['-c, --clear', 'Remove the report (when re-build app)'],
+  ];
+
   constructor() {
     this.ngxerModule = new NgxerModule();
     this.initCommand = new InitCommand(
@@ -56,7 +64,8 @@ export class Cli {
       this.ngxerModule.cacheService,
       this.ngxerModule.htmlService,
       this.ngxerModule.renderService,
-      this.ngxerModule.firebaseService
+      this.ngxerModule.firebaseService,
+      this.ngxerModule.reportService
     );
     this.updateCommand = new UpdateCommand();
     this.removeCommand = new RemoveCommand(
@@ -64,6 +73,7 @@ export class Cli {
       this.ngxerModule.projectService,
       this.ngxerModule.cacheService
     );
+    this.reportCommand = new ReportCommand(this.ngxerModule.reportService);
   }
 
   getApp() {
@@ -115,6 +125,18 @@ export class Cli {
         .aliases(aliases)
         .description(description)
         .action(inputs => this.removeCommand.run(inputs));
+    })();
+
+    // report
+    (() => {
+      const [[command, ...aliases], description, clearOpt] =
+        this.reportCommandDef;
+      commander
+        .command(command)
+        .aliases(aliases)
+        .description(description)
+        .option(...clearOpt)
+        .action(() => this.reportCommand.run());
     })();
 
     // help

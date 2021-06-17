@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>HelperService | @lamnhan/ngxer</title>
+	<title>ReportCommand | @lamnhan/ngxer</title>
 	<meta name="description" content="Documentation for @lamnhan/ngxer">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="helperservice.html">HelperService</a>
+					<a href="reportcommand.html">ReportCommand</a>
 				</li>
 			</ul>
-			<h1>Class HelperService</h1>
+			<h1>Class ReportCommand</h1>
 		</div>
 	</div>
 </header>
@@ -68,7 +68,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">HelperService</span>
+						<span class="target">ReportCommand</span>
 					</li>
 				</ul>
 			</section>
@@ -79,13 +79,13 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="helperservice.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="reportcommand.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="helperservice.html#stringsbetweens" class="tsd-kind-icon">strings<wbr>Betweens</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="reportcommand.html#run" class="tsd-kind-icon">run</a></li>
 							</ul>
 						</section>
 					</div>
@@ -97,16 +97,22 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Helper<wbr>Service<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="helperservice.html" class="tsd-signature-type">HelperService</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Report<wbr>Command<span class="tsd-signature-symbol">(</span>reportService<span class="tsd-signature-symbol">: </span><a href="reportservice.html" class="tsd-signature-type">ReportService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="reportcommand.html" class="tsd-signature-type">ReportCommand</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/00932c4/src/lib/services/helper.service.ts#L1">lib/services/helper.service.ts:1</a></li>
+									<li>Defined in cli/commands/report.command.ts:6</li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="helperservice.html" class="tsd-signature-type">HelperService</a></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>reportService: <a href="reportservice.html" class="tsd-signature-type">ReportService</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="reportcommand.html" class="tsd-signature-type">ReportCommand</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -114,34 +120,19 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="stringsbetweens" class="tsd-anchor"></a>
-					<h3>strings<wbr>Betweens</h3>
+					<a name="run" class="tsd-anchor"></a>
+					<h3>run</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">strings<wbr>Betweens<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, starts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ends<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, filter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">run<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/00932c4/src/lib/services/helper.service.ts#L4">lib/services/helper.service.ts:4</a></li>
+									<li>Defined in cli/commands/report.command.ts:9</li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>text: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>starts: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>ends: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -175,21 +166,9 @@
 					<li class=" tsd-kind-class">
 						<a href="generatecommand.html" class="tsd-kind-icon">Generate<wbr>Command</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class=" tsd-kind-class">
 						<a href="helperservice.html" class="tsd-kind-icon">Helper<wbr>Service</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="helperservice.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="helperservice.html#stringsbetweens" class="tsd-kind-icon">strings<wbr>Betweens</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="htmlservice.html" class="tsd-kind-icon">Html<wbr>Service</a>
 					</li>
@@ -211,9 +190,21 @@
 					<li class=" tsd-kind-class">
 						<a href="renderservice.html" class="tsd-kind-icon">Render<wbr>Service</a>
 					</li>
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="reportcommand.html" class="tsd-kind-icon">Report<wbr>Command</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="reportcommand.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="reportcommand.html#run" class="tsd-kind-icon">run</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="reportservice.html" class="tsd-kind-icon">Report<wbr>Service</a>
 					</li>
