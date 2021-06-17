@@ -1,7 +1,7 @@
 import {resolve} from 'path';
-import {blue} from 'chalk';
+import {blue, grey} from 'chalk';
 
-import {OK, WARN, ERROR, INFO} from '../../lib/services/message.service';
+import {OK, WARN, INFO} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
 import {RenderService} from '../../lib/services/render.service';
@@ -27,9 +27,9 @@ export class RemoveCommand {
       const dirPath = resolve(out, path);
       if (await this.fileService.exists(dirPath)) {
         await this.fileService.removeDir(dirPath);
-        console.log(OK + 'Removed: ' + blue(`/${path}`));
+        console.log(OK + 'Removed: ' + grey(`/${path}`));
       } else {
-        console.log(WARN + 'Not found: ' + blue(`/${path}`));
+        console.log(WARN + 'Not found: ' + grey(`/${path}`));
       }
     };
     // do removal
@@ -72,9 +72,7 @@ export class RemoveCommand {
               databaseRemoved.push(path);
             } else {
               console.log(
-                ERROR +
-                  'No database render for the collection: ' +
-                  blue(collection)
+                WARN + 'No render for the collection: ' + blue(collection)
               );
             }
           }
@@ -118,6 +116,6 @@ export class RemoveCommand {
       ...databaseRenderRemain,
     ]);
     await this.resportService.update(pathRenderRemain, databaseRenderRemain);
-    console.log(INFO + 'Updated .ngxer.json, sitemap.xml & report.json');
+    console.log(INFO + 'Updated: .ngxer.json, sitemap.xml & report.json');
   }
 }
