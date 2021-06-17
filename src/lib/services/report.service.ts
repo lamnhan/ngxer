@@ -3,6 +3,12 @@ import {resolve} from 'path';
 import {FileService} from './file.service';
 import {ProjectService} from './project.service';
 
+export interface ReportJson {
+  timestamp: string;
+  pathRendering: string[];
+  databaseRendering: string[];
+}
+
 export class ReportService {
   public readonly file = 'report.json';
 
@@ -20,16 +26,30 @@ export class ReportService {
   }
 
   read() {
-    return this.fileService.readJson<string[]>(this.getPath());
+    return this.fileService.readJson<ReportJson>(this.getPath());
   }
 
-  save(data: string[]) {
-    return this.fileService.createJson(this.getPath(), data);
+  save(pathRendering: string[], databaseRendering: string[]) {
+    return this.fileService.createJson(this.getPath(), {
+      timestamp: new Date().toISOString(),
+      pathRendering,
+      databaseRendering,
+    } as ReportJson);
   }
 
-  async update(data: string[]) {
-    const currentValue = await this.read();
-    return this.save([...currentValue, ...data]);
+  async update(pathRendering?: string[], databaseRendering?: string[]) {
+    const {
+      pathRendering: currentPathRendering,
+      databaseRendering: currentDatabaseRendering,
+    } = await this.read();
+    return this.save(
+      !pathRendering
+        ? currentPathRendering
+        : [...currentPathRendering, ...pathRendering],
+      !databaseRendering
+        ? currentDatabaseRendering
+        : [...currentDatabaseRendering, ...databaseRendering]
+    );
   }
 
   remove() {

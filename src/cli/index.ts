@@ -42,14 +42,15 @@ export class Cli {
    * @param inputs... - List of inputs to be removed
    */
   removeCommandDef: CommandDef = [
-    ['remove <inputs...>', 'r'],
-    'Remove a generated content',
+    ['remove <inputs...>', 'x'],
+    'Remove a generated content.',
   ];
 
   reportCommandDef: CommandDef = [
-    ['report', 's'],
+    ['report', 'r'],
     'Show generated statistics.',
-    ['-c, --clear', 'Remove the report (when re-build app)'],
+    ['-d, --detail', 'Show detail.'],
+    ['-c, --clear', 'Remove the report (when re-build app).'],
   ];
 
   constructor() {
@@ -129,14 +130,15 @@ export class Cli {
 
     // report
     (() => {
-      const [[command, ...aliases], description, clearOpt] =
+      const [[command, ...aliases], description, detailOpt, clearOpt] =
         this.reportCommandDef;
       commander
         .command(command)
         .aliases(aliases)
         .description(description)
+        .option(...detailOpt)
         .option(...clearOpt)
-        .action(() => this.reportCommand.run());
+        .action(options => this.reportCommand.run(options));
     })();
 
     // help

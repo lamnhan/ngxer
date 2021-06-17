@@ -36,7 +36,6 @@ export class GenerateCommand {
       out,
       contentBetweens
     );
-    const reports: any[] = [];
 
     // legends
     console.log(
@@ -324,10 +323,8 @@ export class GenerateCommand {
     /**
      * save report
      */
-    await this.reportService.save(reports);
-    console.log(
-      '\n' + OK + 'Save report, view later by: $ ' + yellow('ngxer report')
-    );
+    await this.reportService.save(pathRenderSitemap, databaseRenderSitemap);
+    console.log(OK + 'To view report: $ ' + yellow('ngxer report'));
   }
 
   async buildSitemap(url: string, paths: string[]) {
