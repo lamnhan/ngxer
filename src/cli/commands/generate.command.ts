@@ -8,6 +8,7 @@ import {CacheService} from '../../lib/services/cache.service';
 import {HtmlService} from '../../lib/services/html.service';
 import {RenderService} from '../../lib/services/render.service';
 import {FirebaseService} from '../../lib/services/firebase.service';
+import {ReportService} from '../../lib/services/report.service';
 
 export class GenerateCommand {
   constructor(
@@ -16,7 +17,8 @@ export class GenerateCommand {
     private cacheService: CacheService,
     private htmlService: HtmlService,
     private renderService: RenderService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private reportService: ReportService
   ) {}
 
   async run() {
@@ -34,6 +36,7 @@ export class GenerateCommand {
       out,
       contentBetweens
     );
+    const reports: any[] = [];
 
     // legends
     console.log(
@@ -317,6 +320,14 @@ export class GenerateCommand {
       );
       console.log('\n' + OK + 'Saved: sitemap.xml');
     }
+
+    /**
+     * save report
+     */
+    await this.reportService.save(reports);
+    console.log(
+      '\n' + OK + 'Save report, view later by: $ ' + yellow('ngxer report')
+    );
   }
 
   async buildSitemap(url: string, paths: string[]) {
