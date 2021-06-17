@@ -154,6 +154,8 @@ export class GenerateCommand {
     if (databaseRender.length) {
       console.log('\n' + 'Begin database rendering:');
       // proccess collection
+      const firestore = await this.firebaseService.firestore();
+      const cacheLocaleChecks: string[] = [];
       await Promise.all(
         databaseRender.map(databaseRenderItem =>
           (async () => {
@@ -168,7 +170,6 @@ export class GenerateCommand {
               'database_cached',
               collection
             );
-            const firestore = await this.firebaseService.firestore();
             const collectionQuery = firestore
               .collection(collection)
               .where('type', '==', type)
@@ -180,7 +181,14 @@ export class GenerateCommand {
             const databaseRenderCache: Array<Record<string, unknown>> = [];
             const databaseRenderLive: Array<Record<string, unknown>> = [];
             // load data for the fist time
-            if (!(await this.fileService.exists(collectionCachedDir))) {
+            if (
+              // first rendering item and no .../database_cached/[collection]
+              (!cacheLocaleChecks.length &&
+                !(await this.fileService.exists(collectionCachedDir))) ||
+              // not the first but diference locale
+              (cacheLocaleChecks.length &&
+                cacheLocaleChecks.indexOf(`${collection} by ${locale}`) === -1)
+            ) {
               const docs = (
                 await collectionQuery.limitToLast(1000).get()
               ).docs.map(doc => doc.data());
@@ -214,6 +222,8 @@ export class GenerateCommand {
                 }
               }
             }
+            // update locale checks
+            cacheLocaleChecks.push(`${collection} by ${locale}`);
             // renderexisting
             if (databaseRenderExisting.length) {
               databaseRenderExisting.forEach(path => {
