@@ -18,7 +18,6 @@ export interface MetaData {
 export interface ParsedHTML extends MetaData {
   urlBetweens: [string, string];
   titleBetweens: [string, string];
-  description: string;
   descriptionBetweens: [string, string];
   imageBetweens: [string, string];
   localeBetweens: [string, string];
