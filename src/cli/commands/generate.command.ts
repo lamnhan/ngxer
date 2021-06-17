@@ -32,6 +32,14 @@ export class GenerateCommand {
     } = dotNgxerDotJson;
     const parsedIndexHTML = await this.htmlService.parseIndex(out);
 
+    // legends
+    console.log(
+      INFO +
+        `Render legends: ${yellow('cached')} | ${magenta('live')} | ${grey(
+          'exists'
+        )} | ${red('error')}`
+    );
+
     /**
      * path render (from manual paths or rc pathRender)
      */
@@ -42,9 +50,7 @@ export class GenerateCommand {
       const pathRenderLive = [] as string[];
       // filter
       for (let i = 0; i < pathRender.length; i++) {
-        const path = !pathRender[i].startsWith('/')
-          ? pathRender[i]
-          : pathRender[i].substr(1);
+        const path = this.renderService.processPath(pathRender[i]);
         if (await this.fileService.exists(resolve(out, path, 'index.html'))) {
           pathRenderExisting.push(path);
         } else {
@@ -56,14 +62,7 @@ export class GenerateCommand {
         }
       }
       // cache render
-      const legends =
-        `(${yellow('cached')}/` +
-        `${magenta('live')}/` +
-        `${grey('exists')}/` +
-        `${red('error')})`;
-      console.log(
-        INFO + 'Begin path rendering ' + legends + ' (could take some time):'
-      );
+      console.log(INFO + 'Begin path rendering (could take some time):');
       if (pathRenderExisting.length) {
         pathRenderExisting.forEach(path => console.log('  + ' + grey(path)));
       }
@@ -71,17 +70,14 @@ export class GenerateCommand {
         await Promise.all(
           pathRenderCache.map(path =>
             (async () => {
+              path = this.renderService.processPath(path);
               const cached = await this.cacheService.read(
                 dotNgxerDotJson,
                 path
               );
               // save file
               if (cached) {
-                const filePath = resolve(
-                  out,
-                  !path.startsWith('/') ? path : path.substr(1),
-                  'index.html'
-                );
+                const filePath = resolve(out, path, 'index.html');
                 await this.fileService.createFile(
                   filePath,
                   this.htmlService.composeContent(
@@ -90,9 +86,9 @@ export class GenerateCommand {
                     cached.data
                   )
                 );
-                console.log('  + ' + yellow(path));
+                console.log('  + ' + yellow('/' + path));
               } else {
-                console.log('  + ' + red(path));
+                console.log('  + ' + red('/' + path));
               }
             })()
           )
@@ -110,14 +106,14 @@ export class GenerateCommand {
               pageContent,
               contentBetweens
             );
-            metaData.url = url + path + '/';
+            metaData.url = url + '/' + path + '/';
             // cache
             const cached = await this.cacheService.save(
-              path.substr(1),
+              path,
               metaData as unknown as Record<string, unknown>
             );
             // save file
-            const filePath = resolve(out, path.substr(1), 'index.html');
+            const filePath = resolve(out, path, 'index.html');
             await this.fileService.createFile(
               filePath,
               this.htmlService.composeContent(
@@ -126,7 +122,7 @@ export class GenerateCommand {
                 cached.data
               )
             );
-            console.log('  + ' + magenta(path));
+            console.log('  + ' + magenta('/' + path));
           }
         );
       }
@@ -138,12 +134,18 @@ export class GenerateCommand {
      * database render
      */
 
+    const databaseRenderResults = [] as string[]; // for sitemap
     if (databaseRender.length) {
       console.log(INFO + 'Begin database rendering.');
       await Promise.all(
-        databaseRender.map(item =>
+        databaseRender.map(databaseRenderItem =>
           (async () => {
-            const {collection, type, locale, path} = item;
+            const {collection, type, locale} = databaseRenderItem;
+            const collectionCachedDir = resolve(
+              this.projectService.rcDir,
+              'database_cached',
+              collection
+            );
             const firestore = await this.firebaseService.firestore();
             const collectionQuery = firestore
               .collection(collection)
@@ -151,29 +153,57 @@ export class GenerateCommand {
               .where('status', '==', 'publish')
               .where('locale', '==', locale)
               .orderBy('createdAt', 'asc');
-            if (
-              !(await this.fileService.exists(
-                resolve(
-                  this.projectService.rcDir,
-                  'database_cached',
-                  collection
-                )
-              ))
-            ) {
+            // load docs
+            const databaseRenderDocs = [] as Array<Record<string, unknown>>;
+            if (!(await this.fileService.exists(collectionCachedDir))) {
               // load data for the fist time
               const docs = (
                 await collectionQuery.limitToLast(1000).get()
               ).docs.map(doc => doc.data());
-              console.log({docs});
+              databaseRenderDocs.push(...docs);
             } else {
               // load latest 30 items
               const docs = (
                 await collectionQuery.limitToLast(30).get()
               ).docs.map(doc => doc.data());
+              for (let i = 0; i < docs.length; i++) {
+                const doc = docs[i];
+                if (
+                  !(await this.fileService.exists(
+                    resolve(collectionCachedDir, doc.id + '.json')
+                  ))
+                ) {
+                  databaseRenderDocs.push(doc);
+                }
+              }
             }
+            // begin render
+            await this.renderService.collectionRender(
+              databaseRenderItem,
+              databaseRenderDocs,
+              async (path, cacheInput, data) => {
+                // save cache
+                const cached = await this.cacheService.save(cacheInput, data);
+                // save files
+                const filePath = resolve(out, path, 'index.html');
+                await this.fileService.createFile(
+                  filePath,
+                  this.htmlService.composeContent(
+                    parsedIndexHTML,
+                    cached.meta,
+                    cached.data
+                  )
+                );
+                console.log('  + ' + magenta('/' + path));
+                // for sitmap
+                databaseRenderResults.push(path);
+              }
+            );
           })()
         )
       );
+      // done
+      console.log(OK + 'Database rendering completed.');
     }
 
     /**
@@ -183,7 +213,7 @@ export class GenerateCommand {
     if (sitemap) {
       const sitemapItems = [] as string[];
       // path renders
-      sitemapItems.push(...pathRender);
+      sitemapItems.push(...pathRender, ...databaseRenderResults);
       // create sitemap
       const sitemapContent = await this.buildSitemap(url, sitemapItems);
       await this.fileService.createFile(

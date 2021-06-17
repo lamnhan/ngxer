@@ -1,0 +1,39 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build:lib",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"label": "npm: build:lib",
+			"detail": "npm run compile && npm i -g"
+		},
+		{
+			"type": "npm",
+			"script": "build:app",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build:app",
+			"detail": "ayedocs generate"
+		},
+		{
+			"type": "npm",
+			"script": "deploy:lib",
+			"problemMatcher": [],
+			"label": "npm: deploy:lib",
+			"detail": "npm publish"
+		},
+		{
+			"type": "npm",
+			"script": "deploy:app",
+			"problemMatcher": [],
+			"label": "npm: deploy:app",
+			"detail": "git add . && git commit -m 'deploy:app' && git push",
+			"group": "build"
+		}
+	]
+}
