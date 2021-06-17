@@ -2,7 +2,12 @@ import {resolve} from 'path';
 import {Page} from '@lamnhan/schemata';
 
 import {FileService} from './file.service';
-import {MetaData, DotNgxerRCDotJson, ProjectService} from './project.service';
+import {
+  MetaData,
+  DotNgxerRCDotJson,
+  DatabaseRender,
+  ProjectService,
+} from './project.service';
 
 export class CacheService {
   public readonly allowedCollections = [
@@ -38,65 +43,45 @@ export class CacheService {
   }
 
   async read(rcJson: DotNgxerRCDotJson, input: string) {
-    const cachedPath = this.getPath(input);
-    if (!(await this.fileService.exists(cachedPath))) {
+    const cachePath = this.getPath(input);
+    if (!(await this.fileService.exists(cachePath))) {
       return null;
     }
-    const data = await this.fileService.readJson<Record<string, unknown>>(
-      cachedPath
+    const cacheData = await this.fileService.readJson<Record<string, unknown>>(
+      cachePath
     );
-    const meta = this.extractMeta(rcJson, input, data);
-    if (!data || !meta) {
+    if (!cacheData) {
       return null;
     }
-    return {data, meta};
+    const metaData = this.extractMeta(rcJson, input, cacheData);
+    if (!metaData) {
+      return null;
+    }
+    return {
+      path: cachePath,
+      meta: metaData,
+      data: cacheData as Record<string, unknown>,
+    };
   }
 
   async save(
     rcJson: DotNgxerRCDotJson,
     input: string,
-    data: Record<string, unknown>
+    data: MetaData | Record<string, unknown>
   ) {
-    // process data
-    const metaData: MetaData = {
-      title:
-        typeof data.title === 'string'
-          ? data.title
-          : this.projectService.defaultMetaData.title,
-      description:
-        typeof data.description === 'string'
-          ? data.description
-          : this.projectService.defaultMetaData.description,
-      image:
-        typeof data.image === 'string'
-          ? data.image
-          : this.projectService.defaultMetaData.image,
-      url: data.id
-        ? rcJson.url + '/' + data.id
-        : typeof data.url !== 'string'
-        ? this.projectService.defaultMetaData.url
-        : data.url.substr(-1) === '/'
-        ? data.url
-        : data.url + '/',
-      lang:
-        typeof data.lang === 'string'
-          ? data.lang
-          : this.projectService.defaultMetaData.lang,
-      locale:
-        typeof data.locale === 'string'
-          ? data.locale
-          : this.projectService.defaultMetaData.locale,
-      content:
-        typeof data.content === 'string'
-          ? data.content
-          : this.projectService.defaultMetaData.content,
-    };
-    // save cache
+    const isPathRendering = input.indexOf(':') === -1;
     const cachePath = this.getPath(input);
-    const cacheData =
-      input.indexOf(':') !== -1 ? data : this.convertMeta(metaData);
+    // build meta
+    const metaData = isPathRendering
+      ? (data as MetaData)
+      : this.extractMeta(rcJson, input, data as Record<string, unknown>);
+    if (!metaData) {
+      return null;
+    }
+    // build data
+    const cacheData = !isPathRendering ? data : this.convertMeta(metaData);
+    // save cache & result
     await this.fileService.createJson(cachePath, cacheData);
-    // result
     return {
       path: cachePath,
       meta: metaData,
@@ -135,10 +120,14 @@ export class CacheService {
     input: string,
     data: Record<string, unknown>
   ) {
-    const collection =
-      input.indexOf(':') === -1
-        ? 'pages'
-        : (input.split(':').shift() as string);
+    const isPathRendering = input.indexOf(':') === -1;
+    const [collection, docId] = (isPathRendering ? 'pages' : input).split(':');
+    const databaseRender = isPathRendering
+      ? null
+      : ((rcJson.databaseRender || [])
+          .filter(item => item.collection === collection)
+          .shift() as DatabaseRender);
+    // ignore private colelctions
     if (this.allowedCollections.indexOf(collection) === -1) {
       return null;
     }
@@ -149,8 +138,10 @@ export class CacheService {
       data.excerpt ||
       this.projectService.defaultMetaData.description;
     const image = data.image || this.projectService.defaultMetaData.image;
-    const url = data.id
-      ? rcJson.url + '/' + data.id
+    const url = databaseRender
+      ? rcJson.url + '/' + databaseRender.path.replace(':id', docId)
+      : data.url
+      ? data.url
       : this.projectService.defaultMetaData.url;
     const locale = data.locale || this.projectService.defaultMetaData.locale;
     const lang =

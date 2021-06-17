@@ -45,7 +45,7 @@ export class GenerateCommand {
      */
 
     if (pathRender.length) {
-      console.log('\n' + INFO + 'Begin path rendering (could take some time):');
+      console.log('\n' + 'Begin path rendering (could take some time):');
       // filter
       const pathRenderExisting: string[] = [];
       const pathRenderCache: string[] = [];
@@ -117,16 +117,20 @@ export class GenerateCommand {
               metaData as unknown as Record<string, unknown>
             );
             // save file
-            const filePath = resolve(out, path, 'index.html');
-            await this.fileService.createFile(
-              filePath,
-              this.htmlService.composeContent(
-                parsedIndexHTML,
-                cached.meta,
-                cached.data
-              )
-            );
-            console.log('  + ' + magenta('/' + path));
+            if (cached) {
+              const filePath = resolve(out, path, 'index.html');
+              await this.fileService.createFile(
+                filePath,
+                this.htmlService.composeContent(
+                  parsedIndexHTML,
+                  cached.meta,
+                  cached.data
+                )
+              );
+              console.log('  + ' + magenta('/' + path));
+            } else {
+              console.log('  + ' + red('/' + path));
+            }
           }
         );
       }
@@ -140,7 +144,7 @@ export class GenerateCommand {
 
     const databaseRenderResults = [] as string[]; // for sitemap
     if (databaseRender.length) {
-      console.log('\n' + INFO + 'Begin database rendering.');
+      console.log('\n' + 'Begin database rendering.');
       // proccess collection
       await Promise.all(
         databaseRender.map(databaseRenderItem =>
@@ -252,18 +256,22 @@ export class GenerateCommand {
                     data
                   );
                   // save files
-                  const filePath = resolve(out, path, 'index.html');
-                  await this.fileService.createFile(
-                    filePath,
-                    this.htmlService.composeContent(
-                      parsedIndexHTML,
-                      cached.meta,
-                      cached.data
-                    )
-                  );
-                  console.log('  + ' + magenta('/' + path));
-                  // for sitmap
-                  databaseRenderResults.push(path);
+                  if (cached) {
+                    const filePath = resolve(out, path, 'index.html');
+                    await this.fileService.createFile(
+                      filePath,
+                      this.htmlService.composeContent(
+                        parsedIndexHTML,
+                        cached.meta,
+                        cached.data
+                      )
+                    );
+                    console.log('  + ' + magenta('/' + path));
+                    // for sitmap
+                    databaseRenderResults.push(path);
+                  } else {
+                    console.log('  + ' + red('/' + path));
+                  }
                 }
               );
             }
@@ -288,7 +296,7 @@ export class GenerateCommand {
         resolve(out, 'sitemap.xml'),
         sitemapContent
       );
-      console.log('\n' + OK + 'Saved: ' + blue('sitemap.xml'));
+      console.log('\n' + OK + 'Saved: sitemap.xml');
     }
   }
 
