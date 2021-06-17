@@ -93,8 +93,17 @@ export class CacheService {
     return this.fileService.removeFile(this.getPath(input));
   }
 
-  private convertMeta(metaData: MetaData) {
-    const {title, description, image, url, locale, content} = metaData;
+  private convertMeta(metaData: MetaData): Page {
+    const {
+      url,
+      title,
+      description,
+      image,
+      locale,
+      createdAt,
+      updatedAt,
+      content,
+    } = metaData;
     const urlSplits = url.split('/');
     const id = urlSplits[urlSplits.length - 1]
       ? urlSplits[urlSplits.length - 1]
@@ -110,16 +119,16 @@ export class CacheService {
       content,
       type: 'page',
       status: 'publish',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    } as Page;
+      createdAt,
+      updatedAt,
+    };
   }
 
   private extractMeta(
     rcJson: DotNgxerRCDotJson,
     input: string,
     data: Record<string, unknown>
-  ) {
+  ): null | MetaData {
     const isPathRendering = input.indexOf(':') === -1;
     const [collection, docId] = (isPathRendering ? 'pages' : input).split(':');
     const databaseRender = isPathRendering
@@ -132,18 +141,33 @@ export class CacheService {
       return null;
     }
     // data
+    const url = (
+      databaseRender
+        ? rcJson.url + '/' + databaseRender.path.replace(':id', docId)
+        : data.url
+        ? data.url
+        : rcJson.url
+    ) as string;
     const title = data.title as string;
     const description = (data.description || data.excerpt) as string;
-    const image = data.image || `${rcJson.url}/assets/images/featured.jpg`;
-    const url = databaseRender
-      ? rcJson.url + '/' + databaseRender.path.replace(':id', docId)
-      : data.url
-      ? data.url
-      : rcJson.url;
+    const image = (data.image ||
+      `${rcJson.url}/assets/images/featured.jpg`) as string;
     const locale = data.locale as string;
     const lang = locale.split('-').shift() as string;
+    const createdAt = data.createdAt as string;
+    const updatedAt = data.updatedAt as string;
     const content = data.content as string;
     // result
-    return {title, description, image, url, locale, lang, content} as MetaData;
+    return {
+      url,
+      title,
+      description,
+      image,
+      locale,
+      lang,
+      createdAt,
+      updatedAt,
+      content,
+    };
   }
 }

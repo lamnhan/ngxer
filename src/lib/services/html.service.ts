@@ -12,6 +12,8 @@ export interface MetaData {
   image: string;
   locale: string;
   lang: string;
+  createdAt: string;
+  updatedAt: string;
   content: string;
 }
 
@@ -22,6 +24,8 @@ export interface ParsedHTML extends MetaData {
   imageBetweens: [string, string];
   localeBetweens: [string, string];
   langBetweens: [string, string];
+  createdAtBetweens: [string, string];
+  updatedAtBetweens: [string, string];
   styles: string[];
   styleBetweens: [string, string];
   scripts: string[];
@@ -65,6 +69,8 @@ export class HtmlService {
     const imageBetweens = ['<meta itemprop="image" content="', '"'];
     const localeBetweens = ['<meta itemprop="inLanguage" content="', '"'];
     const langBetweens = ['<html lang="', '"'];
+    const createdAtBetweens = ['<meta itemprop="dateCreated" content="', '"'];
+    const updatedAtBetweens = ['<meta itemprop="dateModified" content="', '"'];
     const scriptBetweens = ['<script src="', '"'];
     const styleBetweens = ['<link rel="stylesheet" href="', '"'];
     const contentBetweens = customContentBetweens
@@ -92,6 +98,12 @@ export class HtmlService {
       .shift() as string;
     const lang = this.helperService
       .stringsBetweens(htmlContent, langBetweens[0], langBetweens[1])
+      .shift() as string;
+    const createdAt = this.helperService
+      .stringsBetweens(htmlContent, createdAtBetweens[0], createdAtBetweens[1])
+      .shift() as string;
+    const updatedAt = this.helperService
+      .stringsBetweens(htmlContent, updatedAtBetweens[0], updatedAtBetweens[1])
       .shift() as string;
     // extract bundles
     const onlyVendorFilesFilter = (url: string) =>
@@ -125,6 +137,10 @@ export class HtmlService {
       localeBetweens,
       lang,
       langBetweens,
+      createdAt,
+      createdAtBetweens,
+      updatedAt,
+      updatedAtBetweens,
       styles,
       styleBetweens,
       scripts,
@@ -147,12 +163,23 @@ export class HtmlService {
       image: templateImage,
       locale: templateLocale,
       lang: templateLang,
+      createdAt: templateCreatedAt,
+      updatedAt: templateUpdatedAt,
       scripts,
       styles,
       content: templateContent,
       full: htmlContent,
     } = templateData;
-    const {title, description, image, locale, lang, content} = metaData;
+    const {
+      title,
+      description,
+      image,
+      locale,
+      lang,
+      createdAt,
+      updatedAt,
+      content,
+    } = metaData;
     const url = !metaData.url
       ? ''
       : metaData.url.substr(-1) === '/'
@@ -162,16 +189,27 @@ export class HtmlService {
     let finalContent = htmlContent
       .replace(new RegExp(templateTitle, 'g'), title || templateTitle)
       .replace(
-        new RegExp(templateDescription, 'g'),
-        description || templateDescription
+        new RegExp(`="${templateDescription}"`, 'g'),
+        `="${description || templateDescription}"`
       )
-      .replace(new RegExp(templateImage, 'g'), image || templateImage)
+      .replace(
+        new RegExp(`="${templateImage}"`, 'g'),
+        `="${image || templateImage}"`
+      )
       .replace(new RegExp(`="${templateUrl}"`, 'g'), `="${url || templateUrl}"`)
       .replace(
         new RegExp(`="${templateLocale}"`, 'g'),
         `="${locale || templateLocale}"`
       )
-      .replace(`lang="${templateLang}"`, `lang="${lang || templateLang}"`);
+      .replace(`="${templateLang}"`, `="${lang || templateLang}"`)
+      .replace(
+        new RegExp(`="${templateCreatedAt}"`, 'g'),
+        `="${createdAt || templateCreatedAt}"`
+      )
+      .replace(
+        new RegExp(`="${templateUpdatedAt}"`, 'g'),
+        `="${updatedAt || templateUpdatedAt}"`
+      );
     // scripts replacement (to absolute)
     scripts.forEach(
       script =>
@@ -191,13 +229,15 @@ export class HtmlService {
     // content replacement
     finalContent = finalContent.replace(
       '<app-root></app-root>',
-      `<app-root>${content || templateContent || templateTitle}</app-root>`
+      `<app-root>${
+        content || templateContent || templateDescription || templateTitle
+      }</app-root>`
     );
     // session data
-    if (sessionData) {
-      const scriptCode = `<script>if(window.sessionStorage){sessionStorage.setItem('PRERENDER_DATA','${JSON.stringify(
-        sessionData
-      )}');}</script>`;
+    if (sessionData && sessionData.id) {
+      const scriptCode = `<script>if(window.sessionStorage){sessionStorage.setItem('prerender_data:${
+        sessionData.id
+      }','${JSON.stringify(sessionData)}');}</script>`;
       finalContent = finalContent.replace('</title>', `</title>${scriptCode}`);
     }
     // result
