@@ -41,13 +41,31 @@ export class RemoveCommand {
           // database
           if (input.indexOf(':') !== -1) {
             const [collection, docId] = input.split(':');
-            const databaseRenderItem = databaseRender
-              .filter(item => item.collection === collection)
-              .shift();
-            if (databaseRenderItem) {
-              const path = databaseRenderItem.path.replace(':id', docId);
+            const databaseRenderItems = databaseRender.filter(
+              item => item.collection === collection
+            );
+            if (databaseRenderItems.length) {
               // remove cache
               await this.cacheService.remove(input);
+              // process path with multiple locales
+              const path = await (async () => {
+                if (databaseRenderItems.length === 1) {
+                  return databaseRenderItems[0].path.replace(':id', docId);
+                } else {
+                  let correctPath = '';
+                  for (let i = 0; i < databaseRenderItems.length; i++) {
+                    const path = databaseRenderItems[i].path.replace(
+                      ':id',
+                      docId
+                    );
+                    if (await this.fileService.exists(resolve(out, path))) {
+                      correctPath = path;
+                      break;
+                    }
+                  }
+                  return correctPath;
+                }
+              })();
               // remove file
               await dirRemoval(path);
               // for sitemap & report

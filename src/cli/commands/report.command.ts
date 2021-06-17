@@ -26,8 +26,8 @@ export class ReportCommand {
       const totalDatabaseRender = databaseRendering.length;
       if (!options.detail) {
         table.push(
-          ['Path count', green(totalPathRender)],
-          ['Database count', green(totalDatabaseRender)],
+          ['Path render', `Count: ${green(totalPathRender)}`],
+          ['Database render', `Count: ${green(totalDatabaseRender)}`],
           ['Total count', green(totalPathRender + totalDatabaseRender)]
         );
       } else {
@@ -35,17 +35,23 @@ export class ReportCommand {
           [
             'Path render',
             `Count: ${green(totalPathRender)}` +
-              grey('\n+ /' + pathRendering.join('\n+ /')),
+              (totalPathRender <= 0
+                ? ''
+                : grey('\n+ /' + pathRendering.join('\n+ /'))),
           ],
           [
             'Database render',
             `Count: ${green(totalDatabaseRender)}` +
-              grey('\n+ /' + databaseRendering.join('\n+ /')),
+              (totalDatabaseRender <= 0
+                ? ''
+                : grey('\n+ /' + databaseRendering.join('\n+ /'))),
           ],
           ['Total count', green(totalPathRender + totalDatabaseRender)]
         );
       }
-      console.log(OK + 'Here your render report:');
+      console.log(
+        OK + 'Here your render report (add --detail for more detail):'
+      );
       console.log(table.render());
       console.log('   Latest updated: ' + grey(new Date(timestamp)));
     } else {

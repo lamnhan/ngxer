@@ -43,12 +43,8 @@ export class ReportService {
       databaseRendering: currentDatabaseRendering,
     } = await this.read();
     return this.save(
-      !pathRendering
-        ? currentPathRendering
-        : [...currentPathRendering, ...pathRendering],
-      !databaseRendering
-        ? currentDatabaseRendering
-        : [...currentDatabaseRendering, ...databaseRendering]
+      !pathRendering ? currentPathRendering : pathRendering,
+      !databaseRendering ? currentDatabaseRendering : databaseRendering
     );
   }
 
