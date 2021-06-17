@@ -62,8 +62,8 @@ Tool for prerendering Angular apps
 
 - [`ngxer generate|g`](#command-generate)
 - [`ngxer init|i [projectPath]`](#command-init)
-- [`ngxer remove|r <inputs...>`](#command-remove)
-- [`ngxer report|s --clear`](#command-report)
+- [`ngxer remove|x <inputs...>`](#command-remove)
+- [`ngxer report|r --detail`](#command-report)
 - [`ngxer update|u <inputs...>`](#command-update)
 - [`ngxer help`](#command-help)
 - [`ngxer *`](#command-*)
@@ -102,13 +102,13 @@ ngxer i [projectPath]
 <h3><a name="command-remove"><p><code>remove</code></p>
 </a></h3>
 
-Remove a generated content
+Remove a generated content.
 
 **Usage:**
 
 ```sh
 ngxer remove <inputs...>
-ngxer r <inputs...>
+ngxer x <inputs...>
 ```
 
 **Parameters:**
@@ -123,13 +123,13 @@ Show generated statistics.
 **Usage:**
 
 ```sh
-ngxer report --clear
-ngxer s --clear
+ngxer report --detail
+ngxer r --detail
 ```
 
 **Options:**
 
-- `-c, --clear`: Remove the report (when re-build app)
+- `-d, --detail`: Show detail.
 
 <h3><a name="command-update"><p><code>update</code></p>
 </a></h3>
