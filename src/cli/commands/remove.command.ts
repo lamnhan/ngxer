@@ -1,44 +1,57 @@
 import {resolve} from 'path';
 import {blue} from 'chalk';
 
-import {OK, WARN, ERROR} from '../../lib/services/message.service';
+import {OK, WARN, ERROR, INFO} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
+import {RenderService} from '../../lib/services/render.service';
 import {CacheService} from '../../lib/services/cache.service';
+import {ReportService} from '../../lib/services/report.service';
+import {SitemapService} from '../../lib/services/sitemap.service';
 
 export class RemoveCommand {
   constructor(
     private fileService: FileService,
     private projectService: ProjectService,
-    private cacheService: CacheService
+    private renderService: RenderService,
+    private cacheService: CacheService,
+    private resportService: ReportService,
+    private sitemapService: SitemapService
   ) {}
 
   async run(inputs: string[]) {
-    const {out, databaseRender = []} =
-      await this.projectService.loadDotNgxerRCDotJson();
-    const dirRemoval = async (dirPath: string, input: string, out: string) => {
+    const dotNgxerRCDotJson = await this.projectService.loadDotNgxerRCDotJson();
+    const {out, url, databaseRender = []} = dotNgxerRCDotJson;
+    // helper
+    const dirRemoval = async (path: string) => {
+      const dirPath = resolve(out, path);
       if (await this.fileService.exists(dirPath)) {
         await this.fileService.removeDir(dirPath);
-        console.log(OK + 'Removed: ' + blue(`${out}/${input}`));
+        console.log(OK + 'Removed: ' + blue(`/${path}`));
       } else {
-        console.log(WARN + 'Not found: ' + blue(`${out}/${input}`));
+        console.log(WARN + 'Not found: ' + blue(`/${path}`));
       }
     };
+    // do removal
+    const pathRemoved: string[] = [];
+    const databaseRemoved: string[] = [];
     await Promise.all(
       inputs.map(input =>
         (async () => {
           // database
           if (input.indexOf(':') !== -1) {
-            const [collection, doc] = input.split(':');
-            const renderItem = databaseRender
+            const [collection, docId] = input.split(':');
+            const databaseRenderItem = databaseRender
               .filter(item => item.collection === collection)
               .shift();
-            if (renderItem) {
+            if (databaseRenderItem) {
+              const path = databaseRenderItem.path.replace(':id', docId);
               // remove cache
               await this.cacheService.remove(input);
               // remove file
-              const dirPath = resolve(out, renderItem.path.replace(':id', doc));
-              await dirRemoval(dirPath, input, out);
+              await dirRemoval(path);
+              // for sitemap & report
+              databaseRemoved.push(path);
             } else {
               console.log(
                 ERROR +
@@ -49,14 +62,44 @@ export class RemoveCommand {
           }
           // path
           else {
+            const path = this.renderService.processPath(input);
             // remove cached
-            await this.cacheService.remove(input);
+            await this.cacheService.remove(path);
             // remove file
-            const dirPath = resolve(out, input);
-            await dirRemoval(dirPath, input, out);
+            await dirRemoval(path);
+            // for sitemap & report
+            pathRemoved.push(path);
           }
         })()
       )
     );
+    // update .ngxer.json pathRender, sitemap & report
+    let rcPathRenderRemain = dotNgxerRCDotJson.pathRender || [];
+    let {
+      pathRendering: pathRenderRemain,
+      databaseRendering: databaseRenderRemain,
+    } = await this.resportService.read();
+    if (pathRemoved.length) {
+      rcPathRenderRemain = rcPathRenderRemain.filter(
+        item => pathRemoved.indexOf(item) === -1
+      );
+      pathRenderRemain = pathRenderRemain.filter(
+        item => pathRemoved.indexOf(item) === -1
+      );
+    }
+    if (databaseRemoved.length) {
+      databaseRenderRemain = databaseRenderRemain.filter(
+        item => databaseRemoved.indexOf(item) === -1
+      );
+    }
+    await this.projectService.updateDotNgxerRCDotJson({
+      pathRender: rcPathRenderRemain,
+    });
+    await this.sitemapService.save(out, url, [
+      ...pathRenderRemain,
+      ...databaseRenderRemain,
+    ]);
+    await this.resportService.update(pathRenderRemain, databaseRenderRemain);
+    console.log(INFO + 'Updated .ngxer.json, sitemap.xml & report.json');
   }
 }

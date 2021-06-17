@@ -9,6 +9,7 @@ import {HtmlService} from '../../lib/services/html.service';
 import {RenderService} from '../../lib/services/render.service';
 import {FirebaseService} from '../../lib/services/firebase.service';
 import {ReportService} from '../../lib/services/report.service';
+import {SitemapService} from '../../lib/services/sitemap.service';
 
 export class GenerateCommand {
   constructor(
@@ -18,7 +19,8 @@ export class GenerateCommand {
     private htmlService: HtmlService,
     private renderService: RenderService,
     private firebaseService: FirebaseService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private sitemapService: SitemapService
   ) {}
 
   async run() {
@@ -308,15 +310,8 @@ export class GenerateCommand {
      */
 
     if (sitemap) {
-      const sitemapItems = [] as string[];
-      // path renders
-      sitemapItems.push(...pathRenderSitemap, ...databaseRenderSitemap);
-      // create sitemap
-      const sitemapContent = await this.buildSitemap(url, sitemapItems);
-      await this.fileService.createFile(
-        resolve(out, 'sitemap.xml'),
-        sitemapContent
-      );
+      const sitemapItems = [...pathRenderSitemap, ...databaseRenderSitemap];
+      await this.sitemapService.save(out, url, sitemapItems);
       console.log('\n' + OK + 'Saved: sitemap.xml');
     }
 
@@ -325,30 +320,5 @@ export class GenerateCommand {
      */
     await this.reportService.save(pathRenderSitemap, databaseRenderSitemap);
     console.log(OK + 'To view report: $ ' + yellow('ngxer report'));
-  }
-
-  async buildSitemap(url: string, paths: string[]) {
-    const items = [] as string[];
-    paths.forEach(path => {
-      const remoteUrl = url + (path.startsWith('/') ? path : '/' + path);
-      const loc = remoteUrl.substr(-1) === '/' ? remoteUrl : remoteUrl + '/';
-      const changefreq = 'daily';
-      const priority = '1.0';
-      const lastmod = new Date().toISOString().substr(0, 10);
-      items.push(
-        '   <url>',
-        '       <loc>' + loc + '</loc>',
-        '       <lastmod>' + lastmod + '</lastmod>',
-        '       <changefreq>' + changefreq + '</changefreq>',
-        '       <priority>' + priority + '</priority>',
-        '   </url>'
-      );
-    });
-    return [
-      '<?xml version="1.0" encoding="UTF-8"?>',
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-      ...items,
-      '</urlset>',
-    ].join('\n');
   }
 }

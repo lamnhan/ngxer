@@ -65,13 +65,17 @@ export class Cli {
       this.ngxerModule.htmlService,
       this.ngxerModule.renderService,
       this.ngxerModule.firebaseService,
-      this.ngxerModule.reportService
+      this.ngxerModule.reportService,
+      this.ngxerModule.sitemapService
     );
     this.updateCommand = new UpdateCommand();
     this.removeCommand = new RemoveCommand(
       this.ngxerModule.fileService,
       this.ngxerModule.projectService,
-      this.ngxerModule.cacheService
+      this.ngxerModule.renderService,
+      this.ngxerModule.cacheService,
+      this.ngxerModule.reportService,
+      this.ngxerModule.sitemapService
     );
     this.reportCommand = new ReportCommand(this.ngxerModule.reportService);
   }

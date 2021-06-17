@@ -17,3 +17,4 @@ export * from './lib/services/html.service';
 export * from './lib/services/firebase.service';
 export * from './lib/services/render.service';
 export * from './lib/services/report.service';
+export * from './lib/services/sitemap.service';

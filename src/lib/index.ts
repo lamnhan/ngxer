@@ -8,6 +8,7 @@ import {HtmlService} from './services/html.service';
 import {FirebaseService} from './services/firebase.service';
 import {RenderService} from './services/render.service';
 import {ReportService} from './services/report.service';
+import {SitemapService} from './services/sitemap.service';
 
 export class Lib {
   messageService: MessageService;
@@ -20,6 +21,7 @@ export class Lib {
   firebaseService: FirebaseService;
   renderService: RenderService;
   reportService: ReportService;
+  sitemapService: SitemapService;
 
   constructor() {
     this.messageService = new MessageService();
@@ -31,6 +33,10 @@ export class Lib {
     this.htmlService = new HtmlService(this.helperService, this.fileService);
     this.firebaseService = new FirebaseService(this.fileService);
     this.renderService = new RenderService(this.fetchService, this.htmlService);
-    this.reportService = new ReportService(this.fileService, this.projectService);
+    this.reportService = new ReportService(
+      this.fileService,
+      this.projectService
+    );
+    this.sitemapService = new SitemapService(this.fileService);
   }
 }
