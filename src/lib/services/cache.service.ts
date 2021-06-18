@@ -149,7 +149,7 @@ export class CacheService {
         : rcJson.url
     ) as string;
     const title = data.title as string;
-    const description = (data.description || data.excerpt) as string;
+    const description = data.description as string;
     const image = (data.image ||
       `${rcJson.url}/assets/images/featured.jpg`) as string;
     const locale = data.locale as string;
