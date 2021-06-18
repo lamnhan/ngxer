@@ -46,6 +46,10 @@ export class HtmlService {
       content: rawHtmlContent,
       options: {
         removeAttributeQuotes: false,
+        removeEmptyAttributes: true,
+        removeEmptyElements: true,
+        removeRedundantAttributes: true,
+        removeComments: true,
       },
     });
   }
