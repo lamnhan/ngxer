@@ -22,6 +22,7 @@
     "build": "npm run build:app && npm run build:lib",
     "deploy:lib": "npm publish",
     "deploy:app": "git add . && git commit -m 'deploy:app' && git push",
+    "deploy": "npm run deploy:app && npm run deploy:lib",
     "test": "npm run compile && nyc --cache false mocha test/**/*.js",
     "coverage": "nyc --cache false report --reporter=text-lcov | coveralls",
     "lint": "gts lint",
@@ -40,7 +41,7 @@
     "url": "https://github.com/lamnhan/ngxer/issues"
   },
   "dependencies": {
-    "@lamnhan/schemata": "0.0.11",
+    "@lamnhan/schemata": "^0.0.12",
     "@node-minify/core": "^6.2.0",
     "@node-minify/html-minifier": "^6.2.0",
     "axios": "^0.21.1",

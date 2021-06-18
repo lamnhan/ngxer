@@ -111,12 +111,13 @@ export class CacheService {
       ? urlSplits[urlSplits.length - 1]
       : urlSplits[urlSplits.length - 2];
     // authors
-    const authors: Array<Profile | Author> = [
-      {
-        id: authorUrl.split('/').pop() as string,
+    const authorId = authorUrl.split('/').pop() as string;
+    const authors: Record<string, Profile | Author> = {
+      [authorId]: {
+        id: authorId,
         title: authorName,
       },
-    ];
+    };
     // result
     return {
       id,
