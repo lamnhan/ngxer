@@ -71,6 +71,7 @@ export class Cli {
     );
     this.updateCommand = new UpdateCommand(
       this.ngxerModule.projectService,
+      this.ngxerModule.renderService,
       this.ngxerModule.reportService,
       this.ngxerModule.sitemapService,
       this.generateCommand
