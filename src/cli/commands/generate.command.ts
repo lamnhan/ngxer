@@ -34,6 +34,7 @@ export class GenerateCommand {
       databaseRender = [],
       contentBetweens,
     } = dotNgxerDotJson;
+    let {homeContent = '', contentTemplate = ''} = dotNgxerDotJson;
 
     // index template
     if (!(await this.htmlService.indexExists(out))) {
@@ -43,6 +44,9 @@ export class GenerateCommand {
       out,
       contentBetweens
     );
+    contentTemplate = await this.htmlService.processContentOrPath(
+      contentTemplate
+    );
 
     // legends
     console.log(
@@ -51,6 +55,19 @@ export class GenerateCommand {
           'exists'
         )} | ${red('error')}`
     );
+
+    /**
+     * index.html
+     */
+    if (await this.htmlService.indexTemplateExists(out)) {
+      homeContent = await this.htmlService.processContentOrPath(homeContent);
+      const homePage = this.htmlService.composePageContent(
+        contentTemplate,
+        homeContent
+      );
+      await this.htmlService.saveIndex(out, parsedIndexHTML.full, homePage);
+      console.log('\n' + OK + 'Modified: index.html');
+    }
 
     /**
      * path render (from manual paths or rc pathRender)

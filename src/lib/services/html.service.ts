@@ -62,12 +62,36 @@ export class HtmlService {
     return this.fileService.exists(resolve(out, 'index.html'));
   }
 
+  indexTemplateExists(out: string) {
+    return this.fileService.exists(resolve(out, 'index-template.html'));
+  }
+
+  async processContentOrPath(input: string) {
+    return input.substr(-5) !== '.html'
+      ? input
+      : await this.fileService.readText(resolve(input));
+  }
+
+  composePageContent(contentTemplate: string, content: string) {
+    return contentTemplate.replace('<!--CONTENT_PLACEHOLDER-->', content);
+  }
+
   async parseIndex(out: string, customContentBetweens?: [string, string]) {
     const templatePath = resolve(out, 'index-template.html');
     if (!(await this.fileService.exists(templatePath))) {
       await this.fileService.copy(resolve(out, 'index.html'), templatePath);
     }
     return this.parseFile(templatePath, customContentBetweens);
+  }
+
+  saveIndex(out: string, indexFull: string, page?: string) {
+    if (page) {
+      indexFull = indexFull.replace(
+        '<app-root></app-root>',
+        `<app-root>${page}</app-root>`
+      );
+    }
+    return this.fileService.createFile(resolve(out, 'index.html'), indexFull);
   }
 
   async parseFile(path: string, customContentBetweens?: [string, string]) {
