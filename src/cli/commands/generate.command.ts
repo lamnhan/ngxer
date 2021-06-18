@@ -1,11 +1,14 @@
 import {resolve} from 'path';
-import {yellow, grey, red, magenta, blue} from 'chalk';
+import {yellow, grey, red, magenta} from 'chalk';
 
-import {OK, INFO, WARN, ERROR} from '../../lib/services/message.service';
+import {OK, INFO, WARN} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
-import {ProjectService} from '../../lib/services/project.service';
+import {
+  DotNgxerRCDotJson,
+  ProjectService,
+} from '../../lib/services/project.service';
 import {CacheService} from '../../lib/services/cache.service';
-import {HtmlService} from '../../lib/services/html.service';
+import {ParsedHTML, HtmlService} from '../../lib/services/html.service';
 import {RenderService} from '../../lib/services/render.service';
 import {FirebaseService} from '../../lib/services/firebase.service';
 import {ReportService} from '../../lib/services/report.service';
@@ -25,28 +28,15 @@ export class GenerateCommand {
 
   async run() {
     // load data
-    const dotNgxerDotJson = await this.projectService.loadDotNgxerRCDotJson();
+    const {dotNgxerRCDotJson, parsedIndexHTML, contentTemplate, homeContent} =
+      await this.prepareData();
     const {
       out,
       url,
       sitemap = false,
       pathRender = [],
       databaseRender = [],
-      contentBetweens,
-    } = dotNgxerDotJson;
-    let {homeContent = '', contentTemplate = ''} = dotNgxerDotJson;
-
-    // index template
-    if (!(await this.htmlService.indexExists(out))) {
-      return console.log(ERROR + 'No ' + blue('index.html') + ' found.');
-    }
-    const parsedIndexHTML = await this.htmlService.parseIndex(
-      out,
-      contentBetweens
-    );
-    contentTemplate = await this.htmlService.processContentOrPath(
-      contentTemplate
-    );
+    } = dotNgxerRCDotJson;
 
     // legends
     console.log(
@@ -60,7 +50,6 @@ export class GenerateCommand {
      * index.html
      */
     if (await this.htmlService.indexTemplateExists(out)) {
-      homeContent = await this.htmlService.processContentOrPath(homeContent);
       const homePage = this.htmlService.composePageContent(
         contentTemplate,
         homeContent
@@ -106,7 +95,7 @@ export class GenerateCommand {
             (async () => {
               path = this.renderService.processPath(path);
               const cached = await this.cacheService.read(
-                dotNgxerDotJson,
+                dotNgxerRCDotJson,
                 path
               );
               // save file
@@ -133,42 +122,13 @@ export class GenerateCommand {
       // render live
       if (pathRenderLive.length) {
         console.log(WARN + 'Live path rendering could take some time.');
-        await this.renderService.liveRender(
-          out,
+        const result = await this.livePathRender(
+          dotNgxerRCDotJson,
           pathRenderLive,
-          async (path, page) => {
-            // extract data
-            const pageContent = await page.content();
-            const metaData = await this.htmlService.parseContent(
-              pageContent,
-              contentBetweens
-            );
-            metaData.url = url + '/' + path + '/';
-            // cache
-            const cached = await this.cacheService.save(
-              dotNgxerDotJson,
-              path,
-              metaData as unknown as Record<string, unknown>
-            );
-            // save file
-            if (cached) {
-              const filePath = resolve(out, path, 'index.html');
-              await this.fileService.createFile(
-                filePath,
-                this.htmlService.composeContent(
-                  parsedIndexHTML,
-                  cached.meta,
-                  cached.data,
-                  contentTemplate
-                )
-              );
-              pathRenderSitemap.push(path);
-              console.log('  + ' + magenta('/' + path));
-            } else {
-              console.log('  + ' + red('/' + path));
-            }
-          }
+          parsedIndexHTML,
+          contentTemplate
         );
+        pathRenderSitemap.push(...result);
       }
       // done
       console.log(OK + 'Path rendering completed.');
@@ -268,7 +228,7 @@ export class GenerateCommand {
                       pathTemplate.replace(':id', doc.id as string)
                     );
                     const cached = await this.cacheService.read(
-                      dotNgxerDotJson,
+                      dotNgxerRCDotJson,
                       `${collection}:${doc.id}`
                     );
                     // save file
@@ -300,7 +260,7 @@ export class GenerateCommand {
                 async (path, cacheInput, data) => {
                   // save cache
                   const cached = await this.cacheService.save(
-                    dotNgxerDotJson,
+                    dotNgxerRCDotJson,
                     cacheInput,
                     data
                   );
@@ -346,5 +306,74 @@ export class GenerateCommand {
      */
     await this.reportService.save(pathRenderSitemap, databaseRenderSitemap);
     console.log(OK + 'To view report: $ ' + yellow('ngxer report'));
+  }
+
+  async prepareData() {
+    // rc data
+    const dotNgxerRCDotJson = await this.projectService.loadDotNgxerRCDotJson();
+    const {out, contentBetweens} = dotNgxerRCDotJson;
+    let {homeContent = '', contentTemplate = ''} = dotNgxerRCDotJson;
+    // index template
+    const parsedIndexHTML = await this.htmlService.parseIndex(
+      out,
+      contentBetweens
+    );
+    contentTemplate = await this.htmlService.processContentOrPath(
+      contentTemplate
+    );
+    homeContent = await this.htmlService.processContentOrPath(homeContent);
+    return {
+      dotNgxerRCDotJson,
+      parsedIndexHTML,
+      contentTemplate,
+      homeContent,
+    };
+  }
+
+  async livePathRender(
+    dotNgxerRCDotJson: DotNgxerRCDotJson,
+    pathRenderLive: string[],
+    parsedIndexHTML: ParsedHTML,
+    contentTemplate?: string
+  ) {
+    const {out, url, contentBetweens} = dotNgxerRCDotJson;
+    const result: string[] = [];
+    await this.renderService.liveRender(
+      out,
+      pathRenderLive,
+      async (path, page) => {
+        // extract data
+        const pageContent = await page.content();
+        const metaData = await this.htmlService.parseContent(
+          pageContent,
+          contentBetweens
+        );
+        metaData.url = url + '/' + path + '/';
+        // cache
+        const cached = await this.cacheService.save(
+          dotNgxerRCDotJson,
+          path,
+          metaData as unknown as Record<string, unknown>
+        );
+        // save file
+        if (cached) {
+          const filePath = resolve(out, path, 'index.html');
+          await this.fileService.createFile(
+            filePath,
+            this.htmlService.composeContent(
+              parsedIndexHTML,
+              cached.meta,
+              cached.data,
+              contentTemplate
+            )
+          );
+          result.push(path);
+          console.log('  + ' + magenta('/' + path));
+        } else {
+          console.log('  + ' + red('/' + path));
+        }
+      }
+    );
+    return result;
   }
 }

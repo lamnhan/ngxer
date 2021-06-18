@@ -1,7 +1,86 @@
+import {OK, WARN, INFO} from '../../lib/services/message.service';
+import {ProjectService} from '../../lib/services/project.service';
+import {ReportService} from '../../lib/services/report.service';
+import {SitemapService} from '../../lib/services/sitemap.service';
+
+import {GenerateCommand} from './generate.command';
+
 export class UpdateCommand {
-  constructor() {}
+  constructor(
+    private projectService: ProjectService,
+    private resportService: ReportService,
+    private sitemapService: SitemapService,
+    private generateCommand: GenerateCommand
+  ) {}
 
   async run(inputs: string[]) {
-    console.log('// TODO: ...', {inputs});
+    const {dotNgxerRCDotJson, parsedIndexHTML, contentTemplate} =
+      await this.generateCommand.prepareData();
+    const {out, url, pathRender = [], databaseRender = []} = dotNgxerRCDotJson;
+    // update
+    const pathRenderLive: string[] = [];
+    const databaseRenderLive: string[] = [];
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
+      if (input.indexOf(':') !== -1) {
+        databaseRenderLive.push(input);
+      } else {
+        pathRenderLive.push(input);
+      }
+    }
+    // path render
+    const pathAdded: string[] = [];
+    if (pathRenderLive.length) {
+      console.log('\n' + 'Begin path rendering:');
+      console.log(WARN + 'Live path rendering could take some time.');
+      const result = await this.generateCommand.livePathRender(
+        dotNgxerRCDotJson,
+        pathRenderLive,
+        parsedIndexHTML,
+        contentTemplate
+      );
+      // filter add values
+      for (let i = 0; i < result.length; i++) {
+        const path = result[i];
+        if (pathRender.indexOf(path) === -1) {
+          pathAdded.push(path);
+        }
+      }
+      // done
+      console.log(OK + 'Path rendering completed.');
+    }
+    // database render
+    const databaseAdded: string[] = [];
+    if (databaseRenderLive.length) {
+      console.log('\n' + 'Begin database rendering:');
+      // TODO: ...
+      // done
+      console.log(OK + 'Database rendering completed.');
+    }
+    // update .ngxer.json pathRender
+    if (pathAdded.length) {
+      // update .ngxer.json (pathRender)
+      await this.projectService.updateDotNgxerRCDotJson({
+        pathRender: [...(dotNgxerRCDotJson.pathRender || []), ...pathAdded],
+      });
+    }
+    // update sitemap & report
+    if (pathAdded.length || databaseAdded.length) {
+      let {
+        pathRendering: pathRenderLatest,
+        databaseRendering: databaseRenderLatest,
+      } = await this.resportService.read();
+      pathRenderLatest = [...pathRenderLatest, ...pathAdded];
+      databaseRenderLatest = [...databaseRenderLatest, ...databaseAdded];
+      // update sitemap
+      await this.sitemapService.save(out, url, [
+        ...pathRenderLatest,
+        ...databaseRenderLatest,
+      ]);
+      // update report
+      await this.resportService.update(pathRenderLatest, databaseRenderLatest);
+      // done
+      console.log(INFO + 'Updated: .ngxer.json, sitemap.xml & report.json');
+    }
   }
 }

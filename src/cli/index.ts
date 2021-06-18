@@ -68,7 +68,12 @@ export class Cli {
       this.ngxerModule.reportService,
       this.ngxerModule.sitemapService
     );
-    this.updateCommand = new UpdateCommand();
+    this.updateCommand = new UpdateCommand(
+      this.ngxerModule.projectService,
+      this.ngxerModule.reportService,
+      this.ngxerModule.sitemapService,
+      this.generateCommand
+    );
     this.removeCommand = new RemoveCommand(
       this.ngxerModule.fileService,
       this.ngxerModule.projectService,

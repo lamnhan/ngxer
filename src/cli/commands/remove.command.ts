@@ -95,6 +95,7 @@ export class RemoveCommand {
       pathRendering: pathRenderRemain,
       databaseRendering: databaseRenderRemain,
     } = await this.resportService.read();
+    // remove by path
     if (pathRemoved.length) {
       rcPathRenderRemain = rcPathRenderRemain.filter(
         item => pathRemoved.indexOf(item) === -1
@@ -103,19 +104,24 @@ export class RemoveCommand {
         item => pathRemoved.indexOf(item) === -1
       );
     }
+    // remove by database
     if (databaseRemoved.length) {
       databaseRenderRemain = databaseRenderRemain.filter(
         item => databaseRemoved.indexOf(item) === -1
       );
     }
+    // update .ngxer.json (pathRender)
     await this.projectService.updateDotNgxerRCDotJson({
       pathRender: rcPathRenderRemain,
     });
+    // update sitemap
     await this.sitemapService.save(out, url, [
       ...pathRenderRemain,
       ...databaseRenderRemain,
     ]);
+    // update report
     await this.resportService.update(pathRenderRemain, databaseRenderRemain);
+    // done
     console.log(INFO + 'Updated: .ngxer.json, sitemap.xml & report.json');
   }
 }
