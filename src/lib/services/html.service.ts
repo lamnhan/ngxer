@@ -76,14 +76,6 @@ export class HtmlService {
     return contentTemplate.replace('<!--CONTENT_PLACEHOLDER-->', content);
   }
 
-  async parseIndex(out: string, customContentBetweens?: [string, string]) {
-    const templatePath = resolve(out, 'index-template.html');
-    if (!(await this.fileService.exists(templatePath))) {
-      await this.fileService.copy(resolve(out, 'index.html'), templatePath);
-    }
-    return this.parseFile(templatePath, customContentBetweens);
-  }
-
   saveIndex(out: string, indexFull: string, page?: string) {
     if (page) {
       indexFull = indexFull.replace(
@@ -92,6 +84,17 @@ export class HtmlService {
       );
     }
     return this.fileService.createFile(resolve(out, 'index.html'), indexFull);
+  }
+
+  async parseIndex(out: string, customContentBetweens?: [string, string]) {
+    const indexTemplatePath = resolve(out, 'index-template.html');
+    if (!(await this.fileService.exists(indexTemplatePath))) {
+      await this.fileService.copy(
+        resolve(out, 'index.html'),
+        indexTemplatePath
+      );
+    }
+    return this.parseFile(indexTemplatePath, customContentBetweens);
   }
 
   async parseFile(path: string, customContentBetweens?: [string, string]) {
