@@ -4,7 +4,7 @@ import * as marked from 'marked';
 
 import {FetchService} from './fetch.service';
 import {HtmlService} from './html.service';
-import {DatabaseRender} from './project.service';
+import {DotNgxerRCDotJson, DatabaseRender} from './project.service';
 
 export class RenderService {
   private server!: any;
@@ -50,6 +50,48 @@ export class RenderService {
     path = !path.startsWith('/') ? path : path.substr(1); // remove leading slash
     path = path.substr(-1) !== '/' ? path : path.substr(0, path.length - 1); // remove trailing slash
     return path;
+  }
+
+  sortPaths(dotNgxerRCDotJson: DotNgxerRCDotJson, paths: string[]) {
+    const {pathRender = [], databaseRender = []} = dotNgxerRCDotJson;
+    const pathRenderList: string[] = [];
+    const databaseRenderList: Array<{
+      path: string;
+      renderItem: DatabaseRender;
+    }> = [];
+    const otherList: string[] = [];
+    for (let i = 0; i < paths.length; i++) {
+      const path = this.processPath(paths[i]);
+      // exists in pathRender
+      if (pathRender.indexOf(path) !== -1) {
+        pathRenderList.push(path);
+      } else {
+        // rebuild database render item path
+        const pathSplits = path.split('/');
+        pathSplits.pop();
+        pathSplits.push(':id');
+        const databaseRenderItemPath = pathSplits.join('/');
+        const databaseRenderItem = databaseRender
+          .filter(item => item.path === databaseRenderItemPath)
+          .shift();
+        // has a database render item
+        if (databaseRenderItem) {
+          databaseRenderList.push({
+            path,
+            renderItem: databaseRenderItem,
+          });
+        }
+        // no pathRender nor database render
+        else {
+          otherList.push(path);
+        }
+      }
+    }
+    return {
+      pathRenderList,
+      databaseRenderList,
+      otherList,
+    };
   }
 
   async liveRender(

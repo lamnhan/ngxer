@@ -1,5 +1,9 @@
 import {OK, WARN, INFO} from '../../lib/services/message.service';
-import {ProjectService} from '../../lib/services/project.service';
+import {
+  DotNgxerRCDotJson,
+  ProjectService,
+} from '../../lib/services/project.service';
+import {RenderService} from '../../lib/services/render.service';
 import {ReportService} from '../../lib/services/report.service';
 import {SitemapService} from '../../lib/services/sitemap.service';
 
@@ -12,35 +16,31 @@ interface Options {
 export class UpdateCommand {
   constructor(
     private projectService: ProjectService,
+    private renderService: RenderService,
     private resportService: ReportService,
     private sitemapService: SitemapService,
     private generateCommand: GenerateCommand
   ) {}
 
-  async run(inputs: string[], options: Options) {
+  async run(paths: string[], options: Options) {
     const {dotNgxerRCDotJson, parsedIndexHTML, contentTemplate} =
       await this.generateCommand.prepareData();
     const {out, url, pathRender = [], databaseRender = []} = dotNgxerRCDotJson;
     // sort by rendering type
-    const pathRenderList: string[] = [];
-    const databaseRenderList: string[] = [];
-    for (let i = 0; i < inputs.length; i++) {
-      const input = inputs[i];
-      if (input.indexOf(':') !== -1) {
-        databaseRenderList.push(input);
-      } else {
-        pathRenderList.push(input);
-      }
-    }
+    const {
+      pathRenderList,
+      databaseRenderList,
+      otherList: pathAdded,
+    } = this.renderService.sortPaths(dotNgxerRCDotJson, paths);
     // path render
-    const pathAdded: string[] = [];
-    if (pathRenderList.length) {
+    const allPathRender = [...pathRenderList, ...pathAdded];
+    if (allPathRender.length) {
       console.log('\n' + 'Begin path rendering:');
       // from cached
       if (!options.live) {
         await this.generateCommand.cachedPathRender(
           dotNgxerRCDotJson,
-          pathRenderList,
+          allPathRender,
           parsedIndexHTML,
           contentTemplate
         );
@@ -48,19 +48,12 @@ export class UpdateCommand {
       // live render
       else {
         console.log(WARN + 'Live path rendering could take some time.');
-        const result = await this.generateCommand.livePathRender(
+        await this.generateCommand.livePathRender(
           dotNgxerRCDotJson,
-          pathRenderList,
+          allPathRender,
           parsedIndexHTML,
           contentTemplate
         );
-        // filter add values
-        for (let i = 0; i < result.length; i++) {
-          const path = result[i];
-          if (pathRender.indexOf(path) === -1) {
-            pathAdded.push(path);
-          }
-        }
       }
       // done
       console.log(OK + 'Path rendering completed.');
