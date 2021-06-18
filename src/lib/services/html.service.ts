@@ -73,7 +73,10 @@ export class HtmlService {
   }
 
   composePageContent(contentTemplate: string, content: string) {
-    return contentTemplate.replace('<!--CONTENT_PLACEHOLDER-->', content);
+    return contentTemplate.replace(
+      '<!--PRERENDER_CONTENT_PLACEHOLDER-->',
+      content
+    );
   }
 
   saveIndex(out: string, indexFull: string, thePage?: string) {
