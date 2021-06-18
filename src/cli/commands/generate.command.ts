@@ -1,7 +1,7 @@
 import {resolve} from 'path';
-import {yellow, grey, red, magenta} from 'chalk';
+import {yellow, grey, red, magenta, blue} from 'chalk';
 
-import {OK, INFO, WARN} from '../../lib/services/message.service';
+import {OK, INFO, WARN, ERROR} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
 import {CacheService} from '../../lib/services/cache.service';
@@ -34,6 +34,11 @@ export class GenerateCommand {
       databaseRender = [],
       contentBetweens,
     } = dotNgxerDotJson;
+
+    // index template
+    if (!(await this.htmlService.indexExists(out))) {
+      return console.log(ERROR + 'No ' + blue('index.html') + ' found.');
+    }
     const parsedIndexHTML = await this.htmlService.parseIndex(
       out,
       contentBetweens

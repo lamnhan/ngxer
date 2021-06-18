@@ -58,12 +58,20 @@ export class HtmlService {
     });
   }
 
+  indexExists(out: string) {
+    return this.fileService.exists(resolve(out, 'index.html'));
+  }
+
   async parseIndex(out: string, customContentBetweens?: [string, string]) {
-    return this.parseFile(resolve(out), customContentBetweens);
+    const templatePath = resolve(out, 'index-template.html');
+    if (!(await this.fileService.exists(templatePath))) {
+      await this.fileService.copy(resolve(out, 'index.html'), templatePath);
+    }
+    return this.parseFile(templatePath, customContentBetweens);
   }
 
   async parseFile(path: string, customContentBetweens?: [string, string]) {
-    path = path.indexOf('index.html') !== -1 ? path : `${path}/index.html`;
+    path = path.indexOf('.html') !== -1 ? path : `${path}/index.html`;
     const rawHtmlContent = await this.fileService.readText(path);
     return this.parseContent(rawHtmlContent, customContentBetweens);
   }

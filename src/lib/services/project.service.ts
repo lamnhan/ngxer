@@ -8,6 +8,8 @@ export interface DotNgxerRCDotJson {
   sitemap?: boolean;
   pathRender?: string[];
   databaseRender?: DatabaseRender[];
+  homeContent?: string;
+  contentTemplate?: string;
   contentBetweens?: [string, string];
 }
 
