@@ -20,7 +20,7 @@ export class RenderService {
       // server & browser
       this.server = await superstatic
         .server({
-          port: 7777,
+          port: 7000,
           host: 'localhost',
           cwd: dir,
           config: {
@@ -65,7 +65,7 @@ export class RenderService {
         (async () => {
           path = this.processPath(path);
           const page = await this.browser.newPage();
-          await page.goto('http://localhost:7777/' + path, {
+          await page.goto('http://localhost:7000/' + path, {
             waitUntil: 'networkidle0',
             timeout: 1000000,
           });
