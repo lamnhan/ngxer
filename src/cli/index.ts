@@ -36,6 +36,7 @@ export class Cli {
   updateCommandDef: CommandDef = [
     ['update <inputs...>', 'u'],
     'Update a static.',
+    ['-l, --live', 'Re-rendering with live data.'],
   ];
 
   /**
@@ -118,12 +119,14 @@ export class Cli {
 
     // update
     (() => {
-      const [[command, ...aliases], description] = this.updateCommandDef;
+      const [[command, ...aliases], description, liveOpt] =
+        this.updateCommandDef;
       commander
         .command(command)
         .aliases(aliases)
         .description(description)
-        .action(inputs => this.updateCommand.run(inputs));
+        .option(...liveOpt)
+        .action((inputs, options) => this.updateCommand.run(inputs, options));
     })();
 
     // remove

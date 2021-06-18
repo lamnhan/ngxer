@@ -5,6 +5,10 @@ import {SitemapService} from '../../lib/services/sitemap.service';
 
 import {GenerateCommand} from './generate.command';
 
+interface Options {
+  live?: boolean;
+}
+
 export class UpdateCommand {
   constructor(
     private projectService: ProjectService,
@@ -13,37 +17,49 @@ export class UpdateCommand {
     private generateCommand: GenerateCommand
   ) {}
 
-  async run(inputs: string[]) {
+  async run(inputs: string[], options: Options) {
     const {dotNgxerRCDotJson, parsedIndexHTML, contentTemplate} =
       await this.generateCommand.prepareData();
     const {out, url, pathRender = [], databaseRender = []} = dotNgxerRCDotJson;
-    // update
-    const pathRenderLive: string[] = [];
-    const databaseRenderLive: string[] = [];
+    // sort by rendering type
+    const pathRenderList: string[] = [];
+    const databaseRenderList: string[] = [];
     for (let i = 0; i < inputs.length; i++) {
       const input = inputs[i];
       if (input.indexOf(':') !== -1) {
-        databaseRenderLive.push(input);
+        databaseRenderList.push(input);
       } else {
-        pathRenderLive.push(input);
+        pathRenderList.push(input);
       }
     }
     // path render
     const pathAdded: string[] = [];
-    if (pathRenderLive.length) {
+    if (pathRenderList.length) {
       console.log('\n' + 'Begin path rendering:');
-      console.log(WARN + 'Live path rendering could take some time.');
-      const result = await this.generateCommand.livePathRender(
-        dotNgxerRCDotJson,
-        pathRenderLive,
-        parsedIndexHTML,
-        contentTemplate
-      );
-      // filter add values
-      for (let i = 0; i < result.length; i++) {
-        const path = result[i];
-        if (pathRender.indexOf(path) === -1) {
-          pathAdded.push(path);
+      // from cached
+      if (!options.live) {
+        await this.generateCommand.cachedPathRender(
+          dotNgxerRCDotJson,
+          pathRenderList,
+          parsedIndexHTML,
+          contentTemplate
+        );
+      }
+      // live render
+      else {
+        console.log(WARN + 'Live path rendering could take some time.');
+        const result = await this.generateCommand.livePathRender(
+          dotNgxerRCDotJson,
+          pathRenderList,
+          parsedIndexHTML,
+          contentTemplate
+        );
+        // filter add values
+        for (let i = 0; i < result.length; i++) {
+          const path = result[i];
+          if (pathRender.indexOf(path) === -1) {
+            pathAdded.push(path);
+          }
         }
       }
       // done
@@ -51,9 +67,16 @@ export class UpdateCommand {
     }
     // database render
     const databaseAdded: string[] = [];
-    if (databaseRenderLive.length) {
+    if (databaseRenderList.length) {
       console.log('\n' + 'Begin database rendering:');
-      // TODO: ...
+      // from cached
+      if (!options.live) {
+        //
+      }
+      // live render
+      else {
+        //
+      }
       // done
       console.log(OK + 'Database rendering completed.');
     }

@@ -5,6 +5,7 @@ import {OK, INFO, WARN} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {
   DotNgxerRCDotJson,
+  DatabaseRender,
   ProjectService,
 } from '../../lib/services/project.service';
 import {CacheService} from '../../lib/services/cache.service';
@@ -90,34 +91,13 @@ export class GenerateCommand {
       }
       // render cached
       if (pathRenderCache.length) {
-        await Promise.all(
-          pathRenderCache.map(path =>
-            (async () => {
-              path = this.renderService.processPath(path);
-              const cached = await this.cacheService.read(
-                dotNgxerRCDotJson,
-                path
-              );
-              // save file
-              if (cached) {
-                const filePath = resolve(out, path, 'index.html');
-                await this.fileService.createFile(
-                  filePath,
-                  this.htmlService.composeContent(
-                    parsedIndexHTML,
-                    cached.meta,
-                    cached.data,
-                    contentTemplate
-                  )
-                );
-                pathRenderSitemap.push(path);
-                console.log('  + ' + yellow('/' + path));
-              } else {
-                console.log('  + ' + red('/' + path));
-              }
-            })()
-          )
+        const result = await this.cachedPathRender(
+          dotNgxerRCDotJson,
+          pathRenderCache,
+          parsedIndexHTML,
+          contentTemplate
         );
+        pathRenderSitemap.push(...result);
       }
       // render live
       if (pathRenderLive.length) {
@@ -221,68 +201,25 @@ export class GenerateCommand {
             }
             // render cached
             if (databaseRenderCache.length) {
-              await Promise.all(
-                databaseRenderCache.map(doc =>
-                  (async () => {
-                    const path = this.renderService.processPath(
-                      pathTemplate.replace(':id', doc.id as string)
-                    );
-                    const cached = await this.cacheService.read(
-                      dotNgxerRCDotJson,
-                      `${collection}:${doc.id}`
-                    );
-                    // save file
-                    if (cached) {
-                      const filePath = resolve(out, path, 'index.html');
-                      await this.fileService.createFile(
-                        filePath,
-                        this.htmlService.composeContent(
-                          parsedIndexHTML,
-                          cached.meta,
-                          cached.data,
-                          contentTemplate
-                        )
-                      );
-                      databaseRenderSitemap.push(path);
-                      console.log('  + ' + yellow('/' + path));
-                    } else {
-                      console.log('  + ' + red('/' + path));
-                    }
-                  })()
-                )
+              const result = await this.cachedDatabaseRender(
+                dotNgxerRCDotJson,
+                databaseRenderItem,
+                databaseRenderCache,
+                parsedIndexHTML,
+                contentTemplate
               );
+              databaseRenderSitemap.push(...result);
             }
             // render live
             if (databaseRenderLive.length) {
-              await this.renderService.collectionRender(
+              const result = await this.liveDatabaseRender(
+                dotNgxerRCDotJson,
                 databaseRenderItem,
                 databaseRenderLive,
-                async (path, cacheInput, data) => {
-                  // save cache
-                  const cached = await this.cacheService.save(
-                    dotNgxerRCDotJson,
-                    cacheInput,
-                    data
-                  );
-                  // save files
-                  if (cached) {
-                    const filePath = resolve(out, path, 'index.html');
-                    await this.fileService.createFile(
-                      filePath,
-                      this.htmlService.composeContent(
-                        parsedIndexHTML,
-                        cached.meta,
-                        cached.data,
-                        contentTemplate
-                      )
-                    );
-                    databaseRenderSitemap.push(path);
-                    console.log('  + ' + magenta('/' + path));
-                  } else {
-                    console.log('  + ' + red('/' + path));
-                  }
-                }
+                parsedIndexHTML,
+                contentTemplate
               );
+              databaseRenderSitemap.push(...result);
             }
           })()
         )
@@ -330,6 +267,42 @@ export class GenerateCommand {
     };
   }
 
+  async cachedPathRender(
+    dotNgxerRCDotJson: DotNgxerRCDotJson,
+    pathRenderCache: string[],
+    parsedIndexHTML: ParsedHTML,
+    contentTemplate?: string
+  ) {
+    const {out} = dotNgxerRCDotJson;
+    const result: string[] = [];
+    await Promise.all(
+      pathRenderCache.map(path =>
+        (async () => {
+          path = this.renderService.processPath(path);
+          const cached = await this.cacheService.read(dotNgxerRCDotJson, path);
+          // save file
+          if (cached) {
+            const filePath = resolve(out, path, 'index.html');
+            await this.fileService.createFile(
+              filePath,
+              this.htmlService.composeContent(
+                parsedIndexHTML,
+                cached.meta,
+                cached.data,
+                contentTemplate
+              )
+            );
+            result.push(path);
+            console.log('  + ' + yellow('/' + path));
+          } else {
+            console.log('  + ' + red('/' + path));
+          }
+        })()
+      )
+    );
+    return result;
+  }
+
   async livePathRender(
     dotNgxerRCDotJson: DotNgxerRCDotJson,
     pathRenderLive: string[],
@@ -356,6 +329,90 @@ export class GenerateCommand {
           metaData as unknown as Record<string, unknown>
         );
         // save file
+        if (cached) {
+          const filePath = resolve(out, path, 'index.html');
+          await this.fileService.createFile(
+            filePath,
+            this.htmlService.composeContent(
+              parsedIndexHTML,
+              cached.meta,
+              cached.data,
+              contentTemplate
+            )
+          );
+          result.push(path);
+          console.log('  + ' + magenta('/' + path));
+        } else {
+          console.log('  + ' + red('/' + path));
+        }
+      }
+    );
+    return result;
+  }
+
+  async cachedDatabaseRender(
+    dotNgxerRCDotJson: DotNgxerRCDotJson,
+    databaseRenderItem: DatabaseRender,
+    databaseRenderCache: Array<Record<string, unknown>>,
+    parsedIndexHTML: ParsedHTML,
+    contentTemplate?: string
+  ) {
+    const {out} = dotNgxerRCDotJson;
+    const {collection, path: pathTemplate} = databaseRenderItem;
+    const result: string[] = [];
+    await Promise.all(
+      databaseRenderCache.map(doc =>
+        (async () => {
+          const path = this.renderService.processPath(
+            pathTemplate.replace(':id', doc.id as string)
+          );
+          const cached = await this.cacheService.read(
+            dotNgxerRCDotJson,
+            `${collection}:${doc.id}`
+          );
+          // save file
+          if (cached) {
+            const filePath = resolve(out, path, 'index.html');
+            await this.fileService.createFile(
+              filePath,
+              this.htmlService.composeContent(
+                parsedIndexHTML,
+                cached.meta,
+                cached.data,
+                contentTemplate
+              )
+            );
+            result.push(path);
+            console.log('  + ' + yellow('/' + path));
+          } else {
+            console.log('  + ' + red('/' + path));
+          }
+        })()
+      )
+    );
+    return result;
+  }
+
+  async liveDatabaseRender(
+    dotNgxerRCDotJson: DotNgxerRCDotJson,
+    databaseRenderItem: DatabaseRender,
+    databaseRenderLive: Array<Record<string, unknown>>,
+    parsedIndexHTML: ParsedHTML,
+    contentTemplate?: string
+  ) {
+    const {out} = dotNgxerRCDotJson;
+    const result: string[] = [];
+    await this.renderService.collectionRender(
+      databaseRenderItem,
+      databaseRenderLive,
+      async (path, cacheInput, data) => {
+        // save cache
+        const cached = await this.cacheService.save(
+          dotNgxerRCDotJson,
+          cacheInput,
+          data
+        );
+        // save files
         if (cached) {
           const filePath = resolve(out, path, 'index.html');
           await this.fileService.createFile(
