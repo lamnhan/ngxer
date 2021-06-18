@@ -117,7 +117,8 @@ export class GenerateCommand {
                   this.htmlService.composeContent(
                     parsedIndexHTML,
                     cached.meta,
-                    cached.data
+                    cached.data,
+                    contentTemplate
                   )
                 );
                 pathRenderSitemap.push(path);
@@ -157,7 +158,8 @@ export class GenerateCommand {
                 this.htmlService.composeContent(
                   parsedIndexHTML,
                   cached.meta,
-                  cached.data
+                  cached.data,
+                  contentTemplate
                 )
               );
               pathRenderSitemap.push(path);
@@ -277,7 +279,8 @@ export class GenerateCommand {
                         this.htmlService.composeContent(
                           parsedIndexHTML,
                           cached.meta,
-                          cached.data
+                          cached.data,
+                          contentTemplate
                         )
                       );
                       databaseRenderSitemap.push(path);
@@ -309,7 +312,8 @@ export class GenerateCommand {
                       this.htmlService.composeContent(
                         parsedIndexHTML,
                         cached.meta,
-                        cached.data
+                        cached.data,
+                        contentTemplate
                       )
                     );
                     databaseRenderSitemap.push(path);

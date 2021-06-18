@@ -76,11 +76,11 @@ export class HtmlService {
     return contentTemplate.replace('<!--CONTENT_PLACEHOLDER-->', content);
   }
 
-  saveIndex(out: string, indexFull: string, page?: string) {
-    if (page) {
+  saveIndex(out: string, indexFull: string, thePage?: string) {
+    if (thePage) {
       indexFull = indexFull.replace(
         '<app-root></app-root>',
-        `<app-root>${page}</app-root>`
+        `<app-root>${thePage}</app-root>`
       );
     }
     return this.fileService.createFile(resolve(out, 'index.html'), indexFull);
@@ -217,7 +217,8 @@ export class HtmlService {
   composeContent(
     templateData: ParsedHTML,
     metaData: MetaData,
-    sessionData?: Record<string, unknown>
+    sessionData?: Record<string, unknown>,
+    contentTemplate?: string
   ) {
     const {
       url: templateUrl,
@@ -302,11 +303,14 @@ export class HtmlService {
         ))
     );
     // content replacement
+    let thePage =
+      content || templateContent || templateDescription || templateTitle;
+    if (contentTemplate) {
+      thePage = this.composePageContent(contentTemplate, thePage);
+    }
     finalContent = finalContent.replace(
       '<app-root></app-root>',
-      `<app-root>${
-        content || templateContent || templateDescription || templateTitle
-      }</app-root>`
+      `<app-root>${thePage}</app-root>`
     );
     // session data
     if (sessionData && sessionData.id) {
