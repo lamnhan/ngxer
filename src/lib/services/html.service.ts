@@ -12,6 +12,8 @@ export interface MetaData {
   image: string;
   locale: string;
   lang: string;
+  authorName: string;
+  authorUrl: string;
   createdAt: string;
   updatedAt: string;
   content: string;
@@ -24,6 +26,8 @@ export interface ParsedHTML extends MetaData {
   imageBetweens: [string, string];
   localeBetweens: [string, string];
   langBetweens: [string, string];
+  authorNameBetweens: [string, string];
+  authorUrlBetweens: [string, string];
   createdAtBetweens: [string, string];
   updatedAtBetweens: [string, string];
   styles: string[];
@@ -77,6 +81,8 @@ export class HtmlService {
     const imageBetweens = ['<meta itemprop="image" content="', '"'];
     const localeBetweens = ['<meta itemprop="inLanguage" content="', '"'];
     const langBetweens = ['<html lang="', '"'];
+    const authorNameBetweens = ['<meta itemprop="author" content="', '"'];
+    const authorUrlBetweens = ['<link rel="author" href="', '"'];
     const createdAtBetweens = ['<meta itemprop="dateCreated" content="', '"'];
     const updatedAtBetweens = ['<meta itemprop="dateModified" content="', '"'];
     const scriptBetweens = ['<script src="', '"'];
@@ -106,6 +112,16 @@ export class HtmlService {
       .shift() as string;
     const lang = this.helperService
       .stringsBetweens(htmlContent, langBetweens[0], langBetweens[1])
+      .shift() as string;
+    const authorName = this.helperService
+      .stringsBetweens(
+        htmlContent,
+        authorNameBetweens[0],
+        authorNameBetweens[1]
+      )
+      .shift() as string;
+    const authorUrl = this.helperService
+      .stringsBetweens(htmlContent, authorUrlBetweens[0], authorUrlBetweens[1])
       .shift() as string;
     const createdAt = this.helperService
       .stringsBetweens(htmlContent, createdAtBetweens[0], createdAtBetweens[1])
@@ -145,6 +161,10 @@ export class HtmlService {
       localeBetweens,
       lang,
       langBetweens,
+      authorName,
+      authorNameBetweens,
+      authorUrl,
+      authorUrlBetweens,
       createdAt,
       createdAtBetweens,
       updatedAt,
@@ -171,6 +191,8 @@ export class HtmlService {
       image: templateImage,
       locale: templateLocale,
       lang: templateLang,
+      authorName: templateAuthorName,
+      authorUrl: templateAuthorUrl,
       createdAt: templateCreatedAt,
       updatedAt: templateUpdatedAt,
       scripts,
@@ -184,6 +206,8 @@ export class HtmlService {
       image,
       locale,
       lang,
+      authorName,
+      authorUrl,
       createdAt,
       updatedAt,
       content,
@@ -210,6 +234,14 @@ export class HtmlService {
         `="${locale || templateLocale}"`
       )
       .replace(`="${templateLang}"`, `="${lang || templateLang}"`)
+      .replace(
+        `="${templateAuthorName}"`,
+        `="${authorName || templateAuthorName}"`
+      )
+      .replace(
+        `="${templateAuthorUrl}"`,
+        `="${authorUrl || templateAuthorUrl}"`
+      )
       .replace(
         new RegExp(`="${templateCreatedAt}"`, 'g'),
         `="${createdAt || templateCreatedAt}"`

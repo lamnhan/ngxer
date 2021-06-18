@@ -1,5 +1,5 @@
 import {resolve} from 'path';
-import {Page} from '@lamnhan/schemata';
+import {Page, Profile, Author} from '@lamnhan/schemata';
 
 import {FileService} from './file.service';
 import {
@@ -100,6 +100,8 @@ export class CacheService {
       description,
       image,
       locale,
+      authorName,
+      authorUrl,
       createdAt,
       updatedAt,
       content,
@@ -108,6 +110,14 @@ export class CacheService {
     const id = urlSplits[urlSplits.length - 1]
       ? urlSplits[urlSplits.length - 1]
       : urlSplits[urlSplits.length - 2];
+    // authors
+    const authors: Array<Profile | Author> = [
+      {
+        id: authorUrl.split('/').pop() as string,
+        title: authorName,
+      },
+    ];
+    // result
     return {
       id,
       title,
@@ -116,6 +126,7 @@ export class CacheService {
       image,
       locale,
       origin: id,
+      authors,
       content,
       type: 'page',
       status: 'publish',
@@ -157,6 +168,13 @@ export class CacheService {
     const createdAt = data.createdAt as string;
     const updatedAt = data.updatedAt as string;
     const content = data.content as string;
+    // author
+    const dataAuthors =
+      (data.authors as Record<string, Profile | Author>) || {};
+    const authorList = Object.keys(dataAuthors);
+    const author = !authorList.length ? null : dataAuthors[authorList[0]];
+    const authorName = !author ? '' : author.title;
+    const authorUrl = !author ? '' : rcJson.url + '/' + author.id;
     // result
     return {
       url,
@@ -165,6 +183,8 @@ export class CacheService {
       image,
       locale,
       lang,
+      authorName,
+      authorUrl,
       createdAt,
       updatedAt,
       content,
