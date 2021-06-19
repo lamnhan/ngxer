@@ -51,6 +51,8 @@ export class GenerateCommand {
     /**
      * index.html
      */
+
+    const indexRenderSitemap = [] as string[];
     if (await this.htmlService.isIndexOriginalExists(out)) {
       if (typeof homePage === 'string') {
         await this.htmlService.saveIndex(
@@ -73,6 +75,8 @@ export class GenerateCommand {
             metas,
             locale
           );
+          // sitemap
+          indexRenderSitemap.push(locale);
         }
         console.log(
           '\n' +
@@ -260,7 +264,11 @@ export class GenerateCommand {
      */
 
     if (sitemap) {
-      const sitemapItems = [...pathRenderSitemap, ...databaseRenderSitemap];
+      const sitemapItems = [
+        ...indexRenderSitemap,
+        ...pathRenderSitemap,
+        ...databaseRenderSitemap,
+      ];
       await this.sitemapService.save(out, url, sitemapItems);
       console.log('\n' + OK + 'Saved: sitemap.xml');
     }
