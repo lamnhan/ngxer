@@ -90,7 +90,7 @@ export class HtmlService {
   composePageContent(
     content: string,
     contentTemplate: string | Record<string, string> = '',
-    locale = 'en-US'
+    locale: string
   ) {
     const textContentTemplate =
       typeof contentTemplate === 'string'
@@ -113,16 +113,24 @@ export class HtmlService {
     metas?: MetaData,
     locale?: string
   ) {
+    locale = locale || parsedHTML.locale;
     // page content between <app-root></app-root>
     const indexContent = await this.composePageContent(
       content,
       contentTemplate,
-      locale || parsedHTML.locale
+      locale
     );
     // finla file content
     const indexFinal = await (async () => {
       let htmlFull = parsedHTML.full;
       if (metas) {
+        if (!metas.url) {
+          const url =
+            parsedHTML.url.substr(-1) === '/'
+              ? parsedHTML.url
+              : parsedHTML.url + '/';
+          metas.url = `${url}/${locale}/`;
+        }
         htmlFull = await this.composeContent(parsedHTML, metas);
       }
       return htmlFull.replace(
@@ -131,7 +139,7 @@ export class HtmlService {
       );
     })();
     // localized indexes
-    if (metas && locale) {
+    if (metas) {
       return this.fileService.createFile(
         resolve(out, locale, 'index.html'),
         indexFinal
@@ -295,7 +303,6 @@ export class HtmlService {
       description,
       image,
       locale,
-      lang,
       authorName,
       authorUrl,
       createdAt,
@@ -307,6 +314,8 @@ export class HtmlService {
       : metaData.url.substr(-1) === '/'
       ? metaData.url
       : metaData.url + '/';
+    const lang =
+      metaData.lang || (locale ? (locale.split('-').shift() as string) : '');
     // meta replacements
     let finalContent = htmlContent
       .replace(new RegExp(templateTitle, 'g'), title || templateTitle)
