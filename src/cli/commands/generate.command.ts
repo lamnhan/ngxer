@@ -40,6 +40,7 @@ export class GenerateCommand {
       databaseRender = [],
       databaseLimitFirstTime = 1000,
       databaseLimit = 30,
+      splashscreenTimeout = 0,
     } = dotNgxerRCDotJson;
 
     // legends
@@ -63,7 +64,10 @@ export class GenerateCommand {
           out,
           parsedIndexHTML,
           mainContent,
-          contentTemplate
+          contentTemplate,
+          undefined,
+          undefined,
+          splashscreenTimeout
         );
         // sitemap
         indexRenderSitemap.push('');
@@ -81,7 +85,10 @@ export class GenerateCommand {
             out,
             parsedIndexHTML,
             mainContent,
-            contentTemplate
+            contentTemplate,
+            undefined,
+            undefined,
+            splashscreenTimeout
           );
           // localized
           for (let i = 0; i < homePageLocales.length; i++) {
@@ -93,7 +100,8 @@ export class GenerateCommand {
               content,
               contentTemplate,
               metas,
-              locale
+              locale,
+              splashscreenTimeout
             );
           }
           // sitemap

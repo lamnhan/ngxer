@@ -111,7 +111,8 @@ export class HtmlService {
     content: string,
     contentTemplate: string | Record<string, string> = '',
     metas?: MetaData,
-    locale?: string
+    locale?: string,
+    splashscreenTimeout = 0
   ) {
     locale = locale || parsedHTML.locale;
     // page content between <app-root></app-root>
@@ -129,12 +130,18 @@ export class HtmlService {
             parsedHTML.url.substr(-1) === '/'
               ? parsedHTML.url
               : parsedHTML.url + '/';
-          metas.url = `${url}/${locale}/`;
+          metas.url = `${url}${locale}/`;
         }
         if (!metas.locale) {
           metas.locale = locale;
         }
-        htmlFull = await this.composeContent(parsedHTML, metas);
+        htmlFull = await this.composeContent(
+          parsedHTML,
+          metas,
+          '',
+          null,
+          splashscreenTimeout
+        );
       }
       return htmlFull.replace(
         '<app-root></app-root>',
