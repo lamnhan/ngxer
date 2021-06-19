@@ -18,7 +18,7 @@ export class ReportCommand {
       const table = ttyTable(
         [
           {value: 'Name', width: 50, align: 'left'},
-          {value: 'Value', width: 100, align: 'left'},
+          {value: 'Value', width: 200, align: 'left'},
         ],
         []
       );

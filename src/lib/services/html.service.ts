@@ -25,7 +25,6 @@ export interface ParsedHTML extends MetaData {
   descriptionBetweens: [string, string];
   imageBetweens: [string, string];
   localeBetweens: [string, string];
-  langBetweens: [string, string];
   authorNameBetweens: [string, string];
   authorUrlBetweens: [string, string];
   createdAtBetweens: [string, string];
@@ -115,41 +114,41 @@ export class HtmlService {
     splashscreenTimeout = 0
   ) {
     locale = locale || parsedHTML.locale;
+    const isLocalizing = !!metas;
     // page content between <app-root></app-root>
     const indexContent = await this.composePageContent(
       content,
       contentTemplate,
       locale
     );
-    // finla file content
-    const indexFinal = await (async () => {
-      let htmlFull = parsedHTML.full;
-      if (metas) {
-        if (!metas.url) {
-          const url =
-            parsedHTML.url.substr(-1) === '/'
-              ? parsedHTML.url
-              : parsedHTML.url + '/';
-          metas.url = `${url}${locale}/`;
-        }
-        if (!metas.locale) {
-          metas.locale = locale;
-        }
-        htmlFull = await this.composeContent(
-          parsedHTML,
-          metas,
-          '',
-          null,
-          splashscreenTimeout
-        );
+    // final file content
+    const indexFinal = await (() => {
+      metas = (metas || {}) as MetaData; // {} -> for main index.html
+      // localized only
+      if (!metas.url) {
+        const url =
+          parsedHTML.url.substr(-1) === '/'
+            ? parsedHTML.url
+            : parsedHTML.url + '/';
+        metas.url = `${url}${locale}/`;
       }
-      return htmlFull.replace(
-        '<app-root></app-root>',
-        `<app-root>${indexContent}</app-root>`
+      if (!metas.locale) {
+        metas.locale = locale;
+      }
+      if (!metas.content) {
+        metas.content = indexContent;
+      }
+      // result
+      return this.composeContent(
+        parsedHTML,
+        metas,
+        undefined,
+        null,
+        splashscreenTimeout
       );
     })();
     // localized indexes
-    if (metas) {
+    if (isLocalizing) {
       return this.fileService.createFile(
         resolve(out, locale, 'index.html'),
         indexFinal
@@ -187,7 +186,6 @@ export class HtmlService {
     const descriptionBetweens = ['<meta name="description" content="', '"'];
     const imageBetweens = ['<meta itemprop="image" content="', '"'];
     const localeBetweens = ['<meta itemprop="inLanguage" content="', '"'];
-    const langBetweens = ['<html lang="', '"'];
     const authorNameBetweens = ['<meta itemprop="author" content="', '"'];
     const authorUrlBetweens = ['<link rel="author" href="', '"'];
     const createdAtBetweens = ['<meta itemprop="dateCreated" content="', '"'];
@@ -217,9 +215,7 @@ export class HtmlService {
     const locale = this.helperService
       .stringsBetweens(htmlContent, localeBetweens[0], localeBetweens[1])
       .shift() as string;
-    const lang = this.helperService
-      .stringsBetweens(htmlContent, langBetweens[0], langBetweens[1])
-      .shift() as string;
+    const lang = locale.split('-').shift() as string;
     const authorName = this.helperService
       .stringsBetweens(
         htmlContent,
@@ -267,7 +263,6 @@ export class HtmlService {
       locale,
       localeBetweens,
       lang,
-      langBetweens,
       authorName,
       authorNameBetweens,
       authorUrl,
@@ -325,8 +320,11 @@ export class HtmlService {
       : metaData.url.substr(-1) === '/'
       ? metaData.url
       : metaData.url + '/';
-    const lang =
-      metaData.lang || (locale ? (locale.split('-').shift() as string) : '');
+    const lang = metaData.lang
+      ? metaData.lang
+      : locale
+      ? (locale.split('-').shift() as string)
+      : '';
     // meta replacements
     let finalContent = htmlContent
       .replace(new RegExp(templateTitle, 'g'), title || templateTitle)
@@ -413,6 +411,11 @@ export class HtmlService {
         `</title>${sessionDataScript}`
       );
     }
+    // splashscreen locale
+    finalContent = finalContent.replace(
+      'id="app-splash-screen"',
+      `id="app-splash-screen" class="${locale || templateLocale}"`
+    );
     // result
     return finalContent;
   }
