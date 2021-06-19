@@ -1,7 +1,8 @@
 import {resolve} from 'path';
-import {yellow} from 'chalk';
+import {green, yellow, magenta, cyan} from 'chalk';
+import * as ora from 'ora';
 
-import {WARN} from '../../lib/services/message.service';
+import {WARN, ERROR} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {
   DotNgxerRCDotJson,
@@ -16,8 +17,6 @@ import {FirebaseService} from '../../lib/services/firebase.service';
 import {ReportService} from '../../lib/services/report.service';
 import {SitemapService} from '../../lib/services/sitemap.service';
 
-import {ReportCommand} from './report.command';
-
 export class GenerateCommand {
   constructor(
     private fileService: FileService,
@@ -27,14 +26,21 @@ export class GenerateCommand {
     private renderService: RenderService,
     private firebaseService: FirebaseService,
     private reportService: ReportService,
-    private sitemapService: SitemapService,
-    private reportCommand: ReportCommand
+    private sitemapService: SitemapService
   ) {}
 
   async run() {
     // load data
+    const gartheredData = await this.prepareData();
+    if (!gartheredData) {
+      return console.log(
+        ERROR + 'No index.html found, invalid out path or need to build first.'
+      );
+    }
+
+    // extract data
     const {dotNgxerRCDotJson, parsedIndexHTML, contentTemplate, homePage} =
-      await this.prepareData();
+      gartheredData;
     const {
       out,
       url,
@@ -45,6 +51,7 @@ export class GenerateCommand {
       databaseLimit = 30,
       splashscreenTimeout = 0,
     } = dotNgxerRCDotJson;
+    const spinner = ora().start();
 
     /**
      * index.html
@@ -134,6 +141,7 @@ export class GenerateCommand {
       // render cached
       if (pathRenderCache.length) {
         const result = await this.cachedPathRender(
+          spinner,
           dotNgxerRCDotJson,
           pathRenderCache,
           parsedIndexHTML,
@@ -143,8 +151,9 @@ export class GenerateCommand {
       }
       // render live
       if (pathRenderLive.length) {
-        console.log(WARN + 'Live path rendering could take some time.');
+        spinner.text = WARN + 'Live path rendering could take some time.';
         const result = await this.livePathRender(
+          spinner,
           dotNgxerRCDotJson,
           pathRenderLive,
           parsedIndexHTML,
@@ -196,6 +205,7 @@ export class GenerateCommand {
               (cacheLocaleChecks.length &&
                 cacheLocaleChecks.indexOf(`${collection} by ${locale}`) === -1)
             ) {
+              spinner.text = `Load "${collection}" for the first time.`;
               const docs = (
                 await collectionQuery.limitToLast(databaseLimitFirstTime).get()
               ).docs.map(doc => doc.data());
@@ -203,6 +213,7 @@ export class GenerateCommand {
             }
             // load latest N items
             else {
+              spinner.text = `Load "${collection}" latest items.`;
               const docs = (
                 await collectionQuery.limitToLast(databaseLimit).get()
               ).docs.map(doc => doc.data());
@@ -240,6 +251,7 @@ export class GenerateCommand {
             // render cached
             if (databaseRenderCache.length) {
               const result = await this.cachedDatabaseRender(
+                spinner,
                 dotNgxerRCDotJson,
                 databaseRenderItem,
                 databaseRenderCache,
@@ -251,6 +263,7 @@ export class GenerateCommand {
             // render live
             if (databaseRenderLive.length) {
               const result = await this.liveDatabaseRender(
+                spinner,
                 dotNgxerRCDotJson,
                 databaseRenderItem,
                 databaseRenderLive,
@@ -289,14 +302,10 @@ export class GenerateCommand {
     /**
      * Result
      */
-    this.reportCommand.outputReport(
-      indexRenderSitemap,
-      pathRenderSitemap,
-      databaseRenderSitemap,
-      undefined,
-      true
-    );
-    console.log('   ' + 'To view later: $ ' + yellow('ngxer report -d'));
+    spinner.stopAndPersist({
+      symbol: green('[OK]'),
+      text: 'Completed! View report: $ ' + yellow('ngxer report --detail'),
+    });
   }
 
   async prepareData() {
@@ -304,6 +313,9 @@ export class GenerateCommand {
     const dotNgxerRCDotJson = await this.projectService.loadDotNgxerRCDotJson();
     const {out, contentBetweens} = dotNgxerRCDotJson;
     let {homePage = '', contentTemplate = ''} = dotNgxerRCDotJson;
+    if (!(await this.projectService.isValidOutDir(out))) {
+      return null;
+    }
     // parsed index.html
     const parsedIndexHTML = await this.htmlService.parseIndex(
       out,
@@ -350,6 +362,7 @@ export class GenerateCommand {
   }
 
   async cachedPathRender(
+    spinner: ora.Ora,
     dotNgxerRCDotJson: DotNgxerRCDotJson,
     pathRenderCache: string[],
     parsedIndexHTML: ParsedHTML,
@@ -365,6 +378,7 @@ export class GenerateCommand {
       pathRenderCache.map(path =>
         (async () => {
           path = this.renderService.processPath(path);
+          spinner.text = 'Path render (cached): ' + cyan(path);
           const cached = await this.cacheService.read(dotNgxerRCDotJson, path);
           // save file
           if (cached) {
@@ -386,6 +400,7 @@ export class GenerateCommand {
   }
 
   async livePathRender(
+    spinner: ora.Ora,
     dotNgxerRCDotJson: DotNgxerRCDotJson,
     pathRenderLive: string[],
     parsedIndexHTML: ParsedHTML,
@@ -403,6 +418,7 @@ export class GenerateCommand {
       out,
       pathRenderLive,
       async (path, page) => {
+        spinner.text = 'Path render (live): ' + magenta(path);
         // extract data
         const pageContent = await page.content();
         const metaData = await this.htmlService.parseContent(
@@ -439,6 +455,7 @@ export class GenerateCommand {
   }
 
   async cachedDatabaseRender(
+    spinner: ora.Ora,
     dotNgxerRCDotJson: DotNgxerRCDotJson,
     databaseRenderItem: DatabaseRender,
     databaseRenderCache: Array<Record<string, unknown>>,
@@ -458,6 +475,7 @@ export class GenerateCommand {
           const path = this.renderService.processPath(
             pathTemplate.replace(':id', doc.id as string)
           );
+          spinner.text = 'Database render (cached): ' + cyan(path);
           const cached = await this.cacheService.read(
             dotNgxerRCDotJson,
             `${collection}:${doc.id}`
@@ -482,6 +500,7 @@ export class GenerateCommand {
   }
 
   async liveDatabaseRender(
+    spinner: ora.Ora,
     dotNgxerRCDotJson: DotNgxerRCDotJson,
     databaseRenderItem: DatabaseRender,
     databaseRenderLive: Array<Record<string, unknown>>,
@@ -498,6 +517,7 @@ export class GenerateCommand {
       databaseRenderItem,
       databaseRenderLive,
       async (path, cacheInput, data) => {
+        spinner.text = 'Database render (live): ' + magenta(path);
         // save cache
         const cached = await this.cacheService.save(
           dotNgxerRCDotJson,

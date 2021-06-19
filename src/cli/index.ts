@@ -45,6 +45,7 @@ export class Cli {
   removeCommandDef: CommandDef = [
     ['remove <paths...>', 'x'],
     'Remove a generated content.',
+    ['-k, --keep-cache', 'Remove HTML file, but keep cache.'],
   ];
 
   reportCommandDef: CommandDef = [
@@ -59,7 +60,6 @@ export class Cli {
       this.ngxerModule.fileService,
       this.ngxerModule.projectService
     );
-    this.reportCommand = new ReportCommand(this.ngxerModule.reportService);
     this.generateCommand = new GenerateCommand(
       this.ngxerModule.fileService,
       this.ngxerModule.projectService,
@@ -68,8 +68,7 @@ export class Cli {
       this.ngxerModule.renderService,
       this.ngxerModule.firebaseService,
       this.ngxerModule.reportService,
-      this.ngxerModule.sitemapService,
-      this.reportCommand
+      this.ngxerModule.sitemapService
     );
     this.updateCommand = new UpdateCommand(
       this.ngxerModule.projectService,
@@ -86,6 +85,10 @@ export class Cli {
       this.ngxerModule.reportService,
       this.ngxerModule.sitemapService,
       this.generateCommand
+    );
+    this.reportCommand = new ReportCommand(
+      this.ngxerModule.projectService,
+      this.ngxerModule.reportService
     );
   }
 
@@ -134,12 +137,14 @@ export class Cli {
 
     // remove
     (() => {
-      const [[command, ...aliases], description] = this.removeCommandDef;
+      const [[command, ...aliases], description, keepCacheOpt] =
+        this.removeCommandDef;
       commander
         .command(command)
         .aliases(aliases)
         .description(description)
-        .action(paths => this.removeCommand.run(paths));
+        .option(...keepCacheOpt)
+        .action((paths, options) => this.removeCommand.run(paths, options));
     })();
 
     // report

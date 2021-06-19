@@ -40,6 +40,10 @@ export class ProjectService {
     return this.fileService.exists(resolve(projectPath, this.rcFile));
   }
 
+  isValidOutDir(out: string) {
+    return this.fileService.exists(resolve(out, 'index.html'));
+  }
+
   loadDotNgxerRCDotJson(projectPath = '.') {
     return this.fileService.readJson<DotNgxerRCDotJson>(
       resolve(projectPath, this.rcFile)

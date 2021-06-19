@@ -30,7 +30,11 @@ export class Lib {
     this.fetchService = new FetchService();
     this.projectService = new ProjectService(this.fileService);
     this.cacheService = new CacheService(this.fileService, this.projectService);
-    this.htmlService = new HtmlService(this.helperService, this.fileService);
+    this.htmlService = new HtmlService(
+      this.helperService,
+      this.fileService,
+      this.projectService
+    );
     this.firebaseService = new FirebaseService(this.fileService);
     this.renderService = new RenderService(this.fetchService, this.htmlService);
     this.reportService = new ReportService(

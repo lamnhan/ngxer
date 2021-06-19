@@ -4,6 +4,7 @@ const htmlMinifier = require('@node-minify/html-minifier');
 
 import {HelperService} from './helper.service';
 import {FileService} from './file.service';
+import {ProjectService} from './project.service';
 
 export interface MetaData {
   url: string;
@@ -40,7 +41,8 @@ export interface ParsedHTML extends MetaData {
 export class HtmlService {
   constructor(
     private helperService: HelperService,
-    private fileService: FileService
+    private fileService: FileService,
+    private projectService: ProjectService
   ) {}
 
   async minifyContent(
@@ -83,7 +85,9 @@ export class HtmlService {
   async processContentOrPath(input: string) {
     return input.substr(-5) !== '.html'
       ? input
-      : await this.fileService.readText(resolve(input));
+      : await this.fileService.readText(
+          resolve(input.replace('@', this.projectService.rcDir + '/'))
+        );
   }
 
   composePageContent(

@@ -1,7 +1,7 @@
 import {resolve} from 'path';
-import {grey, yellow} from 'chalk';
+import {yellow} from 'chalk';
 
-import {OK, WARN, INFO} from '../../lib/services/message.service';
+import {ERROR, OK} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {ProjectService} from '../../lib/services/project.service';
 import {RenderService} from '../../lib/services/render.service';
@@ -10,6 +10,10 @@ import {ReportService} from '../../lib/services/report.service';
 import {SitemapService} from '../../lib/services/sitemap.service';
 
 import {GenerateCommand} from './generate.command';
+
+interface Options {
+  keepCache?: boolean;
+}
 
 export class RemoveCommand {
   constructor(
@@ -22,26 +26,26 @@ export class RemoveCommand {
     private generateCommand: GenerateCommand
   ) {}
 
-  async run(paths: string[]) {
-    const {dotNgxerRCDotJson} = await this.generateCommand.prepareData();
+  async run(paths: string[], options: Options) {
+    // load data
+    const gartheredData = await this.generateCommand.prepareData();
+    if (!gartheredData) {
+      return console.log(
+        ERROR + 'No index.html found, invalid out path or need to build first.'
+      );
+    }
+    const {dotNgxerRCDotJson} = gartheredData;
     const {out, url} = dotNgxerRCDotJson;
     // sort by rendering type
     const {
       pathRenderList: pathRemoveList,
       databaseRenderList: databaseRemoveList,
-      otherList: invalidList,
     } = this.renderService.sortPaths(dotNgxerRCDotJson, paths);
-    if (pathRemoveList.length || databaseRemoveList.length) {
-      console.log(INFO + 'Removing:');
-    }
     // helper
     const dirRemoval = async (path: string) => {
       const dirPath = resolve(out, path);
       if (await this.fileService.exists(dirPath)) {
         await this.fileService.removeDir(dirPath);
-        console.log('  + ' + grey(`${path}`));
-      } else {
-        console.log('  + ' + grey(`${path}`) + yellow(' (not found)'));
       }
     };
     // path removal
@@ -50,7 +54,9 @@ export class RemoveCommand {
         pathRemoveList.map(path =>
           (async () => {
             path = this.renderService.processPath(path);
-            await this.cacheService.remove(path);
+            if (!options.keepCache) {
+              await this.cacheService.remove(path);
+            }
             await dirRemoval(path);
           })()
         )
@@ -66,61 +72,63 @@ export class RemoveCommand {
               config: {collection},
             } = item;
             const docId = path.split('/').pop() as string;
-            await this.cacheService.remove(`${collection}:${docId}`);
+            if (!options.keepCache) {
+              await this.cacheService.remove(`${collection}:${docId}`);
+            }
             await dirRemoval(path);
           })()
         )
       );
     }
-    // invalid removal
-    if (invalidList.length) {
-      console.log(
-        '\n' +
-          WARN +
-          'Invalid paths: ' +
-          '\n  + ' +
-          invalidList.map(x => (x ? x : '/')).join('\n  + ')
-      );
-    }
     // final touches
-    let rcPathRenderRemain = dotNgxerRCDotJson.pathRender || [];
-    const {
-      indexRendering: indexRenderRemain,
-      pathRendering,
-      databaseRendering,
-    } = await this.resportService.read();
-    let pathRenderRemain = pathRendering;
-    let databaseRenderRemain = databaseRendering;
-    // remove by path
-    if (pathRemoveList.length) {
-      rcPathRenderRemain = rcPathRenderRemain.filter(
-        item => pathRemoveList.indexOf(item) === -1
-      );
-      pathRenderRemain = pathRenderRemain.filter(
-        item => pathRemoveList.indexOf(item) === -1
+    if (!options.keepCache) {
+      let rcPathRenderRemain = dotNgxerRCDotJson.pathRender || [];
+      const {
+        indexRendering: indexRenderRemain,
+        pathRendering,
+        databaseRendering,
+      } = await this.resportService.read();
+      let pathRenderRemain = pathRendering;
+      let databaseRenderRemain = databaseRendering;
+      // remove by path
+      if (pathRemoveList.length) {
+        rcPathRenderRemain = rcPathRenderRemain.filter(
+          item => pathRemoveList.indexOf(item) === -1
+        );
+        pathRenderRemain = pathRenderRemain.filter(
+          item => pathRemoveList.indexOf(item) === -1
+        );
+      }
+      // remove by database
+      if (databaseRemoveList.length) {
+        databaseRenderRemain = databaseRenderRemain.filter(
+          item => databaseRemoveList.map(x => x.path).indexOf(item) === -1
+        );
+      }
+      // update .ngxer.json#pathRender
+      await this.projectService.updateDotNgxerRCDotJson({
+        pathRender: rcPathRenderRemain,
+      });
+      // update sitemap
+      await this.sitemapService.save(out, url, [
+        ...indexRenderRemain,
+        ...pathRenderRemain,
+        ...databaseRenderRemain,
+      ]);
+      // update report
+      await this.resportService.update(
+        indexRenderRemain,
+        pathRenderRemain,
+        databaseRenderRemain
       );
     }
-    // remove by database
-    if (databaseRemoveList.length) {
-      databaseRenderRemain = databaseRenderRemain.filter(
-        item => databaseRemoveList.map(x => x.path).indexOf(item) === -1
-      );
-    }
-    // update .ngxer.json#pathRender
-    await this.projectService.updateDotNgxerRCDotJson({
-      pathRender: rcPathRenderRemain,
-    });
-    // update sitemap
-    await this.sitemapService.save(out, url, [
-      ...indexRenderRemain,
-      ...pathRenderRemain,
-      ...databaseRenderRemain,
-    ]);
-    // update report
-    await this.resportService.update(
-      indexRenderRemain,
-      pathRenderRemain,
-      databaseRenderRemain
+    // done
+    console.log(
+      OK +
+        `Remove completed${
+          !options.keepCache ? '' : ' (keep cached)'
+        }! View report: $ ` +
+        yellow('ngxer r -d')
     );
   }
 }

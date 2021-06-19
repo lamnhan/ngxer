@@ -2,6 +2,7 @@ import {yellow, grey, green} from 'chalk';
 const ttyTable = require('tty-table');
 
 import {OK, ERROR} from '../../lib/services/message.service';
+import {ProjectService} from '../../lib/services/project.service';
 import {ReportService} from '../../lib/services/report.service';
 
 interface Options {
@@ -9,10 +10,17 @@ interface Options {
 }
 
 export class ReportCommand {
-  constructor(private reportService: ReportService) {}
+  constructor(
+    private projectService: ProjectService,
+    private reportService: ReportService
+  ) {}
 
   async run(options: Options) {
-    if (await this.reportService.exists()) {
+    const {out} = await this.projectService.loadDotNgxerRCDotJson();
+    if (
+      (await this.projectService.isValidOutDir(out)) &&
+      (await this.reportService.exists())
+    ) {
       const {timestamp, indexRendering, pathRendering, databaseRendering} =
         await this.reportService.read();
       console.log(OK + 'Render report (add --detail for more detail):');
@@ -41,9 +49,9 @@ export class ReportCommand {
   ) {
     const table = ttyTable(
       [
-        {value: 'Index render', width: 100, align: 'left'},
-        {value: 'Path render', width: 100, align: 'left'},
         {value: 'Database render', width: 100, align: 'left'},
+        {value: 'Path render', width: 100, align: 'left'},
+        {value: 'Index render', width: 100, align: 'left'},
       ],
       []
     );
@@ -52,24 +60,24 @@ export class ReportCommand {
     const totalDatabaseRender = databaseRendering.length;
     if (!detail) {
       table.push([
-        `Count: ${green(totalIndexRender)}`,
-        `Count: ${green(totalPathRender)}`,
         `Count: ${green(totalDatabaseRender)}`,
+        `Count: ${green(totalPathRender)}`,
+        `Count: ${green(totalIndexRender)}`,
       ]);
     } else {
       table.push([
-        `Count: ${green(totalIndexRender)}` +
-          (totalIndexRender <= 0
-            ? ''
-            : grey('\n+ /' + indexRendering.join('\n+ '))),
-        `Count: ${green(totalPathRender)}` +
-          (totalPathRender <= 0
-            ? ''
-            : grey('\n+ ' + pathRendering.join('\n+ '))),
         `Count: ${green(totalDatabaseRender)}` +
           (totalDatabaseRender <= 0
             ? ''
             : grey('\n+ ' + databaseRendering.join('\n+ '))),
+        `Count: ${green(totalPathRender)}` +
+          (totalPathRender <= 0
+            ? ''
+            : grey('\n+ ' + pathRendering.join('\n+ '))),
+        `Count: ${green(totalIndexRender)}` +
+          (totalIndexRender <= 0
+            ? ''
+            : grey('\n+ /' + indexRendering.join('\n+ '))),
       ]);
     }
     console.log(table.render());
