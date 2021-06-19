@@ -13,7 +13,7 @@ export class ReportCommand {
 
   async run(options: Options) {
     if (await this.reportService.exists()) {
-      const {timestamp, pathRendering, databaseRendering} =
+      const {timestamp, indexRendering, pathRendering, databaseRendering} =
         await this.reportService.read();
       const table = ttyTable(
         [
@@ -22,16 +22,28 @@ export class ReportCommand {
         ],
         []
       );
+      const totalIndexRender = indexRendering.length;
       const totalPathRender = pathRendering.length;
       const totalDatabaseRender = databaseRendering.length;
       if (!options.detail) {
         table.push(
+          ['Index render', `Count: ${green(totalIndexRender)}`],
           ['Path render', `Count: ${green(totalPathRender)}`],
           ['Database render', `Count: ${green(totalDatabaseRender)}`],
-          ['Total count', green(totalPathRender + totalDatabaseRender)]
+          [
+            'Total count',
+            green(totalIndexRender + totalPathRender + totalDatabaseRender),
+          ]
         );
       } else {
         table.push(
+          [
+            'Index render',
+            `Count: ${green(totalIndexRender)}` +
+              (totalIndexRender <= 0
+                ? ''
+                : grey('\n+ /' + indexRendering.join('\n+ /'))),
+          ],
           [
             'Path render',
             `Count: ${green(totalPathRender)}` +
@@ -46,7 +58,10 @@ export class ReportCommand {
                 ? ''
                 : grey('\n+ /' + databaseRendering.join('\n+ /'))),
           ],
-          ['Total count', green(totalPathRender + totalDatabaseRender)]
+          [
+            'Total count',
+            green(totalIndexRender + totalPathRender + totalDatabaseRender),
+          ]
         );
       }
       console.log(

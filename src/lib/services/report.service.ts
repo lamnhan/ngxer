@@ -5,6 +5,7 @@ import {ProjectService} from './project.service';
 
 export interface ReportJson {
   timestamp: string;
+  indexRendering: string[];
   pathRendering: string[];
   databaseRendering: string[];
 }
@@ -29,20 +30,31 @@ export class ReportService {
     return this.fileService.readJson<ReportJson>(this.getPath());
   }
 
-  save(pathRendering: string[], databaseRendering: string[]) {
+  save(
+    indexRendering: string[],
+    pathRendering: string[],
+    databaseRendering: string[]
+  ) {
     return this.fileService.createJson(this.getPath(), {
       timestamp: new Date().toISOString(),
+      indexRendering,
       pathRendering,
       databaseRendering,
     } as ReportJson);
   }
 
-  async update(pathRendering?: string[], databaseRendering?: string[]) {
+  async update(
+    indexRendering?: string[],
+    pathRendering?: string[],
+    databaseRendering?: string[]
+  ) {
     const {
+      indexRendering: currentIndexRendering,
       pathRendering: currentPathRendering,
       databaseRendering: currentDatabaseRendering,
     } = await this.read();
     return this.save(
+      !indexRendering ? currentIndexRendering : indexRendering,
       !pathRendering ? currentPathRendering : pathRendering,
       !databaseRendering ? currentDatabaseRendering : databaseRendering
     );

@@ -61,6 +61,9 @@ export class GenerateCommand {
           homePage,
           contentTemplate
         );
+        // sitemap
+        indexRenderSitemap.push('');
+        // done
         console.log('\n' + OK + 'Modified: index.html');
       } else {
         const homePageLocales = Object.keys(homePage);
@@ -75,9 +78,10 @@ export class GenerateCommand {
             metas,
             locale
           );
-          // sitemap
-          indexRenderSitemap.push(locale);
         }
+        // sitemap
+        indexRenderSitemap.push(...homePageLocales);
+        // done
         console.log(
           '\n' +
             OK +
@@ -276,7 +280,11 @@ export class GenerateCommand {
     /**
      * save report
      */
-    await this.reportService.save(pathRenderSitemap, databaseRenderSitemap);
+    await this.reportService.save(
+      indexRenderSitemap,
+      pathRenderSitemap,
+      databaseRenderSitemap
+    );
     console.log(OK + 'To view report: $ ' + yellow('ngxer report'));
   }
 
