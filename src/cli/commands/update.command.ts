@@ -1,5 +1,5 @@
 import {resolve} from 'path';
-import {green} from 'chalk';
+import {green, yellow} from 'chalk';
 import * as ora from 'ora';
 
 import {WARN, ERROR} from '../../lib/services/message.service';
@@ -85,6 +85,7 @@ export class UpdateCommand {
     // database render
     const databaseAdded: string[] = [];
     if (databaseRenderList.length) {
+      spinner.text = 'Proccess database inputs.';
       // grouping
       const grouping: Record<
         string,
@@ -117,7 +118,6 @@ export class UpdateCommand {
             grouping[config.path].paths.push(path);
           }
         } else {
-          databaseAdded.push(path);
           if (!groupingAdded[config.path]) {
             groupingAdded[config.path] = {
               config,
@@ -131,12 +131,17 @@ export class UpdateCommand {
       // added (always live)
       const groupingAddedKeys = Object.keys(groupingAdded);
       if (groupingAddedKeys.length) {
+        spinner.text = 'Render new database item';
         await Promise.all(
           groupingAddedKeys.map(key =>
             (async () => {
               const {paths, config} = groupingAdded[key];
               // fetch docs
               const docs = await this.fetchDocs(config.collection, paths);
+              // for report & sitemap
+              databaseAdded.push(
+                ...docs.map(doc => config.path.replace(':id', doc.id as string))
+              );
               // render
               return this.generateCommand.liveDatabaseRender(
                 spinner,
@@ -176,6 +181,7 @@ export class UpdateCommand {
         }
         // live render
         else {
+          spinner.text = 'Re-render database item';
           await Promise.all(
             groupingKeys.map(key =>
               (async () => {
@@ -230,7 +236,7 @@ export class UpdateCommand {
     // done
     spinner.stopAndPersist({
       symbol: green('[OK]'),
-      text: 'Update completed!',
+      text: 'Update completed! View report: $ ' + yellow('ngxer r -d'),
     });
   }
 
@@ -241,8 +247,9 @@ export class UpdateCommand {
       paths.map(path =>
         (async () => {
           const docId = path.split('/').pop() as string;
-          const doc = (await firestore.doc(`${collection}/${docId}`).get())
-            .data;
+          const doc = (
+            await firestore.doc(`${collection}/${docId}`).get()
+          ).data();
           if (doc) {
             docs.push(doc as unknown as Record<string, unknown>);
           }

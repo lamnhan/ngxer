@@ -18,7 +18,7 @@
   "scripts": {
     "compile": "tsc",
     "build:lib": "npm run compile && npm i -g",
-    "build:app": "ayedocs generate",
+    "build:app": "ayedocs generate && cpy src/CNAME docs",
     "build": "npm run build:app && npm run build:lib",
     "deploy:lib": "npm publish",
     "deploy:app": "git add . && git commit -m 'deploy:app' && git push",
@@ -66,6 +66,7 @@
     "@types/recursive-readdir": "^2.2.0",
     "chai": "^4.2.0",
     "coveralls": "^3.1.0",
+    "cpy-cli": "^3.1.1",
     "gts": "^3.0.1",
     "mocha": "^8.1.3",
     "nyc": "^15.1.0",
