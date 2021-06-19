@@ -55,44 +55,60 @@ export class GenerateCommand {
      */
 
     const indexRenderSitemap = [] as string[];
+    // single
     if (await this.htmlService.isIndexOriginalExists(out)) {
       if (typeof homePage === 'string') {
+        const mainContent = homePage;
         await this.htmlService.saveIndex(
           out,
           parsedIndexHTML,
-          homePage,
+          mainContent,
           contentTemplate
         );
         // sitemap
         indexRenderSitemap.push('');
         // done
         console.log('\n' + OK + 'Modified: index.html');
-      } else {
+      }
+      // miltiple locales
+      else {
         const homePageLocales = Object.keys(homePage);
-        for (let i = 0; i < homePageLocales.length; i++) {
-          const locale = homePageLocales[i];
-          const {content = '', metas} = homePage[locale];
+        if (homePageLocales.length) {
+          // main
+          const mainLocale = homePageLocales.shift() as string;
+          const mainContent = homePage[mainLocale].content || '';
           await this.htmlService.saveIndex(
             out,
             parsedIndexHTML,
-            content,
-            contentTemplate,
-            metas,
-            locale
+            mainContent,
+            contentTemplate
+          );
+          // localized
+          for (let i = 0; i < homePageLocales.length; i++) {
+            const locale = homePageLocales[i];
+            const {content = '', metas} = homePage[locale];
+            await this.htmlService.saveIndex(
+              out,
+              parsedIndexHTML,
+              content,
+              contentTemplate,
+              metas,
+              locale
+            );
+          }
+          // sitemap
+          indexRenderSitemap.push('', ...homePageLocales);
+          // done
+          console.log(
+            '\n' +
+              OK +
+              'Saved:' +
+              [
+                'index.html',
+                ...homePageLocales.map(locale => `${locale}/index.html`),
+              ].join('\n + ')
           );
         }
-        // sitemap
-        indexRenderSitemap.push(...homePageLocales);
-        // done
-        console.log(
-          '\n' +
-            OK +
-            'Saved:' +
-            [
-              'index.html',
-              ...homePageLocales.map(locale => `${locale}/index.html`),
-            ].join('\n + ')
-        );
       }
     }
 
