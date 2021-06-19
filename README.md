@@ -62,9 +62,9 @@ Tool for prerendering Angular apps
 
 - [`ngxer generate|g`](#command-generate)
 - [`ngxer init|i [projectPath]`](#command-init)
-- [`ngxer remove|x <inputs...>`](#command-remove)
-- [`ngxer report|r --detail`](#command-report)
-- [`ngxer update|u <inputs...>`](#command-update)
+- [`ngxer remove|r <paths...> --keep-cache`](#command-remove)
+- [`ngxer report|log|l --detail`](#command-report)
+- [`ngxer update|u <paths...> --live`](#command-update)
 - [`ngxer help`](#command-help)
 - [`ngxer *`](#command-*)
 
@@ -107,13 +107,17 @@ Remove a generated content.
 **Usage:**
 
 ```sh
-ngxer remove <inputs...>
-ngxer x <inputs...>
+ngxer remove <paths...> --keep-cache
+ngxer r <paths...> --keep-cache
 ```
 
 **Parameters:**
 
-- `<inputs...>`: List of inputs to be removed
+- `<paths...>`: List of paths to be removed
+
+**Options:**
+
+- `-k, --keep-cache`: Remove HTML file, but keep cache.
 
 <h3><a name="command-report"><p><code>report</code></p>
 </a></h3>
@@ -124,7 +128,8 @@ Show generated statistics.
 
 ```sh
 ngxer report --detail
-ngxer r --detail
+ngxer log --detail
+ngxer l --detail
 ```
 
 **Options:**
@@ -139,13 +144,17 @@ Update a static.
 **Usage:**
 
 ```sh
-ngxer update <inputs...>
-ngxer u <inputs...>
+ngxer update <paths...> --live
+ngxer u <paths...> --live
 ```
 
 **Parameters:**
 
-- `<inputs...>`: List of inputs to be updated
+- `<paths...>`: List of paths to be updated
+
+**Options:**
+
+- `-l, --live`: Re-rendering with live data.
 
 <h3><a name="command-help"><p><code>help</code></p>
 </a></h3>

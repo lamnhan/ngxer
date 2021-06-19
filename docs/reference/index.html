@@ -105,8 +105,8 @@
 					<ul>
 						<li><a href="#command-generate"><code>ngxer generate|g</code></a></li>
 						<li><a href="#command-init"><code>ngxer init|i [projectPath]</code></a></li>
-						<li><a href="#command-remove"><code>ngxer remove|r &lt;inputs...&gt;</code></a></li>
-						<li><a href="#command-report"><code>ngxer report|s --clear</code></a></li>
+						<li><a href="#command-remove"><code>ngxer remove|x &lt;inputs...&gt;</code></a></li>
+						<li><a href="#command-report"><code>ngxer report|r --detail</code></a></li>
 						<li><a href="#command-update"><code>ngxer update|u &lt;inputs...&gt;</code></a></li>
 						<li><a href="#command-help"><code>ngxer help</code></a></li>
 						<li><a href="#command-*"><code>ngxer *</code></a></li>
@@ -131,10 +131,10 @@ ngxer i [projectPath]</code></pre>
 					</ul>
 					<h3><a name="command-remove"><p><code>remove</code></p>
 					</a></h3>
-					<p>Remove a generated content</p>
+					<p>Remove a generated content.</p>
 					<p><strong>Usage:</strong></p>
 					<pre><code class="language-sh">ngxer remove &lt;inputs...&gt;
-ngxer r &lt;inputs...&gt;</code></pre>
+ngxer x &lt;inputs...&gt;</code></pre>
 					<p><strong>Parameters:</strong></p>
 					<ul>
 						<li><code>&lt;inputs...&gt;</code>: List of inputs to be removed</li>
@@ -143,11 +143,11 @@ ngxer r &lt;inputs...&gt;</code></pre>
 					</a></h3>
 					<p>Show generated statistics.</p>
 					<p><strong>Usage:</strong></p>
-					<pre><code class="language-sh">ngxer report --clear
-ngxer s --clear</code></pre>
+					<pre><code class="language-sh">ngxer report --detail
+ngxer r --detail</code></pre>
 					<p><strong>Options:</strong></p>
 					<ul>
-						<li><code>-c, --clear</code>: Remove the report (when re-build app)</li>
+						<li><code>-d, --detail</code>: Show detail.</li>
 					</ul>
 					<h3><a name="command-update"><p><code>update</code></p>
 					</a></h3>
@@ -247,6 +247,9 @@ ngxer u &lt;inputs...&gt;</code></pre>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/homeconfig.html" class="tsd-kind-icon">Home<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a>

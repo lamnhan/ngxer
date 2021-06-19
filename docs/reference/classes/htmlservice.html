@@ -86,10 +86,17 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#composecontent" class="tsd-kind-icon">compose<wbr>Content</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#composepagecontent" class="tsd-kind-icon">compose<wbr>Page<wbr>Content</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#indexoriginalpath" class="tsd-kind-icon">index<wbr>Original<wbr>Path</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#indexpath" class="tsd-kind-icon">index<wbr>Path</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#isindexexists" class="tsd-kind-icon">is<wbr>Index<wbr>Exists</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#isindexoriginalexists" class="tsd-kind-icon">is<wbr>Index<wbr>Original<wbr>Exists</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#minifycontent" class="tsd-kind-icon">minify<wbr>Content</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#parsecontent" class="tsd-kind-icon">parse<wbr>Content</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#parsefile" class="tsd-kind-icon">parse<wbr>File</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#parseindex" class="tsd-kind-icon">parse<wbr>Index</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#processcontentorpath" class="tsd-kind-icon">process<wbr>Content<wbr>OrPath</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="htmlservice.html#saveindex" class="tsd-kind-icon">save<wbr>Index</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,13 +108,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Html<wbr>Service<span class="tsd-signature-symbol">(</span>helperService<span class="tsd-signature-symbol">: </span><a href="helperservice.html" class="tsd-signature-type">HelperService</a>, fileService<span class="tsd-signature-symbol">: </span><a href="fileservice.html" class="tsd-signature-type">FileService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="htmlservice.html" class="tsd-signature-type">HtmlService</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Html<wbr>Service<span class="tsd-signature-symbol">(</span>helperService<span class="tsd-signature-symbol">: </span><a href="helperservice.html" class="tsd-signature-type">HelperService</a>, fileService<span class="tsd-signature-symbol">: </span><a href="fileservice.html" class="tsd-signature-type">FileService</a>, projectService<span class="tsd-signature-symbol">: </span><a href="projectservice.html" class="tsd-signature-type">ProjectService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="htmlservice.html" class="tsd-signature-type">HtmlService</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/html.service.ts#L37">lib/services/html.service.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L41">lib/services/html.service.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -117,6 +124,9 @@
 								</li>
 								<li>
 									<h5>fileService: <a href="fileservice.html" class="tsd-signature-type">FileService</a></h5>
+								</li>
+								<li>
+									<h5>projectService: <a href="projectservice.html" class="tsd-signature-type">ProjectService</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="htmlservice.html" class="tsd-signature-type">HtmlService</a></h4>
@@ -130,25 +140,83 @@
 					<a name="composecontent" class="tsd-anchor"></a>
 					<h3>compose<wbr>Content</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">compose<wbr>Content<span class="tsd-signature-symbol">(</span>templateData<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, metaData<span class="tsd-signature-symbol">: </span><a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a>, sessionData<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">compose<wbr>Content<span class="tsd-signature-symbol">(</span>parsedHTML<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, metaData<span class="tsd-signature-symbol">: </span><a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a>, contentTemplate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, sessionData<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span>, splashscreenTimeout<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/html.service.ts#L158">lib/services/html.service.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L288">lib/services/html.service.ts:288</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>templateData: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
+									<h5>parsedHTML: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
 								</li>
 								<li>
 									<h5>metaData: <a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> sessionData: <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> contentTemplate: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> sessionData: <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> splashscreenTimeout: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="composepagecontent" class="tsd-anchor"></a>
+					<h3>compose<wbr>Page<wbr>Content</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">compose<wbr>Page<wbr>Content<span class="tsd-signature-symbol">(</span>content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, contentTemplate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, locale<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L93">lib/services/html.service.ts:93</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>content: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> contentTemplate: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></h5>
+								</li>
+								<li>
+									<h5>locale: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="indexoriginalpath" class="tsd-anchor"></a>
+					<h3>index<wbr>Original<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">index<wbr>Original<wbr>Path<span class="tsd-signature-symbol">(</span>out<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L73">lib/services/html.service.ts:73</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>out: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -156,22 +224,94 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="minifycontent" class="tsd-anchor"></a>
-					<h3>minify<wbr>Content</h3>
+					<a name="indexpath" class="tsd-anchor"></a>
+					<h3>index<wbr>Path</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">minify<wbr>Content<span class="tsd-signature-symbol">(</span>rawHtmlContent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">index<wbr>Path<span class="tsd-signature-symbol">(</span>out<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/html.service.ts#L43">lib/services/html.service.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L69">lib/services/html.service.ts:69</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>out: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="isindexexists" class="tsd-anchor"></a>
+					<h3>is<wbr>Index<wbr>Exists</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Index<wbr>Exists<span class="tsd-signature-symbol">(</span>out<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L77">lib/services/html.service.ts:77</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>out: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="isindexoriginalexists" class="tsd-anchor"></a>
+					<h3>is<wbr>Index<wbr>Original<wbr>Exists</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Index<wbr>Original<wbr>Exists<span class="tsd-signature-symbol">(</span>out<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L81">lib/services/html.service.ts:81</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>out: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="minifycontent" class="tsd-anchor"></a>
+					<h3>minify<wbr>Content</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">minify<wbr>Content<span class="tsd-signature-symbol">(</span>rawHtmlContent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, advanced<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L48">lib/services/html.service.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rawHtmlContent: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> advanced: <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -188,7 +328,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/html.service.ts#L63">lib/services/html.service.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L181">lib/services/html.service.ts:181</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -214,7 +354,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/html.service.ts#L57">lib/services/html.service.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L175">lib/services/html.service.ts:175</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -240,7 +380,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/html.service.ts#L53">lib/services/html.service.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L167">lib/services/html.service.ts:167</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -253,6 +393,70 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="processcontentorpath" class="tsd-anchor"></a>
+					<h3>process<wbr>Content<wbr>OrPath</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">process<wbr>Content<wbr>OrPath<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L85">lib/services/html.service.ts:85</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>input: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="saveindex" class="tsd-anchor"></a>
+					<h3>save<wbr>Index</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">save<wbr>Index<span class="tsd-signature-symbol">(</span>out<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, parsedHTML<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, contentTemplate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, metas<span class="tsd-signature-symbol">?: </span><a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a>, locale<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, splashscreenTimeout<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/html.service.ts#L111">lib/services/html.service.ts:111</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>out: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>parsedHTML: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
+								</li>
+								<li>
+									<h5>content: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> contentTemplate: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> metas: <a href="../interfaces/metadata.html" class="tsd-signature-type">MetaData</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> locale: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> splashscreenTimeout: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -301,6 +505,21 @@
 								<a href="htmlservice.html#composecontent" class="tsd-kind-icon">compose<wbr>Content</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="htmlservice.html#composepagecontent" class="tsd-kind-icon">compose<wbr>Page<wbr>Content</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="htmlservice.html#indexoriginalpath" class="tsd-kind-icon">index<wbr>Original<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="htmlservice.html#indexpath" class="tsd-kind-icon">index<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="htmlservice.html#isindexexists" class="tsd-kind-icon">is<wbr>Index<wbr>Exists</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="htmlservice.html#isindexoriginalexists" class="tsd-kind-icon">is<wbr>Index<wbr>Original<wbr>Exists</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="htmlservice.html#minifycontent" class="tsd-kind-icon">minify<wbr>Content</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -311,6 +530,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="htmlservice.html#parseindex" class="tsd-kind-icon">parse<wbr>Index</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="htmlservice.html#processcontentorpath" class="tsd-kind-icon">process<wbr>Content<wbr>OrPath</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="htmlservice.html#saveindex" class="tsd-kind-icon">save<wbr>Index</a>
 							</li>
 						</ul>
 					</li>
@@ -351,6 +576,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/homeconfig.html" class="tsd-kind-icon">Home<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a>

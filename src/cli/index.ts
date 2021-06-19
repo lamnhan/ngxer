@@ -43,13 +43,13 @@ export class Cli {
    * @param paths... - List of paths to be removed
    */
   removeCommandDef: CommandDef = [
-    ['remove <paths...>', 'x'],
+    ['remove <paths...>', 'r'],
     'Remove a generated content.',
     ['-k, --keep-cache', 'Remove HTML file, but keep cache.'],
   ];
 
   reportCommandDef: CommandDef = [
-    ['report', 'r'],
+    ['report', 'log', 'l'],
     'Show generated statistics.',
     ['-d, --detail', 'Show detail.'],
   ];
@@ -71,7 +71,9 @@ export class Cli {
       this.ngxerModule.sitemapService
     );
     this.updateCommand = new UpdateCommand(
+      this.ngxerModule.fileService,
       this.ngxerModule.projectService,
+      this.ngxerModule.firebaseService,
       this.ngxerModule.renderService,
       this.ngxerModule.reportService,
       this.ngxerModule.sitemapService,

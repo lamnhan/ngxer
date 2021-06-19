@@ -85,6 +85,11 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="generatecommand.html#cacheddatabaserender" class="tsd-kind-icon">cached<wbr>Database<wbr>Render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="generatecommand.html#cachedpathrender" class="tsd-kind-icon">cached<wbr>Path<wbr>Render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="generatecommand.html#livedatabaserender" class="tsd-kind-icon">live<wbr>Database<wbr>Render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="generatecommand.html#livepathrender" class="tsd-kind-icon">live<wbr>Path<wbr>Render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="generatecommand.html#preparedata" class="tsd-kind-icon">prepare<wbr>Data</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="generatecommand.html#run" class="tsd-kind-icon">run</a></li>
 							</ul>
 						</section>
@@ -103,7 +108,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/cli/commands/generate.command.ts#L14">cli/commands/generate.command.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/generate.command.ts#L20">cli/commands/generate.command.ts:20</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -141,6 +146,169 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="cacheddatabaserender" class="tsd-anchor"></a>
+					<h3>cached<wbr>Database<wbr>Render</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">cached<wbr>Database<wbr>Render<span class="tsd-signature-symbol">(</span>spinner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ora</span>, dotNgxerRCDotJson<span class="tsd-signature-symbol">: </span><a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a>, databaseRenderItem<span class="tsd-signature-symbol">: </span><a href="../interfaces/databaserender.html" class="tsd-signature-type">DatabaseRender</a>, databaseRenderCache<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, parsedIndexHTML<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, contentTemplate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/generate.command.ts#L457">cli/commands/generate.command.ts:457</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>spinner: <span class="tsd-signature-type">Ora</span></h5>
+								</li>
+								<li>
+									<h5>dotNgxerRCDotJson: <a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a></h5>
+								</li>
+								<li>
+									<h5>databaseRenderItem: <a href="../interfaces/databaserender.html" class="tsd-signature-type">DatabaseRender</a></h5>
+								</li>
+								<li>
+									<h5>databaseRenderCache: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5>parsedIndexHTML: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> contentTemplate: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="cachedpathrender" class="tsd-anchor"></a>
+					<h3>cached<wbr>Path<wbr>Render</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">cached<wbr>Path<wbr>Render<span class="tsd-signature-symbol">(</span>spinner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ora</span>, dotNgxerRCDotJson<span class="tsd-signature-symbol">: </span><a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a>, pathRenderCache<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, parsedIndexHTML<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, contentTemplate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/generate.command.ts#L364">cli/commands/generate.command.ts:364</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>spinner: <span class="tsd-signature-type">Ora</span></h5>
+								</li>
+								<li>
+									<h5>dotNgxerRCDotJson: <a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a></h5>
+								</li>
+								<li>
+									<h5>pathRenderCache: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>parsedIndexHTML: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> contentTemplate: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="livedatabaserender" class="tsd-anchor"></a>
+					<h3>live<wbr>Database<wbr>Render</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">live<wbr>Database<wbr>Render<span class="tsd-signature-symbol">(</span>spinner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ora</span>, dotNgxerRCDotJson<span class="tsd-signature-symbol">: </span><a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a>, databaseRenderItem<span class="tsd-signature-symbol">: </span><a href="../interfaces/databaserender.html" class="tsd-signature-type">DatabaseRender</a>, databaseRenderLive<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, parsedIndexHTML<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, contentTemplate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/generate.command.ts#L502">cli/commands/generate.command.ts:502</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>spinner: <span class="tsd-signature-type">Ora</span></h5>
+								</li>
+								<li>
+									<h5>dotNgxerRCDotJson: <a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a></h5>
+								</li>
+								<li>
+									<h5>databaseRenderItem: <a href="../interfaces/databaserender.html" class="tsd-signature-type">DatabaseRender</a></h5>
+								</li>
+								<li>
+									<h5>databaseRenderLive: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5>parsedIndexHTML: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> contentTemplate: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="livepathrender" class="tsd-anchor"></a>
+					<h3>live<wbr>Path<wbr>Render</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">live<wbr>Path<wbr>Render<span class="tsd-signature-symbol">(</span>spinner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Ora</span>, dotNgxerRCDotJson<span class="tsd-signature-symbol">: </span><a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a>, pathRenderLive<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, parsedIndexHTML<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a>, contentTemplate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/generate.command.ts#L402">cli/commands/generate.command.ts:402</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>spinner: <span class="tsd-signature-type">Ora</span></h5>
+								</li>
+								<li>
+									<h5>dotNgxerRCDotJson: <a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a></h5>
+								</li>
+								<li>
+									<h5>pathRenderLive: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>parsedIndexHTML: <a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> contentTemplate: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="preparedata" class="tsd-anchor"></a>
+					<h3>prepare<wbr>Data</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">prepare<wbr>Data<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>contentTemplate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>dotNgxerRCDotJson<span class="tsd-signature-symbol">: </span><a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a><span class="tsd-signature-symbol">; </span>homePage<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/homeconfig.html" class="tsd-signature-type">HomeConfig</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>parsedIndexHTML<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/generate.command.ts#L311">cli/commands/generate.command.ts:311</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>contentTemplate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>dotNgxerRCDotJson<span class="tsd-signature-symbol">: </span><a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a><span class="tsd-signature-symbol">; </span>homePage<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/homeconfig.html" class="tsd-signature-type">HomeConfig</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>parsedIndexHTML<span class="tsd-signature-symbol">: </span><a href="../interfaces/parsedhtml.html" class="tsd-signature-type">ParsedHTML</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="run" class="tsd-anchor"></a>
 					<h3>run</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -150,7 +318,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/cli/commands/generate.command.ts#L26">cli/commands/generate.command.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/generate.command.ts#L32">cli/commands/generate.command.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -191,6 +359,21 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="generatecommand.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="generatecommand.html#cacheddatabaserender" class="tsd-kind-icon">cached<wbr>Database<wbr>Render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="generatecommand.html#cachedpathrender" class="tsd-kind-icon">cached<wbr>Path<wbr>Render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="generatecommand.html#livedatabaserender" class="tsd-kind-icon">live<wbr>Database<wbr>Render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="generatecommand.html#livepathrender" class="tsd-kind-icon">live<wbr>Path<wbr>Render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="generatecommand.html#preparedata" class="tsd-kind-icon">prepare<wbr>Data</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="generatecommand.html#run" class="tsd-kind-icon">run</a>
@@ -240,6 +423,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/homeconfig.html" class="tsd-kind-icon">Home<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a>

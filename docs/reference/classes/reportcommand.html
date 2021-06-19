@@ -85,6 +85,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="reportcommand.html#outputreport" class="tsd-kind-icon">output<wbr>Report</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="reportcommand.html#run" class="tsd-kind-icon">run</a></li>
 							</ul>
 						</section>
@@ -97,17 +98,20 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Report<wbr>Command<span class="tsd-signature-symbol">(</span>reportService<span class="tsd-signature-symbol">: </span><a href="reportservice.html" class="tsd-signature-type">ReportService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="reportcommand.html" class="tsd-signature-type">ReportCommand</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Report<wbr>Command<span class="tsd-signature-symbol">(</span>projectService<span class="tsd-signature-symbol">: </span><a href="projectservice.html" class="tsd-signature-type">ProjectService</a>, reportService<span class="tsd-signature-symbol">: </span><a href="reportservice.html" class="tsd-signature-type">ReportService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="reportcommand.html" class="tsd-signature-type">ReportCommand</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/cli/commands/report.command.ts#L11">cli/commands/report.command.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/report.command.ts#L12">cli/commands/report.command.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
+								<li>
+									<h5>projectService: <a href="projectservice.html" class="tsd-signature-type">ProjectService</a></h5>
+								</li>
 								<li>
 									<h5>reportService: <a href="reportservice.html" class="tsd-signature-type">ReportService</a></h5>
 								</li>
@@ -120,6 +124,41 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="outputreport" class="tsd-anchor"></a>
+					<h3>output<wbr>Report</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">output<wbr>Report<span class="tsd-signature-symbol">(</span>indexRendering<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, pathRendering<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, databaseRendering<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, timestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, detail<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/report.command.ts#L43">cli/commands/report.command.ts:43</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>indexRendering: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>pathRendering: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>databaseRendering: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> timestamp: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> detail: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="run" class="tsd-anchor"></a>
 					<h3>run</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -129,7 +168,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/cli/commands/report.command.ts#L14">cli/commands/report.command.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/report.command.ts#L18">cli/commands/report.command.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -205,6 +244,9 @@
 								<a href="reportcommand.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="reportcommand.html#outputreport" class="tsd-kind-icon">output<wbr>Report</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="reportcommand.html#run" class="tsd-kind-icon">run</a>
 							</li>
 						</ul>
@@ -225,6 +267,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/homeconfig.html" class="tsd-kind-icon">Home<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a>

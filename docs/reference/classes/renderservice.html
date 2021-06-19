@@ -90,6 +90,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="renderservice.html#liverender" class="tsd-kind-icon">live<wbr>Render</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="renderservice.html#processpath" class="tsd-kind-icon">process<wbr>Path</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="renderservice.html#shutdown" class="tsd-kind-icon">shutdown</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="renderservice.html#sortpaths" class="tsd-kind-icon">sort<wbr>Paths</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,7 +108,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/render.service.ts#L11">lib/services/render.service.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/render.service.ts#L11">lib/services/render.service.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -136,7 +137,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/render.service.ts#L18">lib/services/render.service.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/render.service.ts#L18">lib/services/render.service.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -159,7 +160,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/render.service.ts#L81">lib/services/render.service.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/render.service.ts#L123">lib/services/render.service.ts:123</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -212,7 +213,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/render.service.ts#L55">lib/services/render.service.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/render.service.ts#L97">lib/services/render.service.ts:97</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -262,7 +263,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/render.service.ts#L49">lib/services/render.service.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/render.service.ts#L49">lib/services/render.service.ts:49</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -285,10 +286,47 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/lib/services/render.service.ts#L42">lib/services/render.service.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/render.service.ts#L42">lib/services/render.service.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="sortpaths" class="tsd-anchor"></a>
+					<h3>sort<wbr>Paths</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">sort<wbr>Paths<span class="tsd-signature-symbol">(</span>dotNgxerRCDotJson<span class="tsd-signature-symbol">: </span><a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a>, paths<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>databaseRenderList<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>config<span class="tsd-signature-symbol">: </span><a href="../interfaces/databaserender.html" class="tsd-signature-type">DatabaseRender</a><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>otherList<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>pathRenderList<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/lib/services/render.service.ts#L55">lib/services/render.service.ts:55</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>dotNgxerRCDotJson: <a href="../interfaces/dotngxerrcdotjson.html" class="tsd-signature-type">DotNgxerRCDotJson</a></h5>
+								</li>
+								<li>
+									<h5>paths: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>databaseRenderList<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>config<span class="tsd-signature-symbol">: </span><a href="../interfaces/databaserender.html" class="tsd-signature-type">DatabaseRender</a><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>otherList<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>pathRenderList<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>database<wbr>Render<wbr>List<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>config<span class="tsd-signature-symbol">: </span><a href="../interfaces/databaserender.html" class="tsd-signature-type">DatabaseRender</a><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>other<wbr>List<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>path<wbr>Render<wbr>List<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
 						</li>
 					</ul>
 				</section>
@@ -366,6 +404,9 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="renderservice.html#shutdown" class="tsd-kind-icon">shutdown</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="renderservice.html#sortpaths" class="tsd-kind-icon">sort<wbr>Paths</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -387,6 +428,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/homeconfig.html" class="tsd-kind-icon">Home<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a>

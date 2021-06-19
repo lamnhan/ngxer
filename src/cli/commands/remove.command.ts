@@ -128,7 +128,7 @@ export class RemoveCommand {
         `Remove completed${
           !options.keepCache ? '' : ' (keep cached)'
         }! View report: $ ` +
-        yellow('ngxer r -d')
+        yellow('ngxer l -d')
     );
   }
 }

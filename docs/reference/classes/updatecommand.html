@@ -85,6 +85,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="updatecommand.html#fetchdocs" class="tsd-kind-icon">fetch<wbr>Docs</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="updatecommand.html#run" class="tsd-kind-icon">run</a></li>
 							</ul>
 						</section>
@@ -97,15 +98,39 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Update<wbr>Command<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="updatecommand.html" class="tsd-signature-type">UpdateCommand</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Update<wbr>Command<span class="tsd-signature-symbol">(</span>fileService<span class="tsd-signature-symbol">: </span><a href="fileservice.html" class="tsd-signature-type">FileService</a>, projectService<span class="tsd-signature-symbol">: </span><a href="projectservice.html" class="tsd-signature-type">ProjectService</a>, firebaseService<span class="tsd-signature-symbol">: </span><a href="firebaseservice.html" class="tsd-signature-type">FirebaseService</a>, renderService<span class="tsd-signature-symbol">: </span><a href="renderservice.html" class="tsd-signature-type">RenderService</a>, resportService<span class="tsd-signature-symbol">: </span><a href="reportservice.html" class="tsd-signature-type">ReportService</a>, sitemapService<span class="tsd-signature-symbol">: </span><a href="sitemapservice.html" class="tsd-signature-type">SitemapService</a>, generateCommand<span class="tsd-signature-symbol">: </span><a href="generatecommand.html" class="tsd-signature-type">GenerateCommand</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="updatecommand.html" class="tsd-signature-type">UpdateCommand</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/cli/commands/update.command.ts#L1">cli/commands/update.command.ts:1</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/update.command.ts#L22">cli/commands/update.command.ts:22</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>fileService: <a href="fileservice.html" class="tsd-signature-type">FileService</a></h5>
+								</li>
+								<li>
+									<h5>projectService: <a href="projectservice.html" class="tsd-signature-type">ProjectService</a></h5>
+								</li>
+								<li>
+									<h5>firebaseService: <a href="firebaseservice.html" class="tsd-signature-type">FirebaseService</a></h5>
+								</li>
+								<li>
+									<h5>renderService: <a href="renderservice.html" class="tsd-signature-type">RenderService</a></h5>
+								</li>
+								<li>
+									<h5>resportService: <a href="reportservice.html" class="tsd-signature-type">ReportService</a></h5>
+								</li>
+								<li>
+									<h5>sitemapService: <a href="sitemapservice.html" class="tsd-signature-type">SitemapService</a></h5>
+								</li>
+								<li>
+									<h5>generateCommand: <a href="generatecommand.html" class="tsd-signature-type">GenerateCommand</a></h5>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="updatecommand.html" class="tsd-signature-type">UpdateCommand</a></h4>
 						</li>
 					</ul>
@@ -114,22 +139,51 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="run" class="tsd-anchor"></a>
-					<h3>run</h3>
+					<a name="fetchdocs" class="tsd-anchor"></a>
+					<h3>fetch<wbr>Docs</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">run<span class="tsd-signature-symbol">(</span>inputs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">fetch<wbr>Docs<span class="tsd-signature-symbol">(</span>collection<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, paths<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/5f5717e/src/cli/commands/update.command.ts#L4">cli/commands/update.command.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/update.command.ts#L237">cli/commands/update.command.ts:237</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>inputs: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>collection: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>paths: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="run" class="tsd-anchor"></a>
+					<h3>run</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">run<span class="tsd-signature-symbol">(</span>paths<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/options.html" class="tsd-signature-type">Options</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lamnhan/ngxer/blob/b4fc0ca/src/cli/commands/update.command.ts#L33">cli/commands/update.command.ts:33</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>paths: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>options: <a href="../interfaces/options.html" class="tsd-signature-type">Options</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -208,6 +262,9 @@
 								<a href="updatecommand.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="updatecommand.html#fetchdocs" class="tsd-kind-icon">fetch<wbr>Docs</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="updatecommand.html#run" class="tsd-kind-icon">run</a>
 							</li>
 						</ul>
@@ -219,6 +276,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/dotngxerrcdotjson.html" class="tsd-kind-icon">Dot<wbr>NgxerRCDot<wbr>Json</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/homeconfig.html" class="tsd-kind-icon">Home<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/metadata.html" class="tsd-kind-icon">Meta<wbr>Data</a>
