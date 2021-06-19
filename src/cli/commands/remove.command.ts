@@ -27,9 +27,9 @@ export class RemoveCommand {
       const dirPath = resolve(out, path);
       if (await this.fileService.exists(dirPath)) {
         await this.fileService.removeDir(dirPath);
-        console.log(OK + 'Removed: ' + grey(`/${path}`));
+        console.log(OK + 'Removed: ' + grey(`${path}`));
       } else {
-        console.log(WARN + 'Not found: ' + grey(`/${path}`));
+        console.log(WARN + 'Not found: ' + grey(`${path}`));
       }
     };
     // do removal

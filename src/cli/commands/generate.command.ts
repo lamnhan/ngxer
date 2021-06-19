@@ -102,11 +102,9 @@ export class GenerateCommand {
           console.log(
             '\n' +
               OK +
-              'Saved:' +
-              [
-                'index.html',
-                ...homePageLocales.map(locale => `${locale}/index.html`),
-              ].join('\n + ')
+              'Indexes saved:' +
+              '\n+ /' +
+              ['', ...homePageLocales].join('\n+ ')
           );
         }
       }
@@ -139,7 +137,7 @@ export class GenerateCommand {
       if (pathRenderExisting.length) {
         pathRenderExisting.forEach(path => {
           pathRenderSitemap.push(path);
-          console.log('  + ' + grey('/' + path));
+          console.log('  + ' + grey(path));
         });
       }
       // render cached
@@ -249,7 +247,7 @@ export class GenerateCommand {
             if (databaseRenderExisting.length) {
               databaseRenderExisting.forEach(path => {
                 databaseRenderSitemap.push(path);
-                console.log('  + ' + grey('/' + path));
+                console.log('  + ' + grey(path));
               });
             }
             // render cached
@@ -385,9 +383,9 @@ export class GenerateCommand {
             );
             await this.fileService.createFile(filePath, fileContent);
             result.push(path);
-            console.log('  + ' + yellow('/' + path));
+            console.log('  + ' + yellow(path));
           } else {
-            console.log('  + ' + red('/' + path));
+            console.log('  + ' + red(path));
           }
         })()
       )
@@ -438,9 +436,9 @@ export class GenerateCommand {
           );
           await this.fileService.createFile(filePath, fileContent);
           result.push(path);
-          console.log('  + ' + magenta('/' + path));
+          console.log('  + ' + magenta(path));
         } else {
-          console.log('  + ' + red('/' + path));
+          console.log('  + ' + red(path));
         }
       }
     );
@@ -483,9 +481,9 @@ export class GenerateCommand {
             );
             await this.fileService.createFile(filePath, fileContent);
             result.push(path);
-            console.log('  + ' + yellow('/' + path));
+            console.log('  + ' + yellow(path));
           } else {
-            console.log('  + ' + red('/' + path));
+            console.log('  + ' + red(path));
           }
         })()
       )
@@ -528,9 +526,9 @@ export class GenerateCommand {
           );
           await this.fileService.createFile(filePath, fileContent);
           result.push(path);
-          console.log('  + ' + magenta('/' + path));
+          console.log('  + ' + magenta(path));
         } else {
-          console.log('  + ' + red('/' + path));
+          console.log('  + ' + red(path));
         }
       }
     );

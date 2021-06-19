@@ -42,21 +42,21 @@ export class ReportCommand {
             `Count: ${green(totalIndexRender)}` +
               (totalIndexRender <= 0
                 ? ''
-                : grey('\n+ /' + indexRendering.join('\n+ /'))),
+                : grey('\n+ /' + indexRendering.join('\n+ '))),
           ],
           [
             'Path render',
             `Count: ${green(totalPathRender)}` +
               (totalPathRender <= 0
                 ? ''
-                : grey('\n+ /' + pathRendering.join('\n+ /'))),
+                : grey('\n+ ' + pathRendering.join('\n+ '))),
           ],
           [
             'Database render',
             `Count: ${green(totalDatabaseRender)}` +
               (totalDatabaseRender <= 0
                 ? ''
-                : grey('\n+ /' + databaseRendering.join('\n+ /'))),
+                : grey('\n+ ' + databaseRendering.join('\n+ '))),
           ],
           [
             'Total count',
