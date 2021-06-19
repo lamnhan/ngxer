@@ -6,6 +6,7 @@ import {FileService} from '../../lib/services/file.service';
 import {
   DotNgxerRCDotJson,
   DatabaseRender,
+  HomeConfig,
   ProjectService,
 } from '../../lib/services/project.service';
 import {CacheService} from '../../lib/services/cache.service';
@@ -29,7 +30,7 @@ export class GenerateCommand {
 
   async run() {
     // load data
-    const {dotNgxerRCDotJson, parsedIndexHTML, contentTemplate, homeContent} =
+    const {dotNgxerRCDotJson, parsedIndexHTML, contentTemplate, homePage} =
       await this.prepareData();
     const {
       out,
@@ -50,13 +51,39 @@ export class GenerateCommand {
     /**
      * index.html
      */
-    if (await this.htmlService.indexTemplateExists(out)) {
-      const homePage = this.htmlService.composePageContent(
-        contentTemplate,
-        homeContent
-      );
-      await this.htmlService.saveIndex(out, parsedIndexHTML.full, homePage);
-      console.log('\n' + OK + 'Modified: index.html');
+    if (await this.htmlService.isIndexOriginalExists(out)) {
+      if (typeof homePage === 'string') {
+        await this.htmlService.saveIndex(
+          out,
+          parsedIndexHTML,
+          homePage,
+          contentTemplate
+        );
+        console.log('\n' + OK + 'Modified: index.html');
+      } else {
+        const homePageLocales = Object.keys(homePage);
+        for (let i = 0; i < homePageLocales.length; i++) {
+          const locale = homePageLocales[i];
+          const {content = '', metas} = homePage[locale];
+          await this.htmlService.saveIndex(
+            out,
+            parsedIndexHTML,
+            content,
+            contentTemplate,
+            metas,
+            locale
+          );
+        }
+        console.log(
+          '\n' +
+            OK +
+            'Saved:' +
+            [
+              'index.html',
+              ...homePageLocales.map(locale => `${locale}/index.html`),
+            ].join('\n + ')
+        );
+      }
     }
 
     /**
@@ -249,21 +276,49 @@ export class GenerateCommand {
     // rc data
     const dotNgxerRCDotJson = await this.projectService.loadDotNgxerRCDotJson();
     const {out, contentBetweens} = dotNgxerRCDotJson;
-    let {homeContent = '', contentTemplate = ''} = dotNgxerRCDotJson;
-    // index template
+    let {homePage = '', contentTemplate = ''} = dotNgxerRCDotJson;
+    // parsed index.html
     const parsedIndexHTML = await this.htmlService.parseIndex(
       out,
       contentBetweens
     );
-    contentTemplate = await this.htmlService.processContentOrPath(
-      contentTemplate
-    );
-    homeContent = await this.htmlService.processContentOrPath(homeContent);
+    // content template
+    if (typeof contentTemplate === 'string') {
+      contentTemplate = await this.htmlService.processContentOrPath(
+        contentTemplate
+      );
+    } else {
+      const processedContentTemplate: Record<string, string> = {};
+      const contentTemplatLocales = Object.keys(contentTemplate);
+      for (let i = 0; i < contentTemplatLocales.length; i++) {
+        const locale = contentTemplatLocales[i];
+        processedContentTemplate[locale] =
+          await this.htmlService.processContentOrPath(contentTemplate[locale]);
+      }
+      contentTemplate = processedContentTemplate;
+    }
+    // home page content
+    if (typeof homePage === 'string') {
+      homePage = await this.htmlService.processContentOrPath(homePage);
+    } else {
+      const processedHomePage: Record<string, HomeConfig> = {};
+      const homePageLocales = Object.keys(homePage);
+      for (let i = 0; i < homePageLocales.length; i++) {
+        const locale = homePageLocales[i];
+        const {content = '', metas} = homePage[locale];
+        const homePageContent = await this.htmlService.processContentOrPath(
+          content
+        );
+        processedHomePage[locale] = {content: homePageContent, metas};
+      }
+      homePage = processedHomePage;
+    }
+    // result
     return {
       dotNgxerRCDotJson,
       parsedIndexHTML,
       contentTemplate,
-      homeContent,
+      homePage,
     };
   }
 
@@ -271,7 +326,7 @@ export class GenerateCommand {
     dotNgxerRCDotJson: DotNgxerRCDotJson,
     pathRenderCache: string[],
     parsedIndexHTML: ParsedHTML,
-    contentTemplate?: string
+    contentTemplate?: string | Record<string, string>
   ) {
     const {out} = dotNgxerRCDotJson;
     const result: string[] = [];
@@ -307,7 +362,7 @@ export class GenerateCommand {
     dotNgxerRCDotJson: DotNgxerRCDotJson,
     pathRenderLive: string[],
     parsedIndexHTML: ParsedHTML,
-    contentTemplate?: string
+    contentTemplate?: string | Record<string, string>
   ) {
     const {out, url, contentBetweens} = dotNgxerRCDotJson;
     const result: string[] = [];
@@ -355,7 +410,7 @@ export class GenerateCommand {
     databaseRenderItem: DatabaseRender,
     databaseRenderCache: Array<Record<string, unknown>>,
     parsedIndexHTML: ParsedHTML,
-    contentTemplate?: string
+    contentTemplate?: string | Record<string, string>
   ) {
     const {out} = dotNgxerRCDotJson;
     const {collection, path: pathTemplate} = databaseRenderItem;
@@ -398,7 +453,7 @@ export class GenerateCommand {
     databaseRenderItem: DatabaseRender,
     databaseRenderLive: Array<Record<string, unknown>>,
     parsedIndexHTML: ParsedHTML,
-    contentTemplate?: string
+    contentTemplate?: string | Record<string, string>
   ) {
     const {out} = dotNgxerRCDotJson;
     const result: string[] = [];

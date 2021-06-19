@@ -1,6 +1,7 @@
 import {resolve} from 'path';
 
 import {FileService} from './file.service';
+import {MetaData} from './html.service';
 
 export interface DotNgxerRCDotJson {
   out: string;
@@ -8,9 +9,14 @@ export interface DotNgxerRCDotJson {
   sitemap?: boolean;
   pathRender?: string[];
   databaseRender?: DatabaseRender[];
-  homeContent?: string;
-  contentTemplate?: string;
+  homePage?: string | Record<string, HomeConfig>;
+  contentTemplate?: string | Record<string, string>;
   contentBetweens?: [string, string];
+}
+
+export interface HomeConfig {
+  content?: string;
+  metas?: MetaData;
 }
 
 export interface DatabaseRender {

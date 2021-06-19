@@ -58,12 +58,20 @@ export class HtmlService {
     });
   }
 
-  indexExists(out: string) {
-    return this.fileService.exists(resolve(out, 'index.html'));
+  indexPath(out: string) {
+    return resolve(out, 'index.html');
   }
 
-  indexTemplateExists(out: string) {
-    return this.fileService.exists(resolve(out, 'index-template.html'));
+  indexOriginalPath(out: string) {
+    return resolve(out, 'index-original.html');
+  }
+
+  isIndexExists(out: string) {
+    return this.fileService.exists(this.indexPath(out));
+  }
+
+  isIndexOriginalExists(out: string) {
+    return this.fileService.exists(this.indexOriginalPath(out));
   }
 
   async processContentOrPath(input: string) {
@@ -72,32 +80,65 @@ export class HtmlService {
       : await this.fileService.readText(resolve(input));
   }
 
-  composePageContent(contentTemplate: string, content: string) {
-    return contentTemplate.replace(
+  composePageContent(
+    content: string,
+    contentTemplate: string | Record<string, string> = '',
+    locale = 'en-US'
+  ) {
+    const textContentTemplate =
+      typeof contentTemplate === 'string'
+        ? contentTemplate
+        : contentTemplate[locale];
+    return textContentTemplate.replace(
       '<!--PRERENDER_CONTENT_PLACEHOLDER-->',
       content
     );
   }
 
-  saveIndex(out: string, indexFull: string, thePage?: string) {
-    if (thePage) {
-      indexFull = indexFull.replace(
+  saveIndex(
+    out: string,
+    parsedHTML: ParsedHTML,
+    content: string,
+    contentTemplate: string | Record<string, string> = '',
+    metas?: MetaData,
+    locale?: string
+  ) {
+    // page content between <app-root></app-root>
+    const indexContent = this.composePageContent(
+      content,
+      contentTemplate,
+      locale || parsedHTML.locale
+    );
+    // finla file content
+    const indexFinal = (() => {
+      let htmlFull = parsedHTML.full;
+      if (metas) {
+        htmlFull = this.composeContent(parsedHTML, metas);
+      }
+      return htmlFull.replace(
         '<app-root></app-root>',
-        `<app-root>${thePage}</app-root>`
+        `<app-root>${indexContent}</app-root>`
+      );
+    })();
+    // localized indexes
+    if (metas && locale) {
+      return this.fileService.createFile(
+        resolve(out, locale, 'index.html'),
+        indexFinal
       );
     }
-    return this.fileService.createFile(resolve(out, 'index.html'), indexFull);
+    // main index
+    else {
+      return this.fileService.createFile(this.indexPath(out), indexFinal);
+    }
   }
 
   async parseIndex(out: string, customContentBetweens?: [string, string]) {
-    const indexTemplatePath = resolve(out, 'index-template.html');
-    if (!(await this.fileService.exists(indexTemplatePath))) {
-      await this.fileService.copy(
-        resolve(out, 'index.html'),
-        indexTemplatePath
-      );
+    const indexOriginalPath = this.indexOriginalPath(out);
+    if (!(await this.fileService.exists(indexOriginalPath))) {
+      await this.fileService.copy(this.indexPath(out), indexOriginalPath);
     }
-    return this.parseFile(indexTemplatePath, customContentBetweens);
+    return this.parseFile(indexOriginalPath, customContentBetweens);
   }
 
   async parseFile(path: string, customContentBetweens?: [string, string]) {
@@ -218,10 +259,10 @@ export class HtmlService {
   }
 
   composeContent(
-    templateData: ParsedHTML,
+    parsedHTML: ParsedHTML,
     metaData: MetaData,
     sessionData?: Record<string, unknown>,
-    contentTemplate?: string
+    contentTemplate?: string | Record<string, string>
   ) {
     const {
       url: templateUrl,
@@ -238,7 +279,7 @@ export class HtmlService {
       styles,
       content: templateContent,
       full: htmlContent,
-    } = templateData;
+    } = parsedHTML;
     const {
       title,
       description,
@@ -306,14 +347,18 @@ export class HtmlService {
         ))
     );
     // content replacement
-    let thePage =
+    let pageContent =
       content || templateContent || templateDescription || templateTitle;
     if (contentTemplate) {
-      thePage = this.composePageContent(contentTemplate, thePage);
+      pageContent = this.composePageContent(
+        pageContent,
+        contentTemplate,
+        locale || templateLocale
+      );
     }
     finalContent = finalContent.replace(
       '<app-root></app-root>',
-      `<app-root>${thePage}</app-root>`
+      `<app-root>${pageContent}</app-root>`
     );
     // session data
     if (sessionData && sessionData.id) {
