@@ -59,6 +59,7 @@ export class Cli {
       this.ngxerModule.fileService,
       this.ngxerModule.projectService
     );
+    this.reportCommand = new ReportCommand(this.ngxerModule.reportService);
     this.generateCommand = new GenerateCommand(
       this.ngxerModule.fileService,
       this.ngxerModule.projectService,
@@ -67,7 +68,8 @@ export class Cli {
       this.ngxerModule.renderService,
       this.ngxerModule.firebaseService,
       this.ngxerModule.reportService,
-      this.ngxerModule.sitemapService
+      this.ngxerModule.sitemapService,
+      this.reportCommand
     );
     this.updateCommand = new UpdateCommand(
       this.ngxerModule.projectService,
@@ -85,7 +87,6 @@ export class Cli {
       this.ngxerModule.sitemapService,
       this.generateCommand
     );
-    this.reportCommand = new ReportCommand(this.ngxerModule.reportService);
   }
 
   getApp() {

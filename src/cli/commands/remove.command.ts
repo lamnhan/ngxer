@@ -1,5 +1,5 @@
 import {resolve} from 'path';
-import {grey} from 'chalk';
+import {grey, yellow} from 'chalk';
 
 import {OK, WARN, INFO} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
@@ -41,7 +41,7 @@ export class RemoveCommand {
         await this.fileService.removeDir(dirPath);
         console.log('  + ' + grey(`${path}`));
       } else {
-        console.log('  + ' + grey(`${path}`) + ' (not found)');
+        console.log('  + ' + grey(`${path}`) + yellow(' (not found)'));
       }
     };
     // path removal
@@ -75,7 +75,11 @@ export class RemoveCommand {
     // invalid removal
     if (invalidList.length) {
       console.log(
-        '\n' + WARN + 'Invalid paths: ' + '\n  + ' + invalidList.join('\n  + ')
+        '\n' +
+          WARN +
+          'Invalid paths: ' +
+          '\n  + ' +
+          invalidList.map(x => (x ? x : '/')).join('\n  + ')
       );
     }
     // final touches
@@ -118,7 +122,5 @@ export class RemoveCommand {
       pathRenderRemain,
       databaseRenderRemain
     );
-    // done
-    console.log('\n' + OK + 'Updated: .ngxer.json, sitemap.xml & report.json');
   }
 }

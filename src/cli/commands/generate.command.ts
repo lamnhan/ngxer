@@ -1,7 +1,7 @@
 import {resolve} from 'path';
-import {yellow, grey, red, magenta, cyan, bgBlueBright} from 'chalk';
+import {yellow} from 'chalk';
 
-import {OK, INFO, WARN} from '../../lib/services/message.service';
+import {WARN} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
 import {
   DotNgxerRCDotJson,
@@ -16,6 +16,8 @@ import {FirebaseService} from '../../lib/services/firebase.service';
 import {ReportService} from '../../lib/services/report.service';
 import {SitemapService} from '../../lib/services/sitemap.service';
 
+import {ReportCommand} from './report.command';
+
 export class GenerateCommand {
   constructor(
     private fileService: FileService,
@@ -25,7 +27,8 @@ export class GenerateCommand {
     private renderService: RenderService,
     private firebaseService: FirebaseService,
     private reportService: ReportService,
-    private sitemapService: SitemapService
+    private sitemapService: SitemapService,
+    private reportCommand: ReportCommand
   ) {}
 
   async run() {
@@ -42,14 +45,6 @@ export class GenerateCommand {
       databaseLimit = 30,
       splashscreenTimeout = 0,
     } = dotNgxerRCDotJson;
-
-    // legends
-    console.log(
-      INFO +
-        `Render legends: ${magenta('live')} | ${cyan('cached')} | ${grey(
-          'exists'
-        )} | ${red('error')}`
-    );
 
     /**
      * index.html
@@ -71,8 +66,6 @@ export class GenerateCommand {
         );
         // sitemap
         indexRenderSitemap.push('');
-        // done
-        console.log('\n' + OK + 'Modified: index.html');
       }
       // miltiple locales
       else {
@@ -106,14 +99,6 @@ export class GenerateCommand {
           }
           // sitemap
           indexRenderSitemap.push('', ...homePageLocales);
-          // done
-          console.log(
-            '\n' +
-              OK +
-              'Indexes saved:' +
-              '\n  + /' +
-              ['', ...homePageLocales].join('\n  + ')
-          );
         }
       }
     }
@@ -124,7 +109,6 @@ export class GenerateCommand {
 
     const pathRenderSitemap = [] as string[];
     if (pathRender.length) {
-      console.log('\n' + bgBlueBright('Begin path rendering:'));
       // filter
       const pathRenderExisting: string[] = [];
       const pathRenderCache: string[] = [];
@@ -145,7 +129,6 @@ export class GenerateCommand {
       if (pathRenderExisting.length) {
         pathRenderExisting.forEach(path => {
           pathRenderSitemap.push(path);
-          console.log('  + ' + grey(path));
         });
       }
       // render cached
@@ -169,8 +152,6 @@ export class GenerateCommand {
         );
         pathRenderSitemap.push(...result);
       }
-      // done
-      console.log(OK + 'Path rendering completed.');
     }
 
     /**
@@ -179,7 +160,6 @@ export class GenerateCommand {
 
     const databaseRenderSitemap = [] as string[];
     if (databaseRender.length) {
-      console.log('\n' + bgBlueBright('Begin database rendering:'));
       // proccess collection
       const firestore = await this.firebaseService.firestore();
       const cacheLocaleChecks: string[] = [];
@@ -255,7 +235,6 @@ export class GenerateCommand {
             if (databaseRenderExisting.length) {
               databaseRenderExisting.forEach(path => {
                 databaseRenderSitemap.push(path);
-                console.log('  + ' + grey(path));
               });
             }
             // render cached
@@ -283,8 +262,6 @@ export class GenerateCommand {
           })()
         )
       );
-      // done
-      console.log(OK + 'Database rendering completed.');
     }
 
     /**
@@ -298,7 +275,6 @@ export class GenerateCommand {
         ...databaseRenderSitemap,
       ];
       await this.sitemapService.save(out, url, sitemapItems);
-      console.log('\n' + OK + 'Saved: sitemap.xml');
     }
 
     /**
@@ -309,7 +285,18 @@ export class GenerateCommand {
       pathRenderSitemap,
       databaseRenderSitemap
     );
-    console.log(OK + 'To view report: $ ' + yellow('ngxer report'));
+
+    /**
+     * Result
+     */
+    this.reportCommand.outputReport(
+      indexRenderSitemap,
+      pathRenderSitemap,
+      databaseRenderSitemap,
+      undefined,
+      true
+    );
+    console.log('   ' + 'To view later: $ ' + yellow('ngxer report -d'));
   }
 
   async prepareData() {
@@ -391,9 +378,6 @@ export class GenerateCommand {
             );
             await this.fileService.createFile(filePath, fileContent);
             result.push(path);
-            console.log('  + ' + cyan(path));
-          } else {
-            console.log('  + ' + red(path));
           }
         })()
       )
@@ -427,7 +411,7 @@ export class GenerateCommand {
         );
         metaData.url = url + '/' + path + '/';
         metaData.content = await this.htmlService.minifyContent(
-          metaData.content || '',
+          (metaData.content || '').replace(/( _ng).*?("")/g, ''),
           true
         );
         // cache
@@ -448,9 +432,6 @@ export class GenerateCommand {
           );
           await this.fileService.createFile(filePath, fileContent);
           result.push(path);
-          console.log('  + ' + magenta(path));
-        } else {
-          console.log('  + ' + red(path));
         }
       }
     );
@@ -493,9 +474,6 @@ export class GenerateCommand {
             );
             await this.fileService.createFile(filePath, fileContent);
             result.push(path);
-            console.log('  + ' + cyan(path));
-          } else {
-            console.log('  + ' + red(path));
           }
         })()
       )
@@ -538,9 +516,6 @@ export class GenerateCommand {
           );
           await this.fileService.createFile(filePath, fileContent);
           result.push(path);
-          console.log('  + ' + magenta(path));
-        } else {
-          console.log('  + ' + red(path));
         }
       }
     );
