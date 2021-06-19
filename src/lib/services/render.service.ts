@@ -57,7 +57,7 @@ export class RenderService {
     const pathRenderList: string[] = [];
     const databaseRenderList: Array<{
       path: string;
-      renderItem: DatabaseRender;
+      config: DatabaseRender;
     }> = [];
     const otherList: string[] = [];
     for (let i = 0; i < paths.length; i++) {
@@ -78,7 +78,7 @@ export class RenderService {
         if (databaseRenderItem) {
           databaseRenderList.push({
             path,
-            renderItem: databaseRenderItem,
+            config: databaseRenderItem,
           });
         }
         // no pathRender nor database render

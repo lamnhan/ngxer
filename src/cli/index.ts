@@ -31,19 +31,19 @@ export class Cli {
   ];
 
   /**
-   * @param inputs... - List of inputs to be updated
+   * @param paths... - List of paths to be updated
    */
   updateCommandDef: CommandDef = [
-    ['update <inputs...>', 'u'],
+    ['update <paths...>', 'u'],
     'Update a static.',
     ['-l, --live', 'Re-rendering with live data.'],
   ];
 
   /**
-   * @param inputs... - List of inputs to be removed
+   * @param paths... - List of paths to be removed
    */
   removeCommandDef: CommandDef = [
-    ['remove <inputs...>', 'x'],
+    ['remove <paths...>', 'x'],
     'Remove a generated content.',
   ];
 
@@ -82,7 +82,8 @@ export class Cli {
       this.ngxerModule.renderService,
       this.ngxerModule.cacheService,
       this.ngxerModule.reportService,
-      this.ngxerModule.sitemapService
+      this.ngxerModule.sitemapService,
+      this.generateCommand
     );
     this.reportCommand = new ReportCommand(this.ngxerModule.reportService);
   }
@@ -127,7 +128,7 @@ export class Cli {
         .aliases(aliases)
         .description(description)
         .option(...liveOpt)
-        .action((inputs, options) => this.updateCommand.run(inputs, options));
+        .action((paths, options) => this.updateCommand.run(paths, options));
     })();
 
     // remove
@@ -137,7 +138,7 @@ export class Cli {
         .command(command)
         .aliases(aliases)
         .description(description)
-        .action(inputs => this.removeCommand.run(inputs));
+        .action(paths => this.removeCommand.run(paths));
     })();
 
     // report

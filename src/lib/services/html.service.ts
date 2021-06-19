@@ -403,9 +403,13 @@ export class HtmlService {
     }
     // session data
     if (sessionData && sessionData.id) {
-      const sessionDataScript = `<script>if(window.sessionStorage){sessionStorage.setItem('prerender_data:${
-        sessionData.id
-      }','${JSON.stringify(sessionData)}');}</>`;
+      const sessionDataScript = [
+        '<script>',
+        `(()=>{if(window.sessionStorage){sessionStorage.setItem('prerender_data:${
+          sessionData.id
+        }','${JSON.stringify(sessionData)}');}})();`,
+        '</script>',
+      ].join('');
       finalContent = finalContent.replace(
         '</title>',
         `</title>${sessionDataScript}`

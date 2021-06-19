@@ -1,5 +1,5 @@
 import {resolve} from 'path';
-import {yellow, grey, red, magenta} from 'chalk';
+import {yellow, grey, red, magenta, cyan, bgBlueBright} from 'chalk';
 
 import {OK, INFO, WARN} from '../../lib/services/message.service';
 import {FileService} from '../../lib/services/file.service';
@@ -46,7 +46,7 @@ export class GenerateCommand {
     // legends
     console.log(
       INFO +
-        `Render legends: ${yellow('cached')} | ${magenta('live')} | ${grey(
+        `Render legends: ${magenta('live')} | ${cyan('cached')} | ${grey(
           'exists'
         )} | ${red('error')}`
     );
@@ -111,8 +111,8 @@ export class GenerateCommand {
             '\n' +
               OK +
               'Indexes saved:' +
-              '\n+ /' +
-              ['', ...homePageLocales].join('\n+ ')
+              '\n  + /' +
+              ['', ...homePageLocales].join('\n  + ')
           );
         }
       }
@@ -124,7 +124,7 @@ export class GenerateCommand {
 
     const pathRenderSitemap = [] as string[];
     if (pathRender.length) {
-      console.log('\n' + 'Begin path rendering:');
+      console.log('\n' + bgBlueBright('Begin path rendering:'));
       // filter
       const pathRenderExisting: string[] = [];
       const pathRenderCache: string[] = [];
@@ -179,7 +179,7 @@ export class GenerateCommand {
 
     const databaseRenderSitemap = [] as string[];
     if (databaseRender.length) {
-      console.log('\n' + 'Begin database rendering:');
+      console.log('\n' + bgBlueBright('Begin database rendering:'));
       // proccess collection
       const firestore = await this.firebaseService.firestore();
       const cacheLocaleChecks: string[] = [];
@@ -391,7 +391,7 @@ export class GenerateCommand {
             );
             await this.fileService.createFile(filePath, fileContent);
             result.push(path);
-            console.log('  + ' + yellow(path));
+            console.log('  + ' + cyan(path));
           } else {
             console.log('  + ' + red(path));
           }
@@ -426,6 +426,10 @@ export class GenerateCommand {
           contentBetweens
         );
         metaData.url = url + '/' + path + '/';
+        metaData.content = await this.htmlService.minifyContent(
+          metaData.content || '',
+          true
+        );
         // cache
         const cached = await this.cacheService.save(
           dotNgxerRCDotJson,
@@ -489,7 +493,7 @@ export class GenerateCommand {
             );
             await this.fileService.createFile(filePath, fileContent);
             result.push(path);
-            console.log('  + ' + yellow(path));
+            console.log('  + ' + cyan(path));
           } else {
             console.log('  + ' + red(path));
           }
