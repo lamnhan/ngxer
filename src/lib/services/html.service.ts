@@ -131,6 +131,9 @@ export class HtmlService {
               : parsedHTML.url + '/';
           metas.url = `${url}/${locale}/`;
         }
+        if (!metas.locale) {
+          metas.locale = locale;
+        }
         htmlFull = await this.composeContent(parsedHTML, metas);
       }
       return htmlFull.replace(
@@ -279,8 +282,9 @@ export class HtmlService {
   async composeContent(
     parsedHTML: ParsedHTML,
     metaData: MetaData,
-    sessionData?: Record<string, unknown>,
-    contentTemplate?: string | Record<string, string>
+    contentTemplate?: string | Record<string, string>,
+    sessionData?: null | Record<string, unknown>,
+    splashscreenTimeout = 0
   ) {
     const {
       url: templateUrl,
@@ -332,7 +336,7 @@ export class HtmlService {
         new RegExp(`="${templateLocale}"`, 'g'),
         `="${locale || templateLocale}"`
       )
-      .replace(`="${templateLang}"`, `="${lang || templateLang}"`)
+      .replace(`lang="${templateLang}"`, `lang="${lang || templateLang}"`)
       .replace(
         `="${templateAuthorName}"`,
         `="${authorName || templateAuthorName}"`
@@ -379,12 +383,28 @@ export class HtmlService {
       '<app-root></app-root>',
       `<app-root>${pageContent}</app-root>`
     );
+    // splashscreen time out
+    if (splashscreenTimeout > 0) {
+      const time = splashscreenTimeout * 1000;
+      const timeoutScript = [
+        '<script>',
+        `(()=>{setTimeout(()=>{var s=document.getElementById("app-splash-screen");if(s){s.classList.add("hidden")}},${time})})();`,
+        '</script>',
+      ].join('');
+      finalContent = finalContent.replace(
+        '</title>',
+        `</title>${timeoutScript}`
+      );
+    }
     // session data
     if (sessionData && sessionData.id) {
-      const scriptCode = `<script>if(window.sessionStorage){sessionStorage.setItem('prerender_data:${
+      const sessionDataScript = `<script>if(window.sessionStorage){sessionStorage.setItem('prerender_data:${
         sessionData.id
-      }','${JSON.stringify(sessionData)}');}</script>`;
-      finalContent = finalContent.replace('</title>', `</title>${scriptCode}`);
+      }','${JSON.stringify(sessionData)}');}</>`;
+      finalContent = finalContent.replace(
+        '</title>',
+        `</title>${sessionDataScript}`
+      );
     }
     // result
     return finalContent;

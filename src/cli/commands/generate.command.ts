@@ -38,6 +38,8 @@ export class GenerateCommand {
       sitemap = false,
       pathRender = [],
       databaseRender = [],
+      databaseLimitFirstTime = 1000,
+      databaseLimit = 30,
     } = dotNgxerRCDotJson;
 
     // legends
@@ -193,14 +195,14 @@ export class GenerateCommand {
                 cacheLocaleChecks.indexOf(`${collection} by ${locale}`) === -1)
             ) {
               const docs = (
-                await collectionQuery.limitToLast(1000).get()
+                await collectionQuery.limitToLast(databaseLimitFirstTime).get()
               ).docs.map(doc => doc.data());
               databaseRenderLive.push(...docs); // render live for all
             }
-            // load latest 30 items
+            // load latest N items
             else {
               const docs = (
-                await collectionQuery.limitToLast(30).get()
+                await collectionQuery.limitToLast(databaseLimit).get()
               ).docs.map(doc => doc.data());
               // filter
               for (let i = 0; i < docs.length; i++) {
@@ -344,7 +346,11 @@ export class GenerateCommand {
     parsedIndexHTML: ParsedHTML,
     contentTemplate?: string | Record<string, string>
   ) {
-    const {out} = dotNgxerRCDotJson;
+    const {
+      out,
+      includeSessionData = false,
+      splashscreenTimeout = 0,
+    } = dotNgxerRCDotJson;
     const result: string[] = [];
     await Promise.all(
       pathRenderCache.map(path =>
@@ -357,8 +363,9 @@ export class GenerateCommand {
             const fileContent = await this.htmlService.composeContent(
               parsedIndexHTML,
               cached.meta,
-              cached.data,
-              contentTemplate
+              contentTemplate,
+              includeSessionData ? cached.data : null,
+              splashscreenTimeout
             );
             await this.fileService.createFile(filePath, fileContent);
             result.push(path);
@@ -378,7 +385,13 @@ export class GenerateCommand {
     parsedIndexHTML: ParsedHTML,
     contentTemplate?: string | Record<string, string>
   ) {
-    const {out, url, contentBetweens} = dotNgxerRCDotJson;
+    const {
+      out,
+      url,
+      contentBetweens,
+      includeSessionData = false,
+      splashscreenTimeout = 0,
+    } = dotNgxerRCDotJson;
     const result: string[] = [];
     await this.renderService.liveRender(
       out,
@@ -403,8 +416,9 @@ export class GenerateCommand {
           const fileContent = await this.htmlService.composeContent(
             parsedIndexHTML,
             cached.meta,
-            cached.data,
-            contentTemplate
+            contentTemplate,
+            includeSessionData ? cached.data : null,
+            splashscreenTimeout
           );
           await this.fileService.createFile(filePath, fileContent);
           result.push(path);
@@ -424,7 +438,11 @@ export class GenerateCommand {
     parsedIndexHTML: ParsedHTML,
     contentTemplate?: string | Record<string, string>
   ) {
-    const {out} = dotNgxerRCDotJson;
+    const {
+      out,
+      includeSessionData = false,
+      splashscreenTimeout = 0,
+    } = dotNgxerRCDotJson;
     const {collection, path: pathTemplate} = databaseRenderItem;
     const result: string[] = [];
     await Promise.all(
@@ -443,8 +461,9 @@ export class GenerateCommand {
             const fileContent = await this.htmlService.composeContent(
               parsedIndexHTML,
               cached.meta,
-              cached.data,
-              contentTemplate
+              contentTemplate,
+              includeSessionData ? cached.data : null,
+              splashscreenTimeout
             );
             await this.fileService.createFile(filePath, fileContent);
             result.push(path);
@@ -465,7 +484,11 @@ export class GenerateCommand {
     parsedIndexHTML: ParsedHTML,
     contentTemplate?: string | Record<string, string>
   ) {
-    const {out} = dotNgxerRCDotJson;
+    const {
+      out,
+      includeSessionData = false,
+      splashscreenTimeout = 0,
+    } = dotNgxerRCDotJson;
     const result: string[] = [];
     await this.renderService.collectionRender(
       databaseRenderItem,
@@ -483,8 +506,9 @@ export class GenerateCommand {
           const fileContent = await this.htmlService.composeContent(
             parsedIndexHTML,
             cached.meta,
-            cached.data,
-            contentTemplate
+            contentTemplate,
+            includeSessionData ? cached.data : null,
+            splashscreenTimeout
           );
           await this.fileService.createFile(filePath, fileContent);
           result.push(path);

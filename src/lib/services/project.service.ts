@@ -6,12 +6,16 @@ import {MetaData} from './html.service';
 export interface DotNgxerRCDotJson {
   out: string;
   url: string;
-  sitemap?: boolean;
   pathRender?: string[];
   databaseRender?: DatabaseRender[];
+  sitemap?: boolean;
   homePage?: string | Record<string, HomeConfig>;
   contentTemplate?: string | Record<string, string>;
   contentBetweens?: [string, string];
+  databaseLimitFirstTime?: number;
+  databaseLimit?: number;
+  includeSessionData?: boolean;
+  splashscreenTimeout?: number; // number of seconds
 }
 
 export interface HomeConfig {
