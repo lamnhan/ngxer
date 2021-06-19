@@ -44,16 +44,23 @@ export class HtmlService {
     private fileService: FileService
   ) {}
 
-  async minifyContent(rawHtmlContent: string) {
+  async minifyContent(
+    rawHtmlContent: string,
+    advanced?: true | Record<string, unknown>
+  ) {
     return minify({
       compressor: htmlMinifier,
       content: rawHtmlContent,
       options: {
         removeAttributeQuotes: false,
         removeEmptyAttributes: true,
-        removeEmptyElements: true,
         removeRedundantAttributes: true,
-        removeComments: true,
+        ...(advanced === true
+          ? {
+              removeComments: true,
+              removeEmptyElements: true,
+            }
+          : advanced),
       },
     });
   }
@@ -89,13 +96,16 @@ export class HtmlService {
       typeof contentTemplate === 'string'
         ? contentTemplate
         : contentTemplate[locale];
-    return textContentTemplate.replace(
-      '<!--PRERENDER_CONTENT_PLACEHOLDER-->',
-      content
+    return this.minifyContent(
+      textContentTemplate.replace(
+        '<!--PRERENDER_CONTENT_PLACEHOLDER-->',
+        content
+      ),
+      true
     );
   }
 
-  saveIndex(
+  async saveIndex(
     out: string,
     parsedHTML: ParsedHTML,
     content: string,
@@ -104,16 +114,16 @@ export class HtmlService {
     locale?: string
   ) {
     // page content between <app-root></app-root>
-    const indexContent = this.composePageContent(
+    const indexContent = await this.composePageContent(
       content,
       contentTemplate,
       locale || parsedHTML.locale
     );
     // finla file content
-    const indexFinal = (() => {
+    const indexFinal = await (async () => {
       let htmlFull = parsedHTML.full;
       if (metas) {
-        htmlFull = this.composeContent(parsedHTML, metas);
+        htmlFull = await this.composeContent(parsedHTML, metas);
       }
       return htmlFull.replace(
         '<app-root></app-root>',
@@ -258,7 +268,7 @@ export class HtmlService {
     } as ParsedHTML;
   }
 
-  composeContent(
+  async composeContent(
     parsedHTML: ParsedHTML,
     metaData: MetaData,
     sessionData?: Record<string, unknown>,
@@ -350,7 +360,7 @@ export class HtmlService {
     let pageContent =
       content || templateContent || templateDescription || templateTitle;
     if (contentTemplate) {
-      pageContent = this.composePageContent(
+      pageContent = await this.composePageContent(
         pageContent,
         contentTemplate,
         locale || templateLocale

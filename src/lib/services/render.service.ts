@@ -144,7 +144,8 @@ export class RenderService {
             const content = await this.fetchService.text(url);
             data.contentSrc = null;
             data.content = await this.htmlService.minifyContent(
-              ext === 'html' ? content : marked(content)
+              ext === 'html' ? content : marked(content),
+              true
             );
           }
           // forwarding

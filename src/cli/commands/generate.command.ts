@@ -338,15 +338,13 @@ export class GenerateCommand {
           // save file
           if (cached) {
             const filePath = resolve(out, path, 'index.html');
-            await this.fileService.createFile(
-              filePath,
-              this.htmlService.composeContent(
-                parsedIndexHTML,
-                cached.meta,
-                cached.data,
-                contentTemplate
-              )
+            const fileContent = await this.htmlService.composeContent(
+              parsedIndexHTML,
+              cached.meta,
+              cached.data,
+              contentTemplate
             );
+            await this.fileService.createFile(filePath, fileContent);
             result.push(path);
             console.log('  + ' + yellow('/' + path));
           } else {
@@ -386,15 +384,13 @@ export class GenerateCommand {
         // save file
         if (cached) {
           const filePath = resolve(out, path, 'index.html');
-          await this.fileService.createFile(
-            filePath,
-            this.htmlService.composeContent(
-              parsedIndexHTML,
-              cached.meta,
-              cached.data,
-              contentTemplate
-            )
+          const fileContent = await this.htmlService.composeContent(
+            parsedIndexHTML,
+            cached.meta,
+            cached.data,
+            contentTemplate
           );
+          await this.fileService.createFile(filePath, fileContent);
           result.push(path);
           console.log('  + ' + magenta('/' + path));
         } else {
@@ -428,15 +424,13 @@ export class GenerateCommand {
           // save file
           if (cached) {
             const filePath = resolve(out, path, 'index.html');
-            await this.fileService.createFile(
-              filePath,
-              this.htmlService.composeContent(
-                parsedIndexHTML,
-                cached.meta,
-                cached.data,
-                contentTemplate
-              )
+            const fileContent = await this.htmlService.composeContent(
+              parsedIndexHTML,
+              cached.meta,
+              cached.data,
+              contentTemplate
             );
+            await this.fileService.createFile(filePath, fileContent);
             result.push(path);
             console.log('  + ' + yellow('/' + path));
           } else {
@@ -470,15 +464,13 @@ export class GenerateCommand {
         // save files
         if (cached) {
           const filePath = resolve(out, path, 'index.html');
-          await this.fileService.createFile(
-            filePath,
-            this.htmlService.composeContent(
-              parsedIndexHTML,
-              cached.meta,
-              cached.data,
-              contentTemplate
-            )
+          const fileContent = await this.htmlService.composeContent(
+            parsedIndexHTML,
+            cached.meta,
+            cached.data,
+            contentTemplate
           );
+          await this.fileService.createFile(filePath, fileContent);
           result.push(path);
           console.log('  + ' + magenta('/' + path));
         } else {
