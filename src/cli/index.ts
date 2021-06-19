@@ -43,13 +43,13 @@ export class Cli {
    * @param paths... - List of paths to be removed
    */
   removeCommandDef: CommandDef = [
-    ['remove <paths...>', 'r'],
+    ['remove <paths...>', 'x'],
     'Remove a generated content.',
     ['-k, --keep-cache', 'Remove HTML file, but keep cache.'],
   ];
 
   reportCommandDef: CommandDef = [
-    ['report', 'log', 'l'],
+    ['report', 'r'],
     'Show generated statistics.',
     ['-d, --detail', 'Show detail.'],
   ];

@@ -62,8 +62,8 @@ Tool for prerendering Angular apps
 
 - [`ngxer generate|g`](#command-generate)
 - [`ngxer init|i [projectPath]`](#command-init)
-- [`ngxer remove|r <paths...> --keep-cache`](#command-remove)
-- [`ngxer report|log|l --detail`](#command-report)
+- [`ngxer remove|x <paths...> --keep-cache`](#command-remove)
+- [`ngxer report|r --detail`](#command-report)
 - [`ngxer update|u <paths...> --live`](#command-update)
 - [`ngxer help`](#command-help)
 - [`ngxer *`](#command-*)
@@ -108,7 +108,7 @@ Remove a generated content.
 
 ```sh
 ngxer remove <paths...> --keep-cache
-ngxer r <paths...> --keep-cache
+ngxer x <paths...> --keep-cache
 ```
 
 **Parameters:**
@@ -128,8 +128,7 @@ Show generated statistics.
 
 ```sh
 ngxer report --detail
-ngxer log --detail
-ngxer l --detail
+ngxer r --detail
 ```
 
 **Options:**

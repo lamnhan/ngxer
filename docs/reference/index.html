@@ -105,9 +105,9 @@
 					<ul>
 						<li><a href="#command-generate"><code>ngxer generate|g</code></a></li>
 						<li><a href="#command-init"><code>ngxer init|i [projectPath]</code></a></li>
-						<li><a href="#command-remove"><code>ngxer remove|x &lt;inputs...&gt;</code></a></li>
-						<li><a href="#command-report"><code>ngxer report|r --detail</code></a></li>
-						<li><a href="#command-update"><code>ngxer update|u &lt;inputs...&gt;</code></a></li>
+						<li><a href="#command-remove"><code>ngxer remove|r &lt;paths...&gt; --keep-cache</code></a></li>
+						<li><a href="#command-report"><code>ngxer report|log|l --detail</code></a></li>
+						<li><a href="#command-update"><code>ngxer update|u &lt;paths...&gt; --live</code></a></li>
 						<li><a href="#command-help"><code>ngxer help</code></a></li>
 						<li><a href="#command-*"><code>ngxer *</code></a></li>
 					</ul>
@@ -133,18 +133,23 @@ ngxer i [projectPath]</code></pre>
 					</a></h3>
 					<p>Remove a generated content.</p>
 					<p><strong>Usage:</strong></p>
-					<pre><code class="language-sh">ngxer remove &lt;inputs...&gt;
-ngxer x &lt;inputs...&gt;</code></pre>
+					<pre><code class="language-sh">ngxer remove &lt;paths...&gt; --keep-cache
+ngxer r &lt;paths...&gt; --keep-cache</code></pre>
 					<p><strong>Parameters:</strong></p>
 					<ul>
-						<li><code>&lt;inputs...&gt;</code>: List of inputs to be removed</li>
+						<li><code>&lt;paths...&gt;</code>: List of paths to be removed</li>
+					</ul>
+					<p><strong>Options:</strong></p>
+					<ul>
+						<li><code>-k, --keep-cache</code>: Remove HTML file, but keep cache.</li>
 					</ul>
 					<h3><a name="command-report"><p><code>report</code></p>
 					</a></h3>
 					<p>Show generated statistics.</p>
 					<p><strong>Usage:</strong></p>
 					<pre><code class="language-sh">ngxer report --detail
-ngxer r --detail</code></pre>
+ngxer <span class="hljs-built_in">log</span> --detail
+ngxer l --detail</code></pre>
 					<p><strong>Options:</strong></p>
 					<ul>
 						<li><code>-d, --detail</code>: Show detail.</li>
@@ -153,11 +158,15 @@ ngxer r --detail</code></pre>
 					</a></h3>
 					<p>Update a static.</p>
 					<p><strong>Usage:</strong></p>
-					<pre><code class="language-sh">ngxer update &lt;inputs...&gt;
-ngxer u &lt;inputs...&gt;</code></pre>
+					<pre><code class="language-sh">ngxer update &lt;paths...&gt; --live
+ngxer u &lt;paths...&gt; --live</code></pre>
 					<p><strong>Parameters:</strong></p>
 					<ul>
-						<li><code>&lt;inputs...&gt;</code>: List of inputs to be updated</li>
+						<li><code>&lt;paths...&gt;</code>: List of paths to be updated</li>
+					</ul>
+					<p><strong>Options:</strong></p>
+					<ul>
+						<li><code>-l, --live</code>: Re-rendering with live data.</li>
 					</ul>
 					<h3><a name="command-help"><p><code>help</code></p>
 					</a></h3>
