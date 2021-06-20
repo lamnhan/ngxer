@@ -419,10 +419,10 @@ export class HtmlService {
         `</title>${sessionDataScript}`
       );
     }
-    // splashscreen locale
+    // web manifests
     finalContent = finalContent.replace(
-      'id="app-splash-screen"',
-      `id="app-splash-screen" class="${locale || templateLocale}"`
+      `${templateLocale}.webmanifest`,
+      `${locale || templateLocale}.webmanifest`
     );
     // result
     return finalContent;
