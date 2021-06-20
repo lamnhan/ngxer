@@ -129,7 +129,7 @@ export class HtmlService {
     const indexFinal = await (() => {
       metas = (metas || {}) as MetaData; // {} -> for main index.html
       // localized only
-      if (!metas.url) {
+      if (isLocalizing && !metas.url) {
         const url =
           parsedHTML.url.substr(-1) === '/'
             ? parsedHTML.url
@@ -397,7 +397,7 @@ export class HtmlService {
       const time = splashscreenTimeout * 1000;
       const timeoutScript = [
         '<script>',
-        `(()=>{setTimeout(()=>{var s=document.getElementById("app-splash-screen");if(s){s.classList.add("hidden")}},${time})})();`,
+        `(()=>{setTimeout(()=>{var a=document.getElementById("app-splash-screen");if(a){a.classList.add("hidden");}},${time})})();`,
         '</script>',
       ].join('');
       finalContent = finalContent.replace(
