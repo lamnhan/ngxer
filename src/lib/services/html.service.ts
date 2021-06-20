@@ -115,7 +115,8 @@ export class HtmlService {
     contentTemplate: string | Record<string, string> = '',
     metas?: MetaData,
     locale?: string,
-    splashscreenTimeout = 0
+    splashscreenTimeout = 0,
+    firebaseI18n = false
   ) {
     locale = locale || parsedHTML.locale;
     const isLocalizing = !!metas;
@@ -151,6 +152,25 @@ export class HtmlService {
         splashscreenTimeout
       );
     })();
+    // firebase localized indexes
+    if (firebaseI18n) {
+      const [languageCode, countryCode] = locale.split('-');
+      const countryCodeLC = countryCode.toLowerCase();
+      const firebaseI18nNames = [
+        languageCode,
+        `${languageCode}_${countryCodeLC}`,
+        `ALL_${countryCodeLC}`,
+        `${languageCode}_ALL`,
+      ];
+      await Promise.all(
+        firebaseI18nNames.map(dir =>
+          this.fileService.createFile(
+            resolve(out, 'i18n', dir, 'index.html'),
+            indexFinal
+          )
+        )
+      );
+    }
     // localized indexes
     if (isLocalizing) {
       return this.fileService.createFile(

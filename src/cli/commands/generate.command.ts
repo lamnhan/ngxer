@@ -52,6 +52,7 @@ export class GenerateCommand {
       databaseLimitFirstTime = 1000,
       databaseLimit = 30,
       splashscreenTimeout = 0,
+      firebaseI18n = false,
     } = dotNgxerRCDotJson;
     const spinner = ora().start();
 
@@ -90,7 +91,8 @@ export class GenerateCommand {
             contentTemplate,
             undefined,
             undefined,
-            splashscreenTimeout
+            splashscreenTimeout,
+            firebaseI18n
           );
           // localized
           for (let i = 0; i < homePageLocales.length; i++) {
@@ -103,7 +105,8 @@ export class GenerateCommand {
               contentTemplate,
               metas,
               locale,
-              splashscreenTimeout
+              splashscreenTimeout,
+              firebaseI18n
             );
           }
           // sitemap
