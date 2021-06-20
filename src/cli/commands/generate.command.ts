@@ -179,21 +179,33 @@ export class GenerateCommand {
           (async () => {
             const {
               collection,
+              path: pathTemplate,
+              status,
               type,
               locale,
-              path: pathTemplate,
+              orderBy,
             } = databaseRenderItem;
             const collectionCachedDir = resolve(
               this.projectService.rcDir,
               'database_cached',
               collection
             );
-            const collectionQuery = firestore
+            // build query
+            let collectionQuery = firestore
               .collection(collection)
-              .where('type', '==', type)
-              .where('status', '==', 'publish')
-              .where('locale', '==', locale)
-              .orderBy('createdAt', 'asc');
+              .where('status', '==', status || 'publish');
+            if (type) {
+              collectionQuery = collectionQuery.where('type', '==', type);
+            }
+            if (locale) {
+              collectionQuery = collectionQuery.where('locale', '==', locale);
+            }
+            if (orderBy) {
+              collectionQuery = collectionQuery.orderBy(
+                orderBy[0] || 'createdAt',
+                (orderBy[1] || 'asc') as any
+              );
+            }
             // load docs
             const databaseRenderExisting: string[] = [];
             const databaseRenderCache: Array<Record<string, unknown>> = [];

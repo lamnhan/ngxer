@@ -25,9 +25,11 @@ export interface HomeConfig {
 
 export interface DatabaseRender {
   collection: string;
-  type: string;
-  locale: string;
   path: string; // xxx/:id
+  status?: string;
+  type?: string;
+  locale?: string;
+  orderBy?: [string, string];
 }
 
 export class ProjectService {
