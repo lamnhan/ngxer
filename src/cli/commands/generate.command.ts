@@ -36,6 +36,8 @@ export class GenerateCommand {
       return console.log(
         ERROR + 'No index.html found, invalid out path or need to build first.'
       );
+    } else {
+      console.log('Start static prerendering ...');
     }
 
     // extract data
