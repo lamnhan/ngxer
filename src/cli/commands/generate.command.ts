@@ -203,7 +203,7 @@ export class GenerateCommand {
             if (orderBy) {
               collectionQuery = collectionQuery.orderBy(
                 orderBy[0] || 'createdAt',
-                (orderBy[1] || 'asc') as any
+                orderBy[1] || 'asc'
               );
             }
             // load docs

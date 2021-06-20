@@ -29,7 +29,7 @@ export interface DatabaseRender {
   status?: string;
   type?: string;
   locale?: string;
-  orderBy?: [string, string];
+  orderBy?: [string, 'asc' | 'desc'];
 }
 
 export class ProjectService {
