@@ -16,7 +16,7 @@ export interface DotNgxerRCDotJson {
   databaseLimit?: number;
   includeSessionData?: boolean;
   splashscreenTimeout?: number; // number of seconds
-  firebaseI18n?: boolean;
+  i18nIndexes?: boolean;
 }
 
 export interface HomeConfig {
