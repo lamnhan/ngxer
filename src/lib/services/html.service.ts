@@ -157,8 +157,11 @@ export class HtmlService {
       const localeLowerCased = locale.toLowerCase();
       const [languageCode, countryCode] = localeLowerCased.split('-');
       const i18nNames = [
+        // locale with dash (-)
         locale,
         localeLowerCased,
+        // countries
+        countryCode,
         // firebase/other variants
         languageCode,
         `${languageCode}_${countryCode}`,
