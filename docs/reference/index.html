@@ -90,13 +90,288 @@
 						<h2>Getting started</h2>
 					</a>
 					<p>Install globally:</p>
-					<pre><code class="language-sh">npm install -g @lamnhan/ngxer</code></pre>
+					<pre><code class="language-sh">npm install -g @lamnhan/ngxer
+</code></pre>
 					<p>Init the project:</p>
-					<pre><code class="language-sh">ngxer init</code></pre>
+					<pre><code class="language-sh">ngxer init
+</code></pre>
 					<p>Or, using npx:</p>
-					<pre><code class="language-sh">npx @lamnhan/ngxer init</code></pre>
+					<pre><code class="language-sh">npx @lamnhan/ngxer init
+</code></pre>
 					<p>Edit <code>.ngxerrc.json</code>, then generate content:</p>
-					<pre><code class="language-sh">ngxer generate</code></pre>
+					<pre><code class="language-sh">ngxer generate
+</code></pre>
+				</section>
+				<section id="features">
+					<a href="#this-is-this-for" id="this-is-this-for" style="color: inherit; text-decoration: none;">
+						<h2>This is this for?</h2>
+					</a>
+					<p>This tool is use to preprender Angular apps, so that you do not need to use SSR and can be deploy to any static hosting.</p>
+					<ul>
+						<li>No SSR needed</li>
+						<li>I18N prerender</li>
+						<li>Firebase Hosting i18n supported</li>
+						<li>No script and legacy client</li>
+						<li>In-app splashcreen</li>
+						<li>Prerender data forwading</li>
+						<li>Site map generation</li>
+					</ul>
+				</section>
+				<section id="how">
+					<a href="#how-does-it-do-it" id="how-does-it-do-it" style="color: inherit; text-decoration: none;">
+						<h2>How does it do it?</h2>
+					</a>
+					<p>The CLI read your configs from <code>.ngxerrc.json</code> file. The <code>out</code> property is where the <code>ng build</code> outputs the app to be deployed.</p>
+					<p>Then, it read the <code>index.html</code> and extract all the info of your app, styles and scripts. The <code>index.html</code> will be use as a template for outputing other static files.</p>
+					<p>For path rendering, you provide the path to a route. The CLI launch a server and browse to the url using Puppeteer, it extract the page content, everything inside <code>router-outlet</code>. Then save the final static file to its proper location.</p>
+					<p>For database rendering, the CLI fetch documents from a collection, then save HTML files to their locations.</p>
+					<p>It also output the <code>sitemap.xml</code> if you want.</p>
+				</section>
+				<section id="tutorials">
+					<a href="#tutorials" id="tutorials" style="color: inherit; text-decoration: none;">
+						<h2>Tutorials</h2>
+					</a>
+					<p>Hint, use can avoid theses steps by using pre-build app with <a href="https://mola.lamnhan.com">Mola</a>.</p>
+					<p>See an example project at: <a href="https://github.com/themolacms/starter-blank">https://github.com/themolacms/starter-blank</a></p>
+					<a href="#prerequirement" id="prerequirement" style="color: inherit; text-decoration: none;">
+						<h3>Prerequirement</h3>
+					</a>
+					<p>Only ANGULAR, you hear me right the Angular gang.</p>
+					<p>Database render only support Firestore for now.</p>
+					<p>Database document schema must follow <a href="https://schemata.lamnhan.com">@lamnhan/schemata</a>.</p>
+					<a href="#add-config" id="add-config" style="color: inherit; text-decoration: none;">
+						<h3>Add config</h3>
+					</a>
+					<pre><code class="language-sh">ngxer init
+</code></pre>
+					<p>The file <code>.ngxerrc.json</code> is added to the project root.</p>
+					<p>Open the file and set out path and app url:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;out&quot;</span>: <span class="hljs-string">&quot;...&quot;</span>,
+  <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;...&quot;</span>
+}
+</code></pre>
+					<a href="#modify-indexhtml" id="modify-indexhtml" style="color: inherit; text-decoration: none;">
+						<h3>Modify index.html</h3>
+					</a>
+					<p>See the example: <a href="https://github.com/themolacms/starter-blank/blob/main/src/index.html">https://github.com/themolacms/starter-blank/blob/main/src/index.html</a></p>
+					<p>Add schema to html the tag:</p>
+					<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">itemscope</span> <span class="hljs-attr">itemtype</span>=<span class="hljs-string">&quot;http://schema.org/WebPage&quot;</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+</code></pre>
+					<p>Add all the meta tags, see the example above:</p>
+					<pre><code class="language-html"><span class="hljs-comment">&lt;!-- Meta tags --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;description&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;The Starter Blank theme preview.&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;canonical&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://starter-blank-preview.lamnhan.com/&quot;</span>&gt;</span>
+<span class="hljs-comment">&lt;!-- ... --&gt;</span>
+</code></pre>
+					<p>Note, same property tags must have the same value. For example, the tag <code>name=&quot;description&quot;</code> and <code>itemprop=&quot;description&quot;</code> have the same value. Tip: use VSCode <code>Ctrl+D</code> to select and replace all.</p>
+					<a href="#modify-appcomponenthtml" id="modify-appcomponenthtml" style="color: inherit; text-decoration: none;">
+						<h3>Modify app.component.html</h3>
+					</a>
+					<p>The main page content must be put under a <code>main</code> tag, this should be the only <code>main</code> tag in your application.</p>
+					<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">main</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;page-container&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">router-outlet</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">router-outlet</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">main</span>&gt;</span>
+</code></pre>
+					<p>Not recommended, if not you must specify the <code>contentBetweens</code> for page content extraction, again, the tag should be unique:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;contentBetweens&quot;</span>: [&#x27;&lt;/router-outlet&gt;&#x27;, &#x27;&lt;/section&gt;&#x27;]
+}
+</code></pre>
+					<a href="#path-render" id="path-render" style="color: inherit; text-decoration: none;">
+						<h3>Path render</h3>
+					</a>
+					<p>Provide the path to a route (no leading slash):</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;pathRender&quot;</span>: [
+    <span class="hljs-string">&quot;foo&quot;</span>,
+    <span class="hljs-string">&quot;bar&quot;</span>,
+    <span class="hljs-string">&quot;baz&quot;</span>,
+    <span class="hljs-string">&quot;...&quot;</span>
+  ]
+}
+</code></pre>
+					<a href="#database-render" id="database-render" style="color: inherit; text-decoration: none;">
+						<h3>Database render</h3>
+					</a>
+					<p>To render documents from the database:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;databaseRender&quot;</span>: [
+    {
+      <span class="hljs-attr">&quot;collection&quot;</span>: <span class="hljs-string">&quot;posts&quot;</span>,
+      <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;post/:id&quot;</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;post&quot;</span>,
+      <span class="hljs-attr">&quot;locale&quot;</span>: <span class="hljs-string">&quot;en-US&quot;</span>,
+      <span class="hljs-attr">&quot;orderBy&quot;</span>: [
+        <span class="hljs-string">&quot;createdAt&quot;</span>,
+        <span class="hljs-string">&quot;desc&quot;</span>
+      ]
+    },
+    {
+      <span class="hljs-attr">&quot;collection&quot;</span>: <span class="hljs-string">&quot;posts&quot;</span>,
+      <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;bai-viet/:id&quot;</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;post&quot;</span>,
+      <span class="hljs-attr">&quot;locale&quot;</span>: <span class="hljs-string">&quot;vi-VN&quot;</span>,
+      <span class="hljs-attr">&quot;orderBy&quot;</span>: [
+        <span class="hljs-string">&quot;createdAt&quot;</span>,
+        <span class="hljs-string">&quot;desc&quot;</span>
+      ]
+    },
+    {
+      <span class="hljs-attr">&quot;collection&quot;</span>: <span class="hljs-string">&quot;products&quot;</span>,
+      <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;product/:id&quot;</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;product&quot;</span>,
+      <span class="hljs-attr">&quot;locale&quot;</span>: <span class="hljs-string">&quot;en-US&quot;</span>,
+      <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-string">&quot;publish&quot;</span>,
+      <span class="hljs-attr">&quot;orderBy&quot;</span>: [
+        <span class="hljs-string">&quot;createdAt&quot;</span>,
+        <span class="hljs-string">&quot;desc&quot;</span>
+      ]
+    },
+    <span class="hljs-string">&quot;...&quot;</span>
+  ]
+}
+</code></pre>
+					<a href="#content-template" id="content-template" style="color: inherit; text-decoration: none;">
+						<h3>Content template</h3>
+					</a>
+					<p>It a HTML content or file, with the id of <code>app-prerender</code> and a placeholder to be replaced with a page actual content.</p>
+					<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;app-prerender&quot;</span>&gt;</span><span class="hljs-comment">&lt;!--PRERENDER_CONTENT_PLACEHOLDER--&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+					<a href="#single-locale" id="single-locale" style="color: inherit; text-decoration: none;">
+						<h4>Single locale</h4>
+					</a>
+					<p>Add <code>ngxer/template.html</code>.</p>
+					<p>Set config:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;contentTemplate&quot;</span>: <span class="hljs-string">&quot;ngxer/template.html&quot;</span>,
+}
+</code></pre>
+					<a href="#multiple-locales" id="multiple-locales" style="color: inherit; text-decoration: none;">
+						<h4>Multiple locales</h4>
+					</a>
+					<p>Add files to <code>ngxer/templates</code>.</p>
+					<pre><code class="language-txt">ngxer/
+  templates/
+    en-US.html
+    vi-VN.html
+    ...
+</code></pre>
+					<p>Set config, (<code>@</code> will be replace with <code>ngxer/</code>):</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;contentTemplate&quot;</span>: {
+    <span class="hljs-attr">&quot;en-US&quot;</span>: <span class="hljs-string">&quot;@templates/en-US.html&quot;</span>,
+    <span class="hljs-attr">&quot;vi-VN&quot;</span>: <span class="hljs-string">&quot;@templates/vi-VN.html&quot;</span>
+  }
+}
+</code></pre>
+					<a href="#home-content" id="home-content" style="color: inherit; text-decoration: none;">
+						<h3>Home content</h3>
+					</a>
+					<p>Any HTML text or file is used for home page.</p>
+					<a href="#single-locale-1" id="single-locale-1" style="color: inherit; text-decoration: none;">
+						<h4>Single locale</h4>
+					</a>
+					<p>Add <code>ngxer/home.html</code>.</p>
+					<p>Set config:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;homePage&quot;</span>: <span class="hljs-string">&quot;ngxer/home.html&quot;</span>
+}
+</code></pre>
+					<a href="#multiple-locales-1" id="multiple-locales-1" style="color: inherit; text-decoration: none;">
+						<h4>Multiple locales</h4>
+					</a>
+					<p>Add files to <code>ngxer/homes</code></p>
+					<pre><code class="language-txt">ngxers/
+  homes/
+    en-US.html
+    vi-VN.html
+    ...
+</code></pre>
+					<p>Set config:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;homePage&quot;</span>: {
+    <span class="hljs-attr">&quot;en-US&quot;</span>: {
+      <span class="hljs-attr">&quot;content&quot;</span>: <span class="hljs-string">&quot;@homes/en-US.html&quot;</span>
+    },
+    <span class="hljs-attr">&quot;vi-VN&quot;</span>: {
+      <span class="hljs-attr">&quot;content&quot;</span>: <span class="hljs-string">&quot;@homes/vi-VN.html&quot;</span>,
+      <span class="hljs-attr">&quot;metas&quot;</span>: {
+        <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;...&quot;</span>,
+        <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;...&quot;</span>
+      }
+    }
+  }
+}
+</code></pre>
+					<a href="#save-sitemap" id="save-sitemap" style="color: inherit; text-decoration: none;">
+						<h3>Save sitemap</h3>
+					</a>
+					<p>To generate sitemap:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;sitemap&quot;</span>: <span class="hljs-literal">true</span>
+}
+</code></pre>
+					<a href="#localized-indexes" id="localized-indexes" style="color: inherit; text-decoration: none;">
+						<h3>Localized indexes</h3>
+					</a>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;i18nIndexes&quot;</span>: <span class="hljs-literal">true</span>
+}
+</code></pre>
+					<a href="#forward-data" id="forward-data" style="color: inherit; text-decoration: none;">
+						<h3>Forward data</h3>
+					</a>
+					<p>To allow app access prerender data:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;includeSessionData&quot;</span>: <span class="hljs-literal">true</span>
+}
+</code></pre>
+					<p>To access data:</p>
+					<pre><code class="language-js"><span class="hljs-keyword">const</span> doc = sessionStorage.getItem(<span class="hljs-string">&#x27;prerender_data:&lt;id&gt;&#x27;</span>);
+</code></pre>
+					<a href="#database-limit" id="database-limit" style="color: inherit; text-decoration: none;">
+						<h3>Database limit</h3>
+					</a>
+					<p>Control number of document on the first time and next time fetching.</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;databaseLimitFirstTime&quot;</span>: <span class="hljs-number">500</span>,
+  <span class="hljs-attr">&quot;databaseLimit&quot;</span>: <span class="hljs-number">15</span>
+}
+</code></pre>
+					<a href="#splashcreen" id="splashcreen" style="color: inherit; text-decoration: none;">
+						<h3>Splashcreen</h3>
+					</a>
+					<p>See example: <a href="https://github.com/themolacms/starter-blank/blob/main/src/index.html">https://github.com/themolacms/starter-blank/blob/main/src/index.html</a></p>
+					<p>Splashscreen provide by <a href="https://nguix-starter.lamnhan.com/splashscreens">@lamnhan/nguix-starter</a></p>
+					<p>To turn of splashscreen after N seconds:</p>
+					<pre><code class="language-json">{
+  <span class="hljs-attr">&quot;splashscreenTimeout&quot;</span>: <span class="hljs-number">15</span>
+}
+</code></pre>
+					<p>You can translate splashscreen texts by using the class <code>class=&quot;locale-code&quot;</code>:</p>
+					<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-id">#app-splash-screen</span><span class="hljs-selector-class">.en-US</span> <span class="hljs-selector-class">.only</span><span class="hljs-selector-class">.en-US</span> {<span class="hljs-attribute">display</span>: inline-block <span class="hljs-meta">!important</span>;}
+  <span class="hljs-selector-id">#app-splash-screen</span><span class="hljs-selector-class">.vi-VN</span> <span class="hljs-selector-class">.only</span><span class="hljs-selector-class">.vi-VN</span> {<span class="hljs-attribute">display</span>: inline-block <span class="hljs-meta">!important</span>;}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;app-splash-screen&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;en-US&quot;</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;vi-VN&quot;</span>&gt;</span>Xin chào<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+					<a href="#final-touches" id="final-touches" style="color: inherit; text-decoration: none;">
+						<h3>Final touches</h3>
+					</a>
+					<ul>
+						<li>Add <a href="https://github.com/themolacms/starter-blank/blob/main/src/robots.txt"><code>robots.txt</code></a> to <code>src/</code>. And including in angular.json <code>assets</code>.</li>
+					</ul>
+					<a href="#preview" id="preview" style="color: inherit; text-decoration: none;">
+						<h3>Preview</h3>
+					</a>
+					<p>To preview your app before deploying, please use the <a href="https://mola.lamnhan.com">Mola</a> <code>preview</code> command</p>
+					<pre><code class="language-sh">mola preview
+</code></pre>
 				</section>
 				<section id="cli" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
 					<h2><a name="cli-command-overview"><p>Command overview</p>
@@ -118,13 +393,15 @@
 					<p>Generate static content.</p>
 					<p><strong>Usage:</strong></p>
 					<pre><code class="language-sh">ngxer generate
-ngxer g</code></pre>
+ngxer g
+</code></pre>
 					<h3><a name="command-init"><p><code>init</code></p>
 					</a></h3>
 					<p>Add ngxer to a project.</p>
 					<p><strong>Usage:</strong></p>
 					<pre><code class="language-sh">ngxer init [projectPath]
-ngxer i [projectPath]</code></pre>
+ngxer i [projectPath]
+</code></pre>
 					<p><strong>Parameters:</strong></p>
 					<ul>
 						<li><code>[projectPath]</code>: Custom path to the project</li>
@@ -134,7 +411,8 @@ ngxer i [projectPath]</code></pre>
 					<p>Remove a generated content.</p>
 					<p><strong>Usage:</strong></p>
 					<pre><code class="language-sh">ngxer remove &lt;paths...&gt; --keep-cache
-ngxer x &lt;paths...&gt; --keep-cache</code></pre>
+ngxer x &lt;paths...&gt; --keep-cache
+</code></pre>
 					<p><strong>Parameters:</strong></p>
 					<ul>
 						<li><code>&lt;paths...&gt;</code>: List of paths to be removed</li>
@@ -148,7 +426,8 @@ ngxer x &lt;paths...&gt; --keep-cache</code></pre>
 					<p>Show generated statistics.</p>
 					<p><strong>Usage:</strong></p>
 					<pre><code class="language-sh">ngxer report --detail
-ngxer r --detail</code></pre>
+ngxer r --detail
+</code></pre>
 					<p><strong>Options:</strong></p>
 					<ul>
 						<li><code>-d, --detail</code>: Show detail.</li>
@@ -158,7 +437,8 @@ ngxer r --detail</code></pre>
 					<p>Update a static.</p>
 					<p><strong>Usage:</strong></p>
 					<pre><code class="language-sh">ngxer update &lt;paths...&gt; --live
-ngxer u &lt;paths...&gt; --live</code></pre>
+ngxer u &lt;paths...&gt; --live
+</code></pre>
 					<p><strong>Parameters:</strong></p>
 					<ul>
 						<li><code>&lt;paths...&gt;</code>: List of paths to be updated</li>
@@ -171,12 +451,14 @@ ngxer u &lt;paths...&gt; --live</code></pre>
 					</a></h3>
 					<p>Display help.</p>
 					<p><strong>Usage:</strong></p>
-					<pre><code class="language-sh">ngxer <span class="hljs-built_in">help</span></code></pre>
+					<pre><code class="language-sh">ngxer <span class="hljs-built_in">help</span>
+</code></pre>
 					<h3><a name="command-*"><p><code>*</code></p>
 					</a></h3>
 					<p>Any other command is not suppoted.</p>
 					<p><strong>Usage:</strong></p>
-					<pre><code class="language-sh">ngxer &lt;cmd&gt;</code></pre>
+					<pre><code class="language-sh">ngxer &lt;cmd&gt;
+</code></pre>
 				</section>
 				<section id="license" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
 					<a href="#license" id="license" style="color: inherit; text-decoration: none;">

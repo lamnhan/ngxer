@@ -9,6 +9,10 @@
 <section id="tocx" data-note="AUTO-GENERATED CONTENT, DO NOT EDIT DIRECTLY!">
 
 - [Getting started](#getting-started)
+- [This is this for?](#this-is-this-for)
+- [How does it do it?](#how-does-it-do-it)
+- [Tutorials](#tutorials)
+  - [Modify app.component.html](#modify-app-component-html)
 - [Command overview](#cli-command-overview)
 - [Command reference](#cli-command-reference)
   - [`generate`](#command-generate)
@@ -69,9 +73,25 @@ This tool is use to preprender Angular apps, so that you do not need to use SSR 
 
 </section>
 
-<section id="steps">
+<section id="how">
 
-## Steps
+## How does it do it?
+
+The CLI read your configs from `.ngxerrc.json` file. The `out` property is where the `ng build` outputs the app to be deployed.
+
+Then, it read the `index.html` and extract all the info of your app, styles and scripts. The `index.html` will be use as a template for outputing other static files.
+
+For path rendering, you provide the path to a route. The CLI launch a server and browse to the url using Puppeteer, it extract the page content, everything inside `router-outlet`. Then save the final static file to its proper location.
+
+For database rendering, the CLI fetch documents from a collection, then save HTML files to their locations.
+
+It also output the `sitemap.xml` if you want.
+
+</section>
+
+<section id="tutorials">
+
+## Tutorials
 
 Hint, use can avoid theses steps by using pre-build app with [Mola](https://mola.lamnhan.com).
 
@@ -82,6 +102,8 @@ See an example project at: <https://github.com/themolacms/starter-blank>
 Only ANGULAR, you hear me right the Angular gang.
 
 Database render only support Firestore for now.
+
+Database document schema must follow [@lamnhan/schemata](https://schemata.lamnhan.com).
 
 ### Add config
 
@@ -107,15 +129,15 @@ See the example: <https://github.com/themolacms/starter-blank/blob/main/src/inde
 Add schema to html the tag:
 
 ```html
-<html itemscope itemtype="http://schema.org/WebPage" lang="en">
+<html itemscope itemtype="http://schema.org/WebPage" lang="en"></html>
 ```
 
 Add all the meta tags, see the example above:
 
 ```html
 <!-- Meta tags -->
-<meta name="description" content="The Starter Blank theme preview.">
-<link rel="canonical" href="https://starter-blank-preview.lamnhan.com/">
+<meta name="description" content="The Starter Blank theme preview." />
+<link rel="canonical" href="https://starter-blank-preview.lamnhan.com/" />
 <!-- ... -->
 ```
 
@@ -123,7 +145,7 @@ Note, same property tags must have the same value. For example, the tag `name="d
 
 ### Modify app.component.html
 
-The main page content must be put under a `main` tag.
+The main page content must be put under a `main` tag, this should be the only `main` tag in your application.
 
 ```html
 <main id="page-container">
@@ -131,188 +153,12 @@ The main page content must be put under a `main` tag.
 </main>
 ```
 
-If not you must specify the `contentBetweens` for page content extraction (the option available but not sure):
+Not recommended, if not you must specify the `contentBetweens` for page content extraction, again, the tag should be unique:
 
 ```json
 {
-  "contentBetweens": ['</router-outlet>', '</section>']
-}
+  "contentBetweens": ['</router-outlet>', '
 ```
-
-### Path render
-
-// TODO
-
-### Database render
-
-// TODO
-
-### Content template
-
-It a HTML content or file, with the id of `app-prerender` and a placeholder to be replaced with a page actual content.
-
-```html
-<div id="app-prerender"><!--PRERENDER_CONTENT_PLACEHOLDER--></div>
-```
-
-#### Single locale
-
-Add `ngxer/template.html`.
-
-Set config:
-
-```json
-{
-  "contentTemplate": "ngxer/template.html",
-}
-```
-
-#### Multiple locales
-
-Add files to `ngxer/templates`.
-
-```txt
-ngxer/
-  templates/
-    en-US.html
-    vi-VN.html
-    ...
-```
-
-Set config, (`@` will be replace with `ngxer/`):
-
-```json
-{
-  "contentTemplate": {
-    "en-US": "@templates/en-US.html",
-    "vi-VN": "@templates/vi-VN.html"
-  }
-}
-```
-
-### Home content
-
-Any HTML text or file is used for home page.
-
-#### Single locale
-
-Add `ngxer/home.html`.
-
-Set config:
-
-```json
-{
-  "homePage": "ngxer/home.html"
-}
-```
-
-#### Multiple locales
-
-Add files to `ngxer/homes`
-
-```txt
-ngxers/
-  homes/
-    en-US.html
-    vi-VN.html
-    ...
-```
-
-Set config:
-
-```json
-{
-  "homePage": {
-    "en-US": {
-      "content": "@homes/en-US.html"
-    },
-    "vi-VN": {
-      "content": "@homes/vi-VN.html",
-      "metas": {
-        "title": "...",
-        "description": "..."
-      }
-    }
-  }
-}
-```
-
-### Save sitemap
-
-To generate sitemap:
-
-```json
-{
-  "sitemap": true
-}
-```
-
-### Localized indexes
-
-```json
-{
-  "i18nIndexes": true
-}
-```
-
-### Forward data
-
-To allow app access prerender data:
-
-```json
-{
-  "includeSessionData": true
-}
-```
-
-To access data:
-
-```js
-const doc = sessionStorage.getItem('prerender_data:<id>');
-```
-
-### Database limit
-
-Control number of document on the first time and next time fetching.
-
-```json
-{
-  "databaseLimitFirstTime": 500,
-  "databaseLimit": 15
-}
-```
-
-### Splashcreen
-
-See example: <https://github.com/themolacms/starter-blank/blob/main/src/index.html>
-
-Splashscreen provide by [@lamnhan/nguix-starter](https://nguix-starter.lamnhan.com/splashscreens)
-
-To turn of splashscreen after N seconds:
-
-```json
-{
-  "splashscreenTimeout": 15
-}
-```
-
-You can translate splashscreen texts by using the class `class="locale-code"`:
-
-```html
-<style>
-  #app-splash-screen.en-US .only.en-US {display: inline-block !important;}
-  #app-splash-screen.vi-VN .only.vi-VN {display: inline-block !important;}
-</style>
-
-<div id="app-splash-screen">
-  <span class="en-US">Hello</span>
-  <span class="vi-VN">Xin chào</span>
-</div>
-```
-
-### Final touches
-
-- Add [`robots.txt`](https://github.com/themolacms/starter-blank/blob/main/src/robots.txt) to `src/`. And including in angular.json `assets`.
 
 </section>
 
