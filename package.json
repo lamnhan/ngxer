@@ -1,6 +1,6 @@
 {
   "name": "@lamnhan/ngxer",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Tool for prerendering Angular apps",
   "author": "Lam Nhan",
   "homepage": "https://ngxer.lamnhan.com",
@@ -41,7 +41,7 @@
     "url": "https://github.com/lamnhan/ngxer/issues"
   },
   "dependencies": {
-    "@lamnhan/schemata": "^0.0.12",
+    "@lamnhan/schemata": "^0.0.20",
     "@node-minify/core": "^6.2.0",
     "@node-minify/html-minifier": "^6.2.0",
     "axios": "^0.21.1",

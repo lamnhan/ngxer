@@ -1,5 +1,5 @@
 import {resolve} from 'path';
-import {Page, Profile, Author} from '@lamnhan/schemata';
+import {Page, ProfileLite} from '@lamnhan/schemata';
 
 import {FileService} from './file.service';
 import {
@@ -12,7 +12,6 @@ import {MetaData} from './html.service';
 export class CacheService {
   public readonly allowedCollections = [
     'audios',
-    'authors',
     'bundles',
     'categories',
     'tags',
@@ -100,8 +99,6 @@ export class CacheService {
       description,
       image,
       locale,
-      authorName,
-      authorUrl,
       createdAt,
       updatedAt,
       content,
@@ -110,26 +107,28 @@ export class CacheService {
     const id = urlSplits[urlSplits.length - 1]
       ? urlSplits[urlSplits.length - 1]
       : urlSplits[urlSplits.length - 2];
-    // authors
-    const authorId = authorUrl.split('/').pop() as string;
-    const authors: Record<string, Profile | Author> = {
-      [authorId]: {
-        id: authorId,
-        title: authorName,
-      },
-    };
     // result
     return {
+      uid: '',
       id,
       title,
       description,
-      thumbnail: image,
-      image,
+      thumbnails: {
+        default: {
+          name: 'default',
+          src: image,
+        },
+      },
+      images: {
+        default: {
+          name: 'default',
+          src: image,
+        },
+      },
       locale,
       origin: id,
-      authors,
       content,
-      type: 'page',
+      type: 'default',
       status: 'publish',
       createdAt,
       updatedAt,
@@ -162,16 +161,22 @@ export class CacheService {
     ) as string;
     const title = data.title as string;
     const description = data.description as string;
-    const image = (data.image ||
-      `${rcJson.url}/assets/images/featured.jpg`) as string;
+    const image = (
+      data.images
+        ? (
+            (data.images as any).xl ||
+            (data.images as any).fhd ||
+            (data.images as any).default
+          ).src
+        : `${rcJson.url}/assets/images/featured.jpg`
+    ) as string;
     const locale = data.locale as string;
     const lang = locale.split('-').shift() as string;
     const createdAt = data.createdAt as string;
     const updatedAt = data.updatedAt as string;
     const content = data.content as string;
     // author
-    const dataAuthors =
-      (data.authors as Record<string, Profile | Author>) || {};
+    const dataAuthors = (data.authors as Record<string, ProfileLite>) || {};
     const authorList = Object.keys(dataAuthors);
     const author = !authorList.length ? null : dataAuthors[authorList[0]];
     const authorName = !author ? '' : author.title;
