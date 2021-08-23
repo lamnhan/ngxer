@@ -138,13 +138,16 @@ export class RenderService {
           const cacheInput = `${collection}:${id}`;
           // data
           const data = doc;
-          if (!data.content && data.contentSrc) {
-            const url = data.contentSrc as string;
+          if (
+            data.content &&
+            typeof data.content === 'string' &&
+            data.content.substr(0, 4) === 'http'
+          ) {
+            const url = data.content as string;
             const ext = url.split('.').pop() as string;
             const content = await this.fetchService.text(url);
-            data.contentSrc = null;
             data.content = await this.htmlService.minifyContent(
-              ext === 'html' ? content : marked(content),
+              ext !== 'md' ? content : marked(content),
               true
             );
           }
