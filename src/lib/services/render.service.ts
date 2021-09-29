@@ -34,7 +34,7 @@ export class RenderService {
       this.browser = await launch({
         executablePath:
           process.env.GOOGLE_CHROME ||
-          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
       });
     }
   }
