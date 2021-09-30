@@ -17,6 +17,7 @@ export interface DotNgxerRCDotJson {
   includeSessionData?: boolean;
   splashscreenTimeout?: number; // number of seconds
   i18nIndexes?: boolean;
+  chromePath?: string;
 }
 
 export interface HomeConfig {

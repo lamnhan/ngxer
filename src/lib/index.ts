@@ -36,7 +36,11 @@ export class Lib {
       this.projectService
     );
     this.firebaseService = new FirebaseService(this.fileService);
-    this.renderService = new RenderService(this.fetchService, this.htmlService);
+    this.renderService = new RenderService(
+      this.fetchService,
+      this.htmlService,
+      this.projectService,
+    );
     this.reportService = new ReportService(
       this.fileService,
       this.projectService

@@ -1,6 +1,6 @@
 {
   "name": "@lamnhan/ngxer",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Tool for prerendering Angular apps",
   "author": "Lam Nhan",
   "homepage": "https://ngxer.lamnhan.com",

@@ -4,6 +4,7 @@ import * as marked from 'marked';
 
 import {FetchService} from './fetch.service';
 import {HtmlService} from './html.service';
+import {ProjectService} from './project.service';
 import {DotNgxerRCDotJson, DatabaseRender} from './project.service';
 
 export class RenderService {
@@ -12,11 +13,13 @@ export class RenderService {
 
   constructor(
     private fetchService: FetchService,
-    private htmlService: HtmlService
+    private htmlService: HtmlService,
+    private projectService: ProjectService
   ) {}
 
   async bootup(dir: string) {
     if (!this.server || !this.browser) {
+      const rcDotJson = await this.projectService.loadDotNgxerRCDotJson();
       // server & browser
       this.server = await superstatic
         .server({
@@ -33,6 +36,7 @@ export class RenderService {
       // browser
       this.browser = await launch({
         executablePath:
+          rcDotJson.chromePath ||
           process.env.GOOGLE_CHROME ||
           'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
       });
