@@ -10,19 +10,6 @@ import {
 import {MetaData} from './html.service';
 
 export class CacheService {
-  public readonly allowedCollections = [
-    'audios',
-    'bundles',
-    'categories',
-    'tags',
-    'pages',
-    'posts',
-    'products',
-    'profiles',
-    'tags',
-    'videos',
-  ];
-
   constructor(
     private fileService: FileService,
     private projectService: ProjectService
@@ -147,10 +134,6 @@ export class CacheService {
       : ((rcJson.databaseRender || [])
           .filter(item => item.collection === collection)
           .shift() as DatabaseRender);
-    // ignore private colelctions
-    if (this.allowedCollections.indexOf(collection) === -1) {
-      return null;
-    }
     // data
     const url = (
       databaseRender
